@@ -1,15 +1,15 @@
 package com.starbucks.starvive.product.domain;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.UUID;
 
 @Entity
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Product {
 
     @Id
@@ -27,13 +27,13 @@ public class Product {
 
     private Boolean isAdditionalItem; // 추가 상품 여부
 
-    private Boolean isEngraved; // 각인 여부
+    private Boolean isEngraved; // 각인 가능 여부
 
     private Boolean isTop; // 베스트 상품 여부
 
     private Boolean isNew; // 신규 상품 여부
 
-    private boolean isLimitedEdition; // 한정 상품 여부
+    private Boolean isLimitedEdition; // 한정 상품 여부
 
     @Enumerated(EnumType.STRING)
     private ProgressStatus progressStatus;
