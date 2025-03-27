@@ -1,10 +1,8 @@
 package com.starbucks.starvive.user.domain;
 
-import com.starbucks.starvive.user.vo.Email;
-import com.starbucks.starvive.user.vo.Password;
-import com.starbucks.starvive.user.vo.PhoneNumber;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,84 +13,94 @@ import java.util.UUID;
 @Entity
 @Table(name = "users")
 @Getter
+@Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class User {
-
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
+    @GeneratedValue
+    @Column(name = "user_uuid", columnDefinition = "BINARY(16)")
     private UUID userId;
 
-    @Embedded
-    private Email email;
+    @Column(name = "login_id", nullable = false, unique = true)
+    private String loginId;
 
-    @Embedded
-    private Password password;
+    @Column(name = "email", nullable = false, unique = true)
+    private String email;
 
-    @Column(nullable = false)
+    @Column(name = "password", nullable = false)
+    private String password;
+
+    @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(nullable = false, unique = true)
+    @Column(name = "nickname", nullable = false, unique = true)
     private String nickname;
 
-    @Embedded
-    private PhoneNumber phoneNumber;
+    @Column(name = "phone_number")
+    private String phoneNumber;
 
-    @Column(name = "created_at")
-    private LocalDateTime createdAt;
-    
-    @Column(name = "updated_at")
-    private LocalDateTime updatedAt;
-    
-    @Column(name = "deleted_at")
-    private LocalDateTime deletedAt;
-    
+    @Column(name = "birth")
+    private LocalDateTime birth;
+
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private UserStatus status = UserStatus.ACTIVE;
-    
+    @Column(name = "gender")
+    private Gender gender;
+
+    @Column(name = "auth_type", nullable = false)
+    private String authType;
+
+    @Column(name = "status", nullable = false)
+    private String status;
+
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private LocalDateTime createdAt;
+
+    @Column(name = "updated_at", nullable = false)
+    private LocalDateTime updatedAt;
+
     @Builder
-    private User(Email email, Password password, String name, String nickname, PhoneNumber phoneNumber) {
+    private User(String loginId, String email, String password, String name, 
+                String nickname, String phoneNumber, LocalDateTime birth, 
+                Gender gender, String authType) {
+        this.loginId = loginId;
         this.email = email;
         this.password = password;
         this.name = name;
         this.nickname = nickname;
         this.phoneNumber = phoneNumber;
+        this.birth = birth;
+        this.gender = gender;
+        this.authType = authType;
+        this.status = UserStatus.ACTIVE.name();
         this.createdAt = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();
-        this.status = UserStatus.ACTIVE;
     }
 
-    // 회원 정보 업데이트
-    public void updateProfile(String nickname, PhoneNumber phoneNumber) {
+    // Setter methods
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public void updateProfile(String nickname, String phoneNumber) {
         this.nickname = nickname;
         this.phoneNumber = phoneNumber;
         this.updatedAt = LocalDateTime.now();
-    }
-
-    // 비밀번호 변경
-    public void changePassword(Password newPassword) {
-        this.password = newPassword;
-        this.updatedAt = LocalDateTime.now();
-    }
-
-    // 회원 탈퇴 처리
-    public void delete() {
-        this.status = UserStatus.DELETED;
-        this.deletedAt = LocalDateTime.now();
-        this.updatedAt = LocalDateTime.now();
-    }
-
-    // 회원 상태 변경
-    public void changeStatus(UserStatus status) {
-        this.status = status;
-        this.updatedAt = LocalDateTime.now();
-    }
-
-    // 사용자 상태를 표현하는 열거형
-    public enum UserStatus {
-        ACTIVE,     // 활성화 상태
-        INACTIVE,   // 비활성화 상태
-        SUSPENDED,  // 정지 상태
-        DELETED     // 삭제 상태
     }
 }

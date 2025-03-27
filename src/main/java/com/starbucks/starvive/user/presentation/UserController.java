@@ -1,13 +1,13 @@
 package com.starbucks.starvive.user.presentation;
 
 import com.starbucks.starvive.user.application.UserService;
-import com.starbucks.starvive.user.dto.in.PasswordChangeRequest;
-import com.starbucks.starvive.user.dto.in.UserCreateRequest;
-import com.starbucks.starvive.user.dto.in.UserUpdateRequest;
-import com.starbucks.starvive.user.dto.out.UserResponse;
+import com.starbucks.starvive.user.dto.in.UserRequestDto;
+import com.starbucks.starvive.user.dto.out.UserResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,8 +24,8 @@ public class UserController {
      * 사용자 등록 API
      */
     @PostMapping
-    public ResponseEntity<UserResponse> register(@RequestBody UserCreateRequest request) {
-        UserResponse response = userService.register(request);
+    public ResponseEntity<UserResponseDto> register(@RequestBody UserRequestDto request) {
+        UserResponseDto response = userService.userCreate(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
@@ -33,31 +33,9 @@ public class UserController {
      * 사용자 정보 조회 API
      */
     @GetMapping("/{userId}")
-    public ResponseEntity<UserResponse> getUserById(@PathVariable(name = "userId") UUID userId) {
-        UserResponse response = userService.findById(userId);
+    public ResponseEntity<UserResponseDto> getUserById(@PathVariable(name = "userId") UUID userId) {
+        UserResponseDto response = userService.findById(userId);
         return ResponseEntity.ok(response);
-    }
-
-    /**
-     * 사용자 정보 수정 API
-     */
-    @PutMapping("/{userId}")
-    public ResponseEntity<UserResponse> updateUser(
-            @PathVariable(name = "userId") UUID userId,
-            @RequestBody UserUpdateRequest request) {
-        UserResponse response = userService.updateProfile(userId, request);
-        return ResponseEntity.ok(response);
-    }
-
-    /**
-     * 비밀번호 변경 API
-     */
-    @PutMapping("/{userId}/password")
-    public ResponseEntity<Void> changePassword(
-            @PathVariable(name = "userId") UUID userId,
-            @RequestBody PasswordChangeRequest request) {
-        userService.changePassword(userId, request);
-        return ResponseEntity.ok().build();
     }
 
     /**
@@ -73,8 +51,19 @@ public class UserController {
      * 전체 사용자 목록 조회 API
      */
     @GetMapping
-    public ResponseEntity<List<UserResponse>> getAllUsers() {
-        List<UserResponse> responses = userService.findAll();
+    public ResponseEntity<List<UserResponseDto>> getAllUsers() {
+        List<UserResponseDto> responses = userService.findAll();
         return ResponseEntity.ok(responses);
+    }
+
+    /**
+     * 현재 로그인한 사용자 정보 조회 API
+     */
+    @GetMapping("/me")
+    public ResponseEntity<UserResponseDto> getCurrentUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String userId = authentication.getName();
+        UserResponseDto response = userService.findById(UUID.fromString(userId));
+        return ResponseEntity.ok(response);
     }
 } 
