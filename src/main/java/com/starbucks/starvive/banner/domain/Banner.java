@@ -2,11 +2,14 @@ package com.starbucks.starvive.banner.domain;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Entity
 @Getter
+@NoArgsConstructor
 public class Banner {
 
     @Id
@@ -14,18 +17,13 @@ public class Banner {
     @Column(columnDefinition = "BINARY(16)", nullable = false)
     private UUID bannerId;
 
-    private String url;
+    private String imageBannerUrl;
 
-    private String alt;
+    private String imageBannerAlt;
 
-    private String externalUrl; // 외부 링크용
+    private String linkUrl; // 이동 주소
 
-    @Column(columnDefinition = "BINARY(16)")
-    private UUID productId;
+    private LocalDate postedAt; // 배너 게시일
 
-    @Column(columnDefinition = "BINARY(16)")
-    private UUID promotionId;
-
-    @Enumerated(EnumType.STRING)
-    private BannerLinkType bannerLinkType;
+    private Boolean activated;  // 배너 상태
 }

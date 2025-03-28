@@ -22,6 +22,7 @@ public class FeaturedSection {
 
     //private String bannerImageUrl;
 
+    // OneToMany 사용 x
     @OneToMany(mappedBy = "featuredSection", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<FeaturedSectionProduct> products = new ArrayList<>(); // 해당 섹션에 포함된 상품들
 

@@ -10,9 +10,7 @@ import java.util.UUID;
 
 @Entity
 @Getter
-@Builder
 @NoArgsConstructor
-@AllArgsConstructor
 public class ProductImage {
 
     @Id
@@ -20,12 +18,21 @@ public class ProductImage {
     @Column(columnDefinition = "BINARY(16)", nullable = false)
     private UUID productThumbId;
 
-    private String imageUrl;
+    private String imageThumbUrl;
 
-    private String alt;
+    private String imageThumbAlt;
 
-    private Boolean isMainImage;
+    private Boolean mainSelected;
 
-    @Column(columnDefinition = "BINARY(16)", nullable = false)
-    private UUID productId;
+    private String productId;
+
+    @Builder
+    public ProductImage(UUID productThumbId, String imageThumbUrl,
+                        String imageThumbAlt, Boolean mainSelected, String productId) {
+        this.productThumbId = productThumbId;
+        this.imageThumbUrl = imageThumbUrl;
+        this.imageThumbAlt = imageThumbAlt;
+        this.mainSelected = mainSelected;
+        this.productId = productId;
+    }
 }

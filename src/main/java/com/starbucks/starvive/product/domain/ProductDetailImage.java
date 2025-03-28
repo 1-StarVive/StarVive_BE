@@ -1,9 +1,6 @@
 package com.starbucks.starvive.product.domain;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,9 +10,7 @@ import java.util.UUID;
 
 @Entity
 @Getter
-@Builder
 @NoArgsConstructor
-@AllArgsConstructor
 public class ProductDetailImage {
 
     @Id
@@ -23,12 +18,20 @@ public class ProductDetailImage {
     @Column(columnDefinition = "BINARY(16)", nullable = false)
     private UUID productDetailId;
 
-    private String imageUrl;
+    @Lob
+    @Column(nullable = false, columnDefinition = "TEXT")
+    private String productDetailContent;
 
-    private String alt;
+    private Integer order;
 
-    private Integer sortOrder;
+    private String productId;
 
-    @Column(columnDefinition = "BINARY(16)", nullable = false)
-    private UUID productId;
+    @Builder
+    public ProductDetailImage(UUID productDetailId, String productDetailContent,
+                              Integer order, String productId) {
+        this.productDetailId = productDetailId;
+        this.productDetailContent = productDetailContent;
+        this.order = order;
+        this.productId = productId;
+    }
 }

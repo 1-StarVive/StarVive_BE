@@ -10,9 +10,7 @@ import java.util.UUID;
 
 @Entity
 @Getter
-@Builder
 @NoArgsConstructor
-@AllArgsConstructor
 public class ProductOption {
 
     @Id
@@ -24,24 +22,24 @@ public class ProductOption {
 
     private int price;
 
-    @Column(columnDefinition = "BINARY(16)", nullable = false)
-    private UUID productId;
+    private String productId;
 
-    @Column(columnDefinition = "BINARY(16)")
-    private UUID colorId;
+    private String colorId;
 
-    @Column(columnDefinition = "BINARY(16)")
-    private UUID sizeId;
+    private String sizeId;
 
-    @Column(columnDefinition = "BINARY(16)")
-    private UUID carvingId;
+    private Boolean carvedAvailable; // 각인 여부
 
-    @Enumerated(EnumType.STRING)
-    private SaleStatus saleStatus;
-
-    private Boolean isEngravedAvailable;
-
-    private Boolean hasColor;
-
-    private Boolean hasSize;
+    @Builder
+    public ProductOption(UUID productOptionId, Integer remainingStock, int price,
+                         String productId, String colorId, String sizeId,
+                         Boolean carvedAvailable) {
+        this.productOptionId = productOptionId;
+        this.remainingStock = remainingStock;
+        this.price = price;
+        this.productId = productId;
+        this.colorId = colorId;
+        this.sizeId = sizeId;
+        this.carvedAvailable = carvedAvailable;
+    }
 }

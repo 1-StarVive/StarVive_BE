@@ -1,18 +1,13 @@
 package com.starbucks.starvive.promotion.domain;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.UUID;
 
 @Entity
 @Getter
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class PromotionProduct {
 
     @Id
@@ -20,12 +15,15 @@ public class PromotionProduct {
     @Column(columnDefinition = "BINARY(16)", nullable = false)
     private UUID promotionProductId;
 
-    @Column(columnDefinition = "BINARY(16)", nullable = false)
-    private UUID productId;
+    private String productId;
 
-    @Column(columnDefinition = "BINARY(16)", nullable = false)
-    private UUID promotionId;
+    private String promotionId;
 
-    @Enumerated(EnumType.STRING)
-    private PromotionProductStatus promotionProductStatus;
+    @Builder
+    public PromotionProduct(UUID promotionProductId, String productId,
+                            String promotionId) {
+        this.promotionProductId = promotionProductId;
+        this.productId = productId;
+        this.promotionId = promotionId;
+    }
 }

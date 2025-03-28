@@ -7,9 +7,7 @@ import java.util.UUID;
 
 @Entity
 @Getter
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Product {
 
     @Id
@@ -21,20 +19,27 @@ public class Product {
 
     private String code;
 
-    private Double discountRate;
+    private String description;
 
-    private String shortDescription;
-
-    private Boolean isAdditionalItem; // 추가 상품 여부
-
-    private Boolean isEngraved; // 각인 가능 여부
-
-    private Boolean isTop; // 베스트 상품 여부
-
-    private Boolean isNew; // 신규 상품 여부
-
-    private Boolean isLimitedEdition; // 한정 상품 여부
+    private Double baseDiscountRate;
 
     @Enumerated(EnumType.STRING)
-    private ProgressStatus progressStatus;
+    private ProductStatus productStatus;
+
+    @Enumerated(EnumType.STRING)
+    private Capacity capacity;
+
+    @Builder
+    public Product(UUID productId, String name, String code,
+                   String description,
+                   Double baseDiscountRate,
+                   ProductStatus productStatus, Capacity capacity) {
+        this.productId = productId;
+        this.name = name;
+        this.code = code;
+        this.description = description;
+        this.baseDiscountRate = baseDiscountRate;
+        this.productStatus = productStatus;
+        this.capacity = capacity;
+    }
 }

@@ -1,10 +1,10 @@
-package com.starbucks.starvive.product.domain;
+package com.starbucks.starvive.category.domain;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
-import lombok.AllArgsConstructor;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,22 +13,23 @@ import java.util.UUID;
 
 @Entity
 @Getter
-@NoArgsConstructor
-public class ColorOption {
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+public class MiddleCategory {
 
     @Id
     @GeneratedValue
     @Column(columnDefinition = "BINARY(16)", nullable = false)
-    private UUID colorId;
+    private UUID middleCategoryId;
 
     private String name;
 
-    private String code;
+    private String topCategoryId;
 
     @Builder
-    public ColorOption(UUID colorId, String name, String code) {
-        this.colorId = colorId;
+    public MiddleCategory(UUID middleCategoryId,
+                          String name, String topCategoryId) {
+        this.middleCategoryId = middleCategoryId;
         this.name = name;
-        this.code = code;
+        this.topCategoryId = topCategoryId;
     }
 }

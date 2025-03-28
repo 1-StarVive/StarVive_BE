@@ -13,9 +13,7 @@ import java.util.UUID;
 
 @Entity
 @Getter
-@Builder
 @NoArgsConstructor
-@AllArgsConstructor
 public class ProductCategory {
 
     @Id
@@ -23,12 +21,22 @@ public class ProductCategory {
     @Column(columnDefinition = "BINARY(16)", nullable = false)
     private UUID productCategoryId;
 
-    @Column(columnDefinition = "BINARY(16)", nullable = false)
-    private UUID productId; // 상품 ID (Product 테이블과 연결)
+    private String topCategoryId;
 
-    @Column(columnDefinition = "BINARY(16)", nullable = false)
-    private UUID categoryId; // 상위 카테고리 ID (Category 테이블과 연결)
+    private String middleCategoryId;
 
-    @Column(columnDefinition = "BINARY(16)", nullable = false)
-    private UUID filterCategoryId;  // 필터 카테고리 ID (FilterCategory 테이블과 연결)
+    private String bottomCategoryId;
+
+    private String productId;
+
+    @Builder
+    public ProductCategory(UUID productCategoryId, String topCategoryId,
+                           String middleCategoryId, String bottomCategoryId,
+                           String productId) {
+        this.productCategoryId = productCategoryId;
+        this.topCategoryId = topCategoryId;
+        this.middleCategoryId = middleCategoryId;
+        this.bottomCategoryId = bottomCategoryId;
+        this.productId = productId;
+    }
 }
