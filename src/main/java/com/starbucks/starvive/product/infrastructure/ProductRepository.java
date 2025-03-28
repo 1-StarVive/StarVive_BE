@@ -12,11 +12,11 @@ import java.util.UUID;
 @Repository
 public interface ProductRepository extends JpaRepository<Product, UUID> {
 
-    @Query("SELECT new com.starbucks.starvive.product.vo.ProductListVO(" +
-            "p.productId, p.name, pi.imageUrl, pi.alt, po.price, p.discountRate, " +
-            "p.isNew, p.isTop, p.isLimitedEdition) " +
-            "FROM Product p " +
-            "LEFT JOIN ProductImage pi ON p.productId = pi.productId AND pi.isMainImage = true " +
-            "LEFT JOIN ProductOption po ON p.productId = po.productId")
-    List<ProductListVO> findAllProducts();
+//    @Query("SELECT new com.starbucks.starvive.product.vo.ProductListVO(" +
+//            "p.productId, p.name, pi.imageUrl, pi.alt, po.price, p.discountRate, " +
+//            "p.isNew, p.isTop, p.isLimitedEdition) " +
+//            "FROM Product p " +
+//            "LEFT JOIN ProductImage pi ON p.productId = pi.productId AND pi.isMainImage = true " +
+//            "LEFT JOIN ProductOption po ON p.productId = po.productId")
+//    List<ProductListVO> findAllProducts();
 }

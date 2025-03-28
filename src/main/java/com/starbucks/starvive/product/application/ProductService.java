@@ -13,10 +13,10 @@ public class ProductService {
 
     private final ProductRepository productRepository;
 
-    public List<ProductListResponseDTO> getAllProducts() {
-
-        return productRepository.findAllProducts().stream()
-                .map(ProductListResponseDTO::fromProductVo)
-                .toList();
-    }
+//    public List<ProductListResponseDTO> getAllProducts() {
+//
+//        return productRepository.findAllProducts().stream()
+//                .map(ProductListResponseDTO::fromProductVo)
+//                .toList();
+//    }
 }

@@ -1,98 +1,68 @@
 package com.starbucks.starvive.user.domain;
 
-import com.starbucks.starvive.user.vo.Email;
-import com.starbucks.starvive.user.vo.Password;
-import com.starbucks.starvive.user.vo.PhoneNumber;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Entity
-@Table(name = "users")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User {
-
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(columnDefinition = "BINARY(16)", nullable = false)
     private UUID userId;
 
-    @Embedded
-    private Email email;
+    @Column(nullable = false, unique = true, length = 13)
+    private String loginId;
 
-    @Embedded
-    private Password password;
+    @Column(nullable = false, unique = true, length = 320)
+    private String email;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 20)
+    private String password;
+
+    @Column(nullable = false, length = 20)
     private String name;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false, length = 20)
     private String nickname;
 
-    @Embedded
-    private PhoneNumber phoneNumber;
+    @Column(length = 20)
+    private String phoneNumber;
 
-    @Column(name = "created_at")
-    private LocalDateTime createdAt;
-    
-    @Column(name = "updated_at")
-    private LocalDateTime updatedAt;
-    
-    @Column(name = "deleted_at")
-    private LocalDateTime deletedAt;
-    
+    private LocalDate birth;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private UserStatus status = UserStatus.ACTIVE;
-    
+    private Gender gender;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private SocialLoginType socialLoginType;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private UserStatus status;
+
     @Builder
-    private User(Email email, Password password, String name, String nickname, PhoneNumber phoneNumber) {
+    private User(UUID userId, String loginId, String email, String password, String name,
+                 String nickname, String phoneNumber, LocalDate birth,
+                 Gender gender, SocialLoginType socialLoginType) {
+        this.userId = (userId != null) ? userId : UUID.randomUUID();
+        this.loginId = loginId;
         this.email = email;
         this.password = password;
         this.name = name;
         this.nickname = nickname;
         this.phoneNumber = phoneNumber;
-        this.createdAt = LocalDateTime.now();
-        this.updatedAt = LocalDateTime.now();
+        this.birth = birth;
+        this.gender = gender;
+        this.socialLoginType = socialLoginType;
         this.status = UserStatus.ACTIVE;
-    }
-
-    // 회원 정보 업데이트
-    public void updateProfile(String nickname, PhoneNumber phoneNumber) {
-        this.nickname = nickname;
-        this.phoneNumber = phoneNumber;
-        this.updatedAt = LocalDateTime.now();
-    }
-
-    // 비밀번호 변경
-    public void changePassword(Password newPassword) {
-        this.password = newPassword;
-        this.updatedAt = LocalDateTime.now();
-    }
-
-    // 회원 탈퇴 처리
-    public void delete() {
-        this.status = UserStatus.DELETED;
-        this.deletedAt = LocalDateTime.now();
-        this.updatedAt = LocalDateTime.now();
-    }
-
-    // 회원 상태 변경
-    public void changeStatus(UserStatus status) {
-        this.status = status;
-        this.updatedAt = LocalDateTime.now();
-    }
-
-    // 사용자 상태를 표현하는 열거형
-    public enum UserStatus {
-        ACTIVE,     // 활성화 상태
-        INACTIVE,   // 비활성화 상태
-        SUSPENDED,  // 정지 상태
-        DELETED     // 삭제 상태
     }
 }
