@@ -23,6 +23,9 @@ public class Product {
 
     private Double baseDiscountRate;
 
+    private int price;
+
+
     @Enumerated(EnumType.STRING)
     private ProductStatus productStatus;
 
