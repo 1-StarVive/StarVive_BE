@@ -24,6 +24,9 @@ public class Product {
     @Column(nullable = false)
     private int baseDiscountRate;
 
+    private int price;
+
+
     @Enumerated(EnumType.STRING)
     private ProductStatus productStatus;
 
