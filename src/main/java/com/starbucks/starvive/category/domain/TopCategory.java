@@ -22,10 +22,13 @@ public class TopCategory {
     @Column(columnDefinition = "BINARY(16)", nullable = false)
     private UUID topCategoryId;
 
+    @Column(nullable = false)
     private String name;
 
+    @Column(nullable = false)
     private String thumbImageUrl;
 
+    @Column(nullable = false)
     private String thumbAlt;
 
     @Builder

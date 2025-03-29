@@ -17,8 +17,10 @@ public class LimitedEdition {
     @Column(columnDefinition = "BINARY(16)", nullable = false)
     private UUID limitedEditionId;
 
+    @Column(nullable = false)
     private LocalDate saleStartAt;
 
+    @Column(nullable = false)
     private LocalDate saleEndAt;
 
     private String productId;

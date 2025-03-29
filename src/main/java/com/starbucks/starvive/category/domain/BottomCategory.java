@@ -21,6 +21,7 @@ public class BottomCategory {
     @Column(columnDefinition = "BINARY(16)", nullable = false)
     private UUID bottomCategoryId;
 
+    @Column(nullable = false)
     private String name;
 
     private String middleCategoryId;

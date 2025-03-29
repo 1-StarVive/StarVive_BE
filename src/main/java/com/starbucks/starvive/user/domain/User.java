@@ -17,7 +17,7 @@ public class User {
     @Column(columnDefinition = "BINARY(16)", nullable = false)
     private UUID userId;
 
-    @Column(nullable = false, unique = true, length = 13)
+    @Column(nullable = false, unique = true, length = 20)
     private String loginId;
 
     @Column(nullable = false, unique = true, length = 320)
@@ -32,9 +32,10 @@ public class User {
     @Column(nullable = false, length = 20)
     private String nickname;
 
-    @Column(length = 20)
+    @Column(nullable = false, length = 20)
     private String phoneNumber;
 
+    @Column(nullable = false)
     private LocalDate birth;
 
     @Enumerated(EnumType.STRING)

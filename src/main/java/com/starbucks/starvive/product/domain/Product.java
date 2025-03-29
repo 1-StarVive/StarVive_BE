@@ -15,31 +15,27 @@ public class Product {
     @Column(columnDefinition = "BINARY(16)", nullable = false)
     private UUID productId;
 
+    @Column(nullable = false)
     private String name;
 
-    private String code;
-
+    @Column(nullable = false)
     private String description;
 
-    private Double baseDiscountRate;
+    @Column(nullable = false)
+    private int baseDiscountRate;
 
     @Enumerated(EnumType.STRING)
     private ProductStatus productStatus;
 
-    @Enumerated(EnumType.STRING)
-    private Capacity capacity;
-
     @Builder
-    public Product(UUID productId, String name, String code,
+    public Product(UUID productId, String name,
                    String description,
-                   Double baseDiscountRate,
-                   ProductStatus productStatus, Capacity capacity) {
+                   int baseDiscountRate,
+                   ProductStatus productStatus) {
         this.productId = productId;
         this.name = name;
-        this.code = code;
         this.description = description;
         this.baseDiscountRate = baseDiscountRate;
         this.productStatus = productStatus;
-        this.capacity = capacity;
     }
 }

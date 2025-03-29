@@ -22,16 +22,13 @@ public class ProductDetailImage {
     @Column(nullable = false, columnDefinition = "TEXT")
     private String productDetailContent;
 
-    private Integer order;
-
     private String productId;
 
     @Builder
     public ProductDetailImage(UUID productDetailId, String productDetailContent,
-                              Integer order, String productId) {
+                              String productId) {
         this.productDetailId = productDetailId;
         this.productDetailContent = productDetailContent;
-        this.order = order;
         this.productId = productId;
     }
 }
