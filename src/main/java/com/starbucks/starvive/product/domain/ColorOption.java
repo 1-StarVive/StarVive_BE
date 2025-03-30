@@ -21,14 +21,16 @@ public class ColorOption {
     @Column(columnDefinition = "BINARY(16)", nullable = false)
     private UUID colorId;
 
+    @Column(nullable = false)
     private String name;
 
-    private String code;
+    @Column(nullable = false, length = 10)
+    private String colorCode;
 
     @Builder
-    public ColorOption(UUID colorId, String name, String code) {
+    public ColorOption(UUID colorId, String name, String colorCode) {
         this.colorId = colorId;
         this.name = name;
-        this.code = code;
+        this.colorCode = colorCode;
     }
 }
