@@ -4,7 +4,8 @@ import com.starbucks.starvive.cart.domain.Cart;
 import com.starbucks.starvive.cart.dto.in.AddCartItemRequestDto;
 import com.starbucks.starvive.cart.dto.out.*;
 import com.starbucks.starvive.cart.infrastructure.CartRepository;
-import jakarta.transaction.Transactional;
+import com.starbucks.starvive.product.domain.ProductOption;
+import com.starbucks.starvive.product.infrastructure.ProductOptionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.util.Date;
@@ -19,6 +20,7 @@ import java.util.UUID;
 public class CartService {
 
     private final CartRepository cartRepository;
+    private final ProductOptionRepository productOptionRepository;
 
     public AddCartItemResponseDto addItem(UUID userId, AddCartItemRequestDto dto) {
         // 상품 추가
@@ -37,15 +39,19 @@ public class CartService {
         return new AddCartItemResponseDto("상품이 장바구니에 추가되었습니다.", cart.getQuantity());
     }
 
+
     public List<CartItemResponseDto> getCartList(UUID userId) {
         return cartRepository.findByUserIdAndDeletedAtIsNull(userId).stream()
-                .map(c -> new CartItemResponseDto(
-                        c.getCartId(),
-                        c.getProductOptionId(),
-                        //"텀블러",  예시
-                        //15000,    예시
-                        c.getQuantity()
-                )).toList();
+                .map(c -> {
+                    ProductOption option = productOptionRepository.findById(c.getProductOptionId())
+                            .orElseThrow(() -> new NoSuchElementException("상품 옵션을 찾을 수 없습니다."));
+                    return new CartItemResponseDto(
+                            c.getCartId(),
+                            c.getProductOptionId(),
+                            option.getProduct().getName(),
+                            option.getPrice(),
+                            c.getQuantity());
+                }).toList();
     }
 
     public UpdateQuantityResponseDto updateQuantity(UUID cartId, int quantity) {

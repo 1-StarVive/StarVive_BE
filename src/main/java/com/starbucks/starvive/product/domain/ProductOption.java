@@ -33,6 +33,14 @@ public class ProductOption {
 
     private String sizeId;
 
+    private Boolean carvedAvailable; // 각인 여부
+
+    // 작성자 : 김보미
+    //@ManyToOne(fetch = FetchType.LAZY)
+   // @JoinColumn(name = "product_id")
+   // private Product product;
+
+
     @Builder
     public ProductOption(UUID productOptionId, Integer stock, int price,
                          String productId, String colorId, String sizeId,
@@ -45,4 +53,5 @@ public class ProductOption {
         this.sizeId = sizeId;
         this.carvedAvailable = carvedAvailable;
     }
+
 }

@@ -45,7 +45,7 @@ public class Cart {
         this.deletedAt = new Date();
     }
 
-    public boolean isDeleted() {
-        return this.deletedAt != null;
-    }
+    //public boolean Deleted() {
+        //return this.deletedAt != null;}
+
 }
