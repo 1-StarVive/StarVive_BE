@@ -11,20 +11,19 @@ import java.util.UUID;
 
 @Getter
 @Entity
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class FeaturedSection {
 
     @Id
     @GeneratedValue
     @Column(columnDefinition = "BINARY(16)")
     private UUID featuredSectionId; // 추천 섹션 ID (PK)
-    private String featuredSectionName; // 추천 섹션 이름
 
-    //private String bannerImageUrl;
+    private String name; // 추천 섹션 이름
+    private boolean activated;
 
-    // OneToMany 사용 x
-    @OneToMany(mappedBy = "featuredSection", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<FeaturedSectionProduct> products = new ArrayList<>(); // 해당 섹션에 포함된 상품들
+
+    //@Column(columnDefinition = "BINARY(16)", nullable = false)
+    //private String productId;
 
 
 }

@@ -10,7 +10,8 @@ import java.util.List;
 @Getter
 @Builder
 @AllArgsConstructor
-public class FeaturedSectionProductResponseDto {
+public class FeaturedSectionResponseDto {
     private String featuredSectionsId;
-    private List<FeaturedSectionProductVo> products;
+    private String name;
+
 }

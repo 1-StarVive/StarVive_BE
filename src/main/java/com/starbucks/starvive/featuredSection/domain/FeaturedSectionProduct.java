@@ -18,17 +18,15 @@ public class FeaturedSectionProduct {
     private UUID featuredSectionProductId;
 
     @Column(columnDefinition = "BINARY(16)", nullable = false)
-    private UUID productId;
+    private String productId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "featuredSectionId")
     private FeaturedSection featuredSection;
 
-    // private String name;
-    // private int price;
-    // private String imageUrl;
-    // private String description;
-    // private boolean available;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "productId")
+    private Product product;
 
 }
