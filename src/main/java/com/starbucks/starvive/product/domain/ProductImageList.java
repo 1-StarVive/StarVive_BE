@@ -19,7 +19,6 @@ public class ProductImageList extends BaseEntity {
     private Boolean mainSelected;
 
     @Builder
-
     public ProductImageList(Long productImageId, Boolean mainSelected) {
         ProductImageId = productImageId;
         this.mainSelected = mainSelected;
