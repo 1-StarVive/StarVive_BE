@@ -23,4 +23,5 @@ server:
 logging:
   level:
     root: INFO
-    com.starvive: DEBUG
+    com.starbucks.starvive: DEBUG
+    org.springframework.web: DEBUG
