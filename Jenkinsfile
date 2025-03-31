@@ -4,12 +4,10 @@ pipeline {
     environment {
         GRADLE_OPTS = '-Dorg.gradle.daemon=false -Dorg.gradle.jvmargs="-Xmx512m -XX:MaxMetaspaceSize=256m"'
         DB_CREDS = credentials('db-credentials')
-        BRANCH_NAME = "${env.BRANCH_NAME}"
-        DB_NAME = BRANCH_NAME == 'main' ? 'starvive' : 'starvive_dev'
-        SERVER_PORT = BRANCH_NAME == 'main' ? '8081' : '8082'
-        CONTAINER_NAME = BRANCH_NAME == 'main' ? 'springboot-container' : 'springboot-container-dev'
-        IMAGE_TAG = BRANCH_NAME == 'main' ? 'latest' : 'dev'
-        SPRING_PROFILES_ACTIVE = BRANCH_NAME == 'main' ? 'prod' : 'dev'
+        DB_NAME = 'starvive_dev'
+        SERVER_PORT = '8082'
+        CONTAINER_NAME = 'springboot-container-dev'
+        IMAGE_TAG = 'dev'
     }
     
     stages {
@@ -38,12 +36,6 @@ pipeline {
         }
         
         stage('Deploy') {
-            when {
-                anyOf {
-                    branch 'main'
-                    branch 'dev'
-                }
-            }
             steps {
                 sh '''
                     # 기존 컨테이너 중지 및 제거
