@@ -3,7 +3,7 @@ pipeline {
     
     environment {
         GRADLE_OPTS = '-Dorg.gradle.daemon=false -Dorg.gradle.jvmargs="-Xmx512m -XX:MaxMetaspaceSize=256m"'
-        DB_CREDS = credentials('db-credentials')
+        DB_CREDS = credentials('db-credentials-dev')
         DB_NAME = 'starvive_dev'
         SERVER_PORT = '8082'
         CONTAINER_NAME = 'springboot-container-dev'
