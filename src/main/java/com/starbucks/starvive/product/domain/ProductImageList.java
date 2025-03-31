@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.UuidGenerator;
 
 @Entity
 @Getter
@@ -12,7 +13,9 @@ import lombok.NoArgsConstructor;
 public class ProductImageList extends BaseEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
+    @UuidGenerator
+    @Column(columnDefinition = "BINARY(16)")
     private Long ProductImageId;
 
     @Column(nullable = false)

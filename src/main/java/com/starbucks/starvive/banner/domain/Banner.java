@@ -4,6 +4,7 @@ import com.starbucks.starvive.common.domain.BaseEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.UuidGenerator;
 
 import java.time.LocalDate;
 import java.util.UUID;
@@ -15,7 +16,8 @@ public class Banner extends BaseEntity {
 
     @Id
     @GeneratedValue
-    @Column(columnDefinition = "BINARY(16)", nullable = false)
+    @UuidGenerator
+    @Column(columnDefinition = "BINARY(16)")
     private UUID bannerId;
 
     @Column(nullable = false)

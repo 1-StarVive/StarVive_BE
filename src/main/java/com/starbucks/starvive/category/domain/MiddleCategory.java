@@ -9,6 +9,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.UuidGenerator;
 
 import java.util.UUID;
 
@@ -19,7 +20,8 @@ public class MiddleCategory extends BaseEntity {
 
     @Id
     @GeneratedValue
-    @Column(columnDefinition = "BINARY(16)", nullable = false)
+    @UuidGenerator
+    @Column(columnDefinition = "BINARY(16)")
     private UUID middleCategoryId;
 
     @Column(nullable = false)

@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.UuidGenerator;
 
 import java.util.UUID;
 
@@ -19,7 +20,8 @@ public class ProductCategory extends BaseEntity {
 
     @Id
     @GeneratedValue
-    @Column(columnDefinition = "BINARY(16)", nullable = false)
+    @UuidGenerator
+    @Column(columnDefinition = "BINARY(16)")
     private UUID productCategoryId;
 
     private String topCategoryId;

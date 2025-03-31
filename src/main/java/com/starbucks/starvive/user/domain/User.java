@@ -1,11 +1,13 @@
 package com.starbucks.starvive.user.domain;
 
 import com.starbucks.starvive.common.domain.BaseEntity;
+
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.UuidGenerator;
 
 import java.time.LocalDate;
 import java.util.UUID;
@@ -16,7 +18,9 @@ import java.util.UUID;
 public class User extends BaseEntity {
 
     @Id
-    @Column(columnDefinition = "BINARY(16)", nullable = false)
+    @GeneratedValue
+    @UuidGenerator
+    @Column(columnDefinition = "BINARY(16)")
     private UUID userId;
 
     @Column(nullable = false, unique = true, length = 20)
@@ -56,7 +60,7 @@ public class User extends BaseEntity {
     private User(UUID userId, String loginId, String email, String password, String name,
                  String nickname, String phoneNumber, LocalDate birth,
                  Gender gender, SocialLoginType socialLoginType) {
-        this.userId = (userId != null) ? userId : UUID.randomUUID();
+        this.userId = userId;
         this.loginId = loginId;
         this.email = email;
         this.password = password;

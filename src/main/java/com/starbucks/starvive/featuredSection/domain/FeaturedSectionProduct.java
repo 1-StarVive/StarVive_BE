@@ -4,6 +4,7 @@ import com.starbucks.starvive.product.domain.Product;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.UuidGenerator;
 
 import java.util.UUID;
 
@@ -14,6 +15,7 @@ public class FeaturedSectionProduct {
 
     @Id
     @GeneratedValue
+    @UuidGenerator
     @Column(columnDefinition = "BINARY(16)")
     private UUID featuredSectionProductId;
 

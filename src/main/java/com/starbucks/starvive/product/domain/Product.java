@@ -3,6 +3,7 @@ package com.starbucks.starvive.product.domain;
 import com.starbucks.starvive.common.domain.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.UuidGenerator;
 
 import java.util.UUID;
 
@@ -13,7 +14,8 @@ public class Product extends BaseEntity {
 
     @Id
     @GeneratedValue
-    @Column(columnDefinition = "BINARY(16)", nullable = false)
+    @UuidGenerator
+    @Column(columnDefinition = "BINARY(16)")
     private UUID productId;
 
     @Column(nullable = false)
