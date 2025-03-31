@@ -10,8 +10,15 @@ public class StarviveApplication {
 	public static void main(String[] args) {
 
 		Dotenv dotenv = Dotenv.configure().ignoreIfMissing().load();
-		System.setProperty("DB_USERNAME", dotenv.get("DB_USERNAME"));
-		System.setProperty("DB_PASSWORD", dotenv.get("DB_PASSWORD"));
+		String dbUsername = dotenv.get("DB_USERNAME");
+		String dbPassword = dotenv.get("DB_PASSWORD");
+
+		if (dbUsername != null) {
+    		System.setProperty("DB_USERNAME", dbUsername);
+		}
+		if (dbPassword != null) {
+    	System.setProperty("DB_PASSWORD", dbPassword);
+		}
 
 		SpringApplication.run(StarviveApplication.class, args);
 	}
