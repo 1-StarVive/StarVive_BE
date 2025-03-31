@@ -1,5 +1,6 @@
 package com.starbucks.starvive.user.domain;
 
+import com.starbucks.starvive.common.domain.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -12,7 +13,8 @@ import java.util.UUID;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class User {
+public class User extends BaseEntity {
+
     @Id
     @Column(columnDefinition = "BINARY(16)", nullable = false)
     private UUID userId;

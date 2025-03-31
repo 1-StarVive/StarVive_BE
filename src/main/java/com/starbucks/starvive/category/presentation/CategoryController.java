@@ -16,10 +16,10 @@ public class CategoryController {
 
     private final CategoryService categoryService;
 
-    @GetMapping
-    public List<CategoryListResponseDTO> getCategories() {
-//        return categoryService.getCategories();
-
-        return List.of();
-    }
+//    @GetMapping
+//    public List<CategoryListResponseDTO> getCategories() {
+////        return categoryService.getCategories();
+//
+//        return List.of();
+//    }
 }

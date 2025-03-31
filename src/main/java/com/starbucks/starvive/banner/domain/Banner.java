@@ -1,5 +1,6 @@
 package com.starbucks.starvive.banner.domain;
 
+import com.starbucks.starvive.common.domain.BaseEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,7 +11,7 @@ import java.util.UUID;
 @Entity
 @Getter
 @NoArgsConstructor
-public class Banner {
+public class Banner extends BaseEntity {
 
     @Id
     @GeneratedValue

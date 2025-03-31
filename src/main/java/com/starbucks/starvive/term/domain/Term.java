@@ -1,4 +1,6 @@
 package com.starbucks.starvive.term.domain;
 
-public class Term {
+import com.starbucks.starvive.common.domain.BaseEntity;
+
+public class Term extends BaseEntity {
 }

@@ -1,5 +1,6 @@
 package com.starbucks.starvive.promotion.domain;
 
+import com.starbucks.starvive.common.domain.BaseEntity;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -12,7 +13,7 @@ import java.util.UUID;
 @Entity
 @Getter
 @NoArgsConstructor
-public class Promotion {
+public class Promotion extends BaseEntity {
 
     @Id
     @GeneratedValue

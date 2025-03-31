@@ -1,5 +1,6 @@
 package com.starbucks.starvive.product.domain;
 
+import com.starbucks.starvive.common.domain.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -14,7 +15,7 @@ import java.util.UUID;
 @Entity
 @Getter
 @NoArgsConstructor
-public class ProductCategory {
+public class ProductCategory extends BaseEntity {
 
     @Id
     @GeneratedValue
