@@ -47,7 +47,7 @@ pipeline {
                     springboot-app:latest
                     
                     # 컨테이너가 제대로 시작되었는지 확인
-                    sleep 10
+                    sleep 30
                     if ! docker ps | grep -q springboot-container; then
                         echo "Container failed to start"
                         docker logs springboot-container
@@ -56,10 +56,11 @@ pipeline {
                     
                     # 애플리케이션이 응답하는지 확인
                     for i in {1..30}; do
-                        if curl -s http://localhost:8081/api/health > /dev/null; then
+                        if curl -s http://localhost:8081/actuator/health > /dev/null; then
                             echo "Application is up and running"
                             exit 0
                         fi
+                        echo "Waiting for application to start... (attempt $i/30)"
                         sleep 2
                     done
                     
