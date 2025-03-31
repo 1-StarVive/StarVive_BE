@@ -3,6 +3,10 @@ pipeline {
     
     environment {
         GRADLE_OPTS = '-Dorg.gradle.daemon=false -Dorg.gradle.jvmargs="-Xmx512m -XX:MaxMetaspaceSize=256m"'
+        DB_USERNAME = credentials('DB_USERNAME')
+        DB_PASSWORD = credentials('DB_PASSWORD')
+        DB_NAME = 'starvive'
+        SERVER_PORT = '8081'
     }
     
     stages {
@@ -39,10 +43,10 @@ pipeline {
                     
                     # 새로운 컨테이너 실행
                     docker run -d --name springboot-container \
-                    -e DB_USERNAME=appuser \
-                    -e DB_PASSWORD=1234 \
-                    -e SPRING_DATASOURCE_URL=jdbc:mysql://localhost:3306/starvive \
-                    -e SERVER_PORT=8081 \
+                    -e DB_USERNAME=${DB_USERNAME} \
+                    -e DB_PASSWORD=${DB_PASSWORD} \
+                    -e SPRING_DATASOURCE_URL=jdbc:mysql://localhost:3306/${DB_NAME} \
+                    -e SERVER_PORT=${SERVER_PORT} \
                     --network=host \
                     springboot-app:latest
                     
@@ -56,7 +60,7 @@ pipeline {
                     
                     # 애플리케이션이 응답하는지 확인
                     for i in {1..30}; do
-                        if curl -s http://localhost:8081/actuator/health > /dev/null; then
+                        if curl -s http://localhost:${SERVER_PORT}/actuator/health > /dev/null; then
                             echo "Application is up and running"
                             exit 0
                         fi
