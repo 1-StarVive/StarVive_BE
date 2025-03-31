@@ -12,12 +12,12 @@ import java.util.UUID;
 @Repository
 public interface CategoryRepository extends JpaRepository<TopCategory, UUID> {
 
-    @Query("""
-    SELECT new com.starbucks.starvive.category.vo.CategoryListVO(
-        c.categoryId, c.categoryName, c.url, c.alt)
-    FROM TopCategory c
-    """)
-    List<CategoryListVO> findAllCategories();
+//    @Query("""
+//    SELECT new com.starbucks.starvive.category.vo.CategoryListVO(
+//        c.categoryId, c.categoryName, c.url, c.alt)
+//    FROM TopCategory c
+//    """)
+//    List<CategoryListVO> findAllCategories();
 
     // List<Category> findAll();
 }

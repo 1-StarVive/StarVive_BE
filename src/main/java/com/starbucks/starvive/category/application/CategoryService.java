@@ -13,9 +13,9 @@ public class CategoryService {
 
     private final CategoryRepository categoryRepository;
 
-    public List<CategoryListResponseDTO> getCategories() {
-        return categoryRepository.findAllCategories().stream()
-                .map(CategoryListResponseDTO::fromCategoryVo)
-                .toList();
-    }
+//    public List<CategoryListResponseDTO> getCategories() {
+//        return categoryRepository.findAllCategories().stream()
+//                .map(CategoryListResponseDTO::fromCategoryVo)
+//                .toList();
+//    }
 }

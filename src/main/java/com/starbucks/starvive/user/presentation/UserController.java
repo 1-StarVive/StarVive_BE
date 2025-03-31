@@ -18,10 +18,4 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class UserController {
 
-    private final UserService userService;
-
-    /**
-     * 사용자 등록 API
-     */
-    
 } 

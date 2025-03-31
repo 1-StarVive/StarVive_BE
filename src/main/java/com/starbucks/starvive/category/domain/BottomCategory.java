@@ -1,5 +1,6 @@
 package com.starbucks.starvive.category.domain;
 
+import com.starbucks.starvive.common.domain.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -14,7 +15,7 @@ import java.util.UUID;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class BottomCategory {
+public class BottomCategory extends BaseEntity {
 
     @Id
     @GeneratedValue
@@ -27,7 +28,6 @@ public class BottomCategory {
     private String middleCategoryId;
 
     @Builder
-
     public BottomCategory(UUID bottomCategoryId,
                           String name, String middleCategoryId) {
         this.bottomCategoryId = bottomCategoryId;

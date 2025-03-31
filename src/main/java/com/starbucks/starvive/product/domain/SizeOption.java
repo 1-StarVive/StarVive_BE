@@ -1,5 +1,6 @@
 package com.starbucks.starvive.product.domain;
 
+import com.starbucks.starvive.common.domain.BaseEntity;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -10,7 +11,7 @@ import java.util.UUID;
 @Entity
 @Getter
 @NoArgsConstructor
-public class SizeOption {
+public class SizeOption extends BaseEntity {
 
     @Id
     @GeneratedValue

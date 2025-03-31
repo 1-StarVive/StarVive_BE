@@ -1,4 +1,6 @@
 package com.starbucks.starvive.payment.domain;
 
-public class Payment {
+import com.starbucks.starvive.common.domain.BaseEntity;
+
+public class Payment extends BaseEntity {
 }
