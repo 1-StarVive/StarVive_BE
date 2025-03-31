@@ -40,19 +40,19 @@ public class CartService {
     }
 
 
-    public List<CartItemResponseDto> getCartList(UUID userId) {
-        return cartRepository.findByUserIdAndDeletedAtIsNull(userId).stream()
-                .map(c -> {
-                    ProductOption option = productOptionRepository.findById(c.getProductOptionId())
-                            .orElseThrow(() -> new NoSuchElementException("상품 옵션을 찾을 수 없습니다."));
-                    return new CartItemResponseDto(
-                            c.getCartId(),
-                            c.getProductOptionId(),
-                            option.getProduct().getName(),
-                            option.getPrice(),
-                            c.getQuantity());
-                }).toList();
-    }
+//    public List<CartItemResponseDto> getCartList(UUID userId) {
+//        return cartRepository.findByUserIdAndDeletedAtIsNull(userId).stream()
+//                .map(c -> {
+//                    ProductOption option = productOptionRepository.findById(c.getProductOptionId())
+//                            .orElseThrow(() -> new NoSuchElementException("상품 옵션을 찾을 수 없습니다."));
+//                    return new CartItemResponseDto(
+//                            c.getCartId(),
+//                            c.getProductOptionId(),
+//                            option.getProduct().getName(),
+//                            option.getPrice(),
+//                            c.getQuantity());
+//                }).toList();
+//    }
 
     public UpdateQuantityResponseDto updateQuantity(UUID cartId, int quantity) {
         Cart cart = cartRepository.findById(cartId).orElseThrow();

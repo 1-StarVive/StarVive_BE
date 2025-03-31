@@ -29,10 +29,10 @@ public class CartController {
     }
     
     // 장바구니 목록 조회
-    @GetMapping
-    public ResponseEntity<List<CartItemResponseDto>> getCart(@RequestParam UUID userId) {
-        return ResponseEntity.ok(cartService.getCartList(userId));
-    }
+//    @GetMapping
+//    public ResponseEntity<List<CartItemResponseDto>> getCart(@RequestParam UUID userId) {
+//        return ResponseEntity.ok(cartService.getCartList(userId));
+//    }
 
     // 장바구니 상품 수량 변경
     @PatchMapping("/{cartId}")

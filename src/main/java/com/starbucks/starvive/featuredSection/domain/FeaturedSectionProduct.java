@@ -23,10 +23,4 @@ public class FeaturedSectionProduct {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "featuredSectionId")
     private FeaturedSection featuredSection;
-
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "productId")
-    private Product product;
-
 }

@@ -76,7 +76,7 @@ public class FeaturedSectionService {
                          //       .price(option.getPrice())
                          //       .discountRate(product.getDiscountRate())
                           //      .discountedPrice(discountedPrice)
-                                .code(product.getCode())
+                            //     .code(product.getCode())
                            //     .LimitedEdition(option.LimitedEdition())
                           //      .topProduct(product.TopProduct())
                            //     .newProduct(product.NewProduct())

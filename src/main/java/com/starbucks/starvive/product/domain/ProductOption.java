@@ -34,8 +34,6 @@ public class ProductOption extends BaseEntity {
 
     private String sizeId;
 
-    private Boolean carvedAvailable; // 각인 여부
-
     // 작성자 : 김보미
     //@ManyToOne(fetch = FetchType.LAZY)
    // @JoinColumn(name = "product_id")

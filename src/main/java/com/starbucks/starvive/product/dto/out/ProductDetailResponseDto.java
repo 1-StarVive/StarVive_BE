@@ -21,16 +21,4 @@ public class ProductDetailResponseDto {
     private int discountedPrice;
     private String code;
 
-    public static ProductDetailResponseDto from(Product product) {
-        return ProductDetailResponseDto.builder()
-                .productId(product.getProductId())
-                .name(product.getName())
-                .thumbnailUrl(product.getThumbnailUrl())
-                .altText(product.getAltText())
-                .price(product.getPrice())
-                .discountRate(product.getDiscountRate())
-                .discountedPrice(product.getDiscountedPrice())
-                .code(product.getCode())
-                .build();
-    }
 }
