@@ -2,8 +2,7 @@ package com.starbucks.starvive.cart.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
-
-import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.UUID;
 
@@ -27,13 +26,12 @@ public class Cart {
     @Column(nullable = false)
     private Integer quantity; // 상품 수량
 
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date date; // 생성일자 (담은 시각)
+
+    private LocalDate date; // 생성일자 (담은 시각)
 
     private Boolean checked; // 체크 여부 (예: 주문 선택)
 
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date deletedAt; // soft delete용 필드
+    private LocalDate deletedAt; // soft delete용 필드
 
     // 수량 변경
     public void updateQuantity(int quantity) {
@@ -42,7 +40,7 @@ public class Cart {
 
     // 삭제 처리 (soft delete)
     public void softDelete() {
-        this.deletedAt = new Date();
+        this.deletedAt =  LocalDate.now();
     }
 
     //public boolean Deleted() {

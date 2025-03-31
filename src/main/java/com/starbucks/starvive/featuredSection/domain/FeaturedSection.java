@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.UuidGenerator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +16,7 @@ public class FeaturedSection {
 
     @Id
     @GeneratedValue
+    @UuidGenerator
     @Column(columnDefinition = "BINARY(16)")
     private UUID featuredSectionId; // 추천 섹션 ID (PK)
 
