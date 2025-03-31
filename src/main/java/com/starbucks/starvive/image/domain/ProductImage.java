@@ -18,21 +18,20 @@ public class ProductImage {
     @Column(columnDefinition = "BINARY(16)", nullable = false)
     private UUID productThumbId;
 
-    private String imageThumbUrl;
+    @Column(nullable = false)
+    private String imageUrl;
 
-    private String imageThumbAlt;
-
-    private Boolean mainSelected;
+    @Column(nullable = false)
+    private String imageAlt;
 
     private String productId;
 
     @Builder
-    public ProductImage(UUID productThumbId, String imageThumbUrl,
-                        String imageThumbAlt, Boolean mainSelected, String productId) {
+    public ProductImage(UUID productThumbId, String imageUrl,
+                        String imageAlt, String productId) {
         this.productThumbId = productThumbId;
-        this.imageThumbUrl = imageThumbUrl;
-        this.imageThumbAlt = imageThumbAlt;
-        this.mainSelected = mainSelected;
+        this.imageUrl = imageUrl;
+        this.imageAlt = imageAlt;
         this.productId = productId;
     }
 }

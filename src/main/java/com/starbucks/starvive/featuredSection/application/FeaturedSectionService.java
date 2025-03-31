@@ -60,33 +60,34 @@ public class FeaturedSectionService {
 
                         Product product = productRepository.findById(productId)
                                 .orElseThrow(() -> new RuntimeException("Product not found: " + productId));
-                        ProductOption option = productOptionRepository.findByProductId(productId)
-                                .orElseThrow(() -> new RuntimeException("ProductOption not found"));
-                        ProductImage image = productImageRepository.findThumbnailByProductId(productId)
-                                .orElseThrow(() -> new RuntimeException("Thumbnail image not found"));
 
-                        int discountedPrice = product.getPrice() * (100 - option.getDiscountRate()) / 100;
+                        //ProductOption option = productOptionRepository.findByProductId(productId)
+                         //       .orElseThrow(() -> new RuntimeException("ProductOption not found"));
+                      //  ProductImage image = productImageRepository.findThumbnailByProductId(productId)
+                      //          .orElseThrow(() -> new RuntimeException("Thumbnail image not found"));
+
+                      //  int discountedPrice = product.getPrice() * (100 - option.getDiscountRate()) / 100;
 
                         return FeaturedSectionProductVo.builder()
                                 .productId(UUID.fromString(productId.toString()))
-                                .url(image.getThumbnailUrl())
-                                .alt(image.getThumbnailAlt())
+                         //       .url(image.getThumbnailUrl())
+                        //        .alt(image.getThumbnailAlt())
                                 .name(product.getName())
-                                .price(option.getPrice())
-                                .discountRate(product.getDiscountRate())
-                                .discountedPrice(discountedPrice)
+                         //       .price(option.getPrice())
+                         //       .discountRate(product.getDiscountRate())
+                          //      .discountedPrice(discountedPrice)
                                 .code(product.getCode())
-                                .LimitedEdition(detail.LimitedEdition())
-                                .topProduct(product.TopProduct())
-                                .newProduct(product.NewProduct())
+                           //     .LimitedEdition(option.LimitedEdition())
+                          //      .topProduct(product.TopProduct())
+                           //     .newProduct(product.NewProduct())
                                 .build();
                     }).toList();
 
-                    return FeaturedSectionResponseDto.builder()
-                            .featuredSectionsId(section.getFeaturedSectionId().toString())
-                            .products(products)
-                            .build();
-                })
-                .toList();
+                    return FeaturedSectionProductResponseDto.builder()
+                           .featuredSectionsId(section.getFeaturedSectionId().toString())
+                           .products(products)
+                           .build();
+               })
+               .toList();
     }
 }

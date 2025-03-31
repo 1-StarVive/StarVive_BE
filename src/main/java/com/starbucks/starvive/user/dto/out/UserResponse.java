@@ -1,10 +1,12 @@
 package com.starbucks.starvive.user.dto.out;
 
 import com.starbucks.starvive.user.domain.User;
+import com.starbucks.starvive.user.domain.UserStatus;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -16,12 +18,12 @@ public class UserResponse {
     private String name;
     private String nickname;
     private String phoneNumber;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
-    private User.UserStatus status;
+    private LocalDate createdAt;
+    private LocalDate updatedAt;
+    private UserStatus status;
     
     @Builder
-    public UserResponse(UUID userId, String email, String name, String nickname, String phoneNumber, LocalDateTime createdAt, LocalDateTime updatedAt, User.UserStatus status) {
+    public UserResponse(UUID userId, String email, String name, String nickname, String phoneNumber, LocalDate createdAt, LocalDate updatedAt, UserStatus status) {
         this.userId = userId;
         this.email = email;
         this.name = name;
@@ -35,13 +37,13 @@ public class UserResponse {
     public static UserResponse from(User user) {
         return UserResponse.builder()
                 .userId(user.getUserId())
-                .email(user.getEmail().getValue())
+                .email(user.getEmail())
                 .name(user.getName())
                 .nickname(user.getNickname())
-                .phoneNumber(user.getPhoneNumber().getValue())
-                .createdAt(user.getCreatedAt())
-                .updatedAt(user.getUpdatedAt())
+                .phoneNumber(user.getPhoneNumber())
                 .status(user.getStatus())
+                .createdAt(LocalDate.now())
+                .updatedAt(LocalDate.now())
                 .build();
     }
 } 
