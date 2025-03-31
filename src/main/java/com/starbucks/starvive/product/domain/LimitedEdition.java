@@ -4,7 +4,6 @@ import com.starbucks.starvive.common.domain.BaseEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.UuidGenerator;
 
 import java.time.LocalDate;
 import java.util.UUID;
@@ -16,8 +15,7 @@ public class LimitedEdition extends BaseEntity {
 
     @Id
     @GeneratedValue
-    @UuidGenerator
-    @Column(columnDefinition = "BINARY(16)")
+    @Column(columnDefinition = "BINARY(16)", nullable = false)
     private UUID limitedEditionId;
 
     @Column(nullable = false)

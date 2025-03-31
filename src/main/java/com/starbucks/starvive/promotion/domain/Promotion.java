@@ -5,7 +5,6 @@ import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.UuidGenerator;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -18,8 +17,7 @@ public class Promotion extends BaseEntity {
 
     @Id
     @GeneratedValue
-    @UuidGenerator
-    @Column(columnDefinition = "BINARY(16)")
+    @Column(columnDefinition = "BINARY(16)", nullable = false)
     private UUID promotionId;
 
     @Column(nullable = false)

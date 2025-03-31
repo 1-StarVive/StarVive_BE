@@ -6,7 +6,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.UuidGenerator;
 
 import java.util.UUID;
 
@@ -17,8 +16,7 @@ public class ProductImage extends BaseEntity {
 
     @Id
     @GeneratedValue
-    @UuidGenerator
-    @Column(columnDefinition = "BINARY(16)")
+    @Column(columnDefinition = "BINARY(16)", nullable = false)
     private UUID productThumbId;
 
     @Column(nullable = false)

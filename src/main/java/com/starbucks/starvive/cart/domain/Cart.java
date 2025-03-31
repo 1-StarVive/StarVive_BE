@@ -2,7 +2,6 @@ package com.starbucks.starvive.cart.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.UuidGenerator;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -17,8 +16,6 @@ public class Cart {
 
     @Id
     @GeneratedValue
-    @UuidGenerator
-    @Column(columnDefinition = "BINARY(16)")
     private UUID cartId; // 장바구니 항목 고유 식별자
 
     @Column(columnDefinition = "BINARY(16)", nullable = false)
