@@ -15,14 +15,14 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ProductController {
 
-    private final ProductService productService;
+     private final ProductService productService;
 
 
-//    @Operation(summary = "Product All List",
-//            description = "Product All List API 입니다",
-//            tags = {"Product-Service"})
-//    @GetMapping
-//    public List<ProductListResponseDTO> getProductAllList() {
-//        return productService.getAllProducts();
-//    }
+    @Operation(summary = "Product All List",
+            description = "Product All List API 입니다",
+            tags = {"Product-Service"})
+    @GetMapping
+    public List<ProductListResponseDTO> getProductAllList() {
+        return List.of();
+    }
 }

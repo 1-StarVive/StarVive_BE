@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/featured-Sections")
+@RequestMapping("/api/v1/featured-Sections")
 @RequiredArgsConstructor
 public class FeaturedSectionController {
 

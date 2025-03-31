@@ -14,7 +14,7 @@ import java.util.UUID;
 // 작성자 : 김보미
 
 @RestController
-@RequestMapping("/cart")
+@RequestMapping("/api/v1/cart")
 @RequiredArgsConstructor
 public class CartController {
 
