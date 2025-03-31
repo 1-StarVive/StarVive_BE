@@ -3,8 +3,7 @@ pipeline {
     
     environment {
         GRADLE_OPTS = '-Dorg.gradle.daemon=false -Dorg.gradle.jvmargs="-Xmx512m -XX:MaxMetaspaceSize=256m"'
-        DB_USERNAME = credentials('DB_USERNAME')
-        DB_PASSWORD = credentials('DB_PASSWORD')
+        DB_CREDS = credentials('db-credentials')
         DB_NAME = 'starvive'
         SERVER_PORT = '8081'
     }
@@ -43,8 +42,8 @@ pipeline {
                     
                     # 새로운 컨테이너 실행
                     docker run -d --name springboot-container \
-                    -e DB_USERNAME=${DB_USERNAME} \
-                    -e DB_PASSWORD=${DB_PASSWORD} \
+                    -e DB_USERNAME=${DB_CREDS_USR} \
+                    -e DB_PASSWORD=${DB_CREDS_PSW} \
                     -e SPRING_DATASOURCE_URL=jdbc:mysql://localhost:3306/${DB_NAME} \
                     -e SERVER_PORT=${SERVER_PORT} \
                     --network=host \
@@ -78,7 +77,7 @@ pipeline {
     
     post {
         always {
-            cleanWs()
+            sh 'rm -rf ~/.gradle/caches/ || true'
         }
     }
 }
