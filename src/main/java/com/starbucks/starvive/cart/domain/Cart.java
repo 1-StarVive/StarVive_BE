@@ -1,23 +1,22 @@
 package com.starbucks.starvive.cart.domain;
 
-import com.starbucks.starvive.common.domain.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.UUID;
-
-import org.hibernate.annotations.UuidGenerator;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
+@Builder
 public class Cart {
 
     @Id
-    @UuidGenerator
-    @Column(name = "cart_id", updatable = false, nullable = false, columnDefinition = "BINARY(16)")
-    private UUID cartId;
+    @GeneratedValue
+    private UUID cartId; // 장바구니 항목 고유 식별자
 
     @Column(columnDefinition = "BINARY(16)", nullable = false)
     private UUID userId; // 사용자 식별자
@@ -35,16 +34,6 @@ public class Cart {
 
     @Temporal(TemporalType.TIMESTAMP)
     private Date deletedAt; // soft delete용 필드
-
-    @Builder
-    public Cart(UUID userId, UUID productOptionId, Integer quantity, Date date, Boolean checked) {
-        this.cartId = UUID.randomUUID();
-        this.userId = userId;
-        this.productOptionId = productOptionId;
-        this.quantity = quantity;
-        this.date = date;
-        this.checked = checked;
-    }
 
     // 수량 변경
     public void updateQuantity(int quantity) {

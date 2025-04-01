@@ -9,21 +9,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import org.hibernate.annotations.UuidGenerator;
-
 @Getter
 @Entity
 public class FeaturedSection {
 
     @Id
-    @UuidGenerator
-    @Column(updatable = false, nullable = false, columnDefinition = "BINARY(16)")
-    private UUID id;
+    @GeneratedValue
+    @Column(columnDefinition = "BINARY(16)")
+    private UUID featuredSectionId; // 추천 섹션 ID (PK)
 
-    @Column(nullable = false)
     private String name; // 추천 섹션 이름
-
-    @Column(nullable = false)
     private boolean activated;
 
 
