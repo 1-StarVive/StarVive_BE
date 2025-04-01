@@ -21,7 +21,7 @@ public class ProductController {
     @Operation(summary = "Product All List",
             description = "Product All List API 입니다",
             tags = {"Product-Service"})
-    @GetMapping("/list-all")
+    @GetMapping
     public List<ProductListResponseDTO> getAllProductList() {
         return productService.getAllProducts().stream()
                 .map(ProductListResponseDTO::fromProductVo)

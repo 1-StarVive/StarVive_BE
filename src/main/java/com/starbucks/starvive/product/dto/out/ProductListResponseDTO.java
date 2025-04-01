@@ -1,5 +1,6 @@
 package com.starbucks.starvive.product.dto.out;
 
+import com.starbucks.starvive.common.domain.BaseEntity;
 import com.starbucks.starvive.product.vo.ProductListVO;
 
 import lombok.AllArgsConstructor;
@@ -7,6 +8,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Getter
@@ -29,6 +32,11 @@ public class ProductListResponseDTO {
 
     private int discountedPrice; // 할인금액
 
+    private String productIdStr;
+
+    private LocalDateTime createdAt;
+
+    private Boolean wasNew;
 
     // vo -> dto 변환
     public static ProductListResponseDTO fromProductVo(ProductListVO productListVO) {
@@ -50,6 +58,9 @@ public class ProductListResponseDTO {
                 .price(price)
                 .baseDiscountRate(baseDiscountRate)
                 .discountedPrice(discountedPrice)
+                .productIdStr(productListVO.getProductIdStr())
+                .createdAt(productListVO.getCreatedAt())
+                .wasNew(productListVO.getWasNew())
                 .build();
     }
 }
