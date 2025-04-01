@@ -19,7 +19,7 @@ public class BottomCategory extends BaseEntity {
 
     @Id
     @UuidGenerator
-    @Column(name = "bottom_category_id", updatable = false, nullable = false, columnDefinition = "BINARY(16)")
+    @Column(updatable = false, nullable = false, columnDefinition = "BINARY(16)")
     private UUID bottomCategoryId;
 
     @Column(nullable = false)

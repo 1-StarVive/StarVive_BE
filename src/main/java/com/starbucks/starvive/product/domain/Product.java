@@ -14,7 +14,7 @@ public class Product extends BaseEntity {
 
     @Id
     @UuidGenerator
-    @Column(name = "product_id", updatable = false, nullable = false, columnDefinition = "BINARY(16)")
+    @Column(updatable = false, nullable = false, columnDefinition = "BINARY(16)")
     private UUID productId;
 
     @Column(nullable = false)

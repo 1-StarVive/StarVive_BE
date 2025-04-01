@@ -18,7 +18,7 @@ public class Banner extends BaseEntity {
 
     @Id
     @UuidGenerator
-    @Column(name = "banner_id", updatable = false, nullable = false, columnDefinition = "BINARY(16)")
+    @Column(updatable = false, nullable = false, columnDefinition = "BINARY(16)")
     private UUID bannerId;
 
     @Column(nullable = false)

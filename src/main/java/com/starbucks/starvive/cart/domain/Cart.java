@@ -16,7 +16,7 @@ public class Cart {
 
     @Id
     @UuidGenerator
-    @Column(name = "cart_id", updatable = false, nullable = false, columnDefinition = "BINARY(16)")
+    @Column(updatable = false, nullable = false, columnDefinition = "BINARY(16)")
     private UUID cartId;
 
     @Column(columnDefinition = "BINARY(16)", nullable = false)
