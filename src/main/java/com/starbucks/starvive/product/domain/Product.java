@@ -25,17 +25,12 @@ public class Product extends BaseEntity {
     @Column(nullable = false)
     private int baseDiscountRate;
 
-    @Column(nullable = false)
-    private int price;
-
     @Enumerated(EnumType.STRING)
     private ProductStatus productStatus;
 
     @Builder
-    public Product(UUID productId, String name,
-                   String description,
-                   int baseDiscountRate,
-                   ProductStatus productStatus) {
+    public Product(UUID productId, String name, String description,
+                   int baseDiscountRate, ProductStatus productStatus) {
         this.productId = productId;
         this.name = name;
         this.description = description;

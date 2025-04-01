@@ -1,7 +1,7 @@
 package com.starbucks.starvive.product.application;
 
-import com.starbucks.starvive.product.dto.out.ProductListResponseDTO;
-import com.starbucks.starvive.product.infrastructure.ProductRepository;
+import com.starbucks.starvive.product.infrastructure.ProductCustomRepository;
+import com.starbucks.starvive.product.vo.ProductListVO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -11,12 +11,9 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ProductService {
 
-    private final ProductRepository productRepository;
+    private final ProductCustomRepository productCustomRepository;
 
-//    public List<ProductListResponseDTO> getAllProducts() {
-//
-//        return productRepository.findAllProducts().stream()
-//                .map(ProductListResponseDTO::fromProductVo)
-//                .toList();
-//    }
+    public List<ProductListVO> getAllProducts() {
+        return productCustomRepository.findAllProducts();
+    }
 }

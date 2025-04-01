@@ -23,11 +23,5 @@ public class ProductListVO {
 
     private int productPrice;
 
-    private Double productDiscountRate;
-
-    private Boolean isNew;
-
-    private Boolean isTop;
-
-    private Boolean isLimitedEdition;
+    private int productBaseDiscountRate;
 }

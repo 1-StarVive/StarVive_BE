@@ -6,10 +6,8 @@ import com.starbucks.starvive.featuredSection.dto.out.FeaturedSectionResponseDto
 import com.starbucks.starvive.featuredSection.infrastructure.FeaturedSectionProductRepository;
 import com.starbucks.starvive.featuredSection.infrastructure.FeaturedSectionRepository;
 import com.starbucks.starvive.featuredSection.vo.FeaturedSectionProductVo;
-import com.starbucks.starvive.image.domain.ProductImage;
 import com.starbucks.starvive.image.infrastructure.ProductImageRepository;
 import com.starbucks.starvive.product.domain.Product;
-import com.starbucks.starvive.product.domain.ProductOption;
 import com.starbucks.starvive.product.infrastructure.ProductOptionRepository;
 import com.starbucks.starvive.product.infrastructure.ProductRepository;
 import lombok.RequiredArgsConstructor;
@@ -58,8 +56,8 @@ public class FeaturedSectionService {
                     List<FeaturedSectionProductVo> products = sectionProducts.stream().map(fsp -> {
                         UUID productId = UUID.fromString(fsp.getProductId());
 
-                        Product product = productRepository.findById(productId)
-                                .orElseThrow(() -> new RuntimeException("Product not found: " + productId));
+//                        Product product = productRepository.findById(productId)
+//                                .orElseThrow(() -> new RuntimeException("Product not found: " + productId));
 
                         //ProductOption option = productOptionRepository.findByProductId(productId)
                          //       .orElseThrow(() -> new RuntimeException("ProductOption not found"));
@@ -72,7 +70,7 @@ public class FeaturedSectionService {
                                 .productId(UUID.fromString(productId.toString()))
                          //       .url(image.getThumbnailUrl())
                         //        .alt(image.getThumbnailAlt())
-                                .name(product.getName())
+                        //        .name(product.getName())
                          //       .price(option.getPrice())
                          //       .discountRate(product.getDiscountRate())
                           //      .discountedPrice(discountedPrice)

@@ -21,8 +21,10 @@ public class ProductController {
     @Operation(summary = "Product All List",
             description = "Product All List API 입니다",
             tags = {"Product-Service"})
-    @GetMapping
-    public List<ProductListResponseDTO> getProductAllList() {
-        return List.of();
+    @GetMapping("/list-all")
+    public List<ProductListResponseDTO> getAllProductList() {
+        return productService.getAllProducts().stream()
+                .map(ProductListResponseDTO::fromProductVo)
+                .toList();
     }
 }
