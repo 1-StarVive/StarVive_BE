@@ -11,16 +11,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ProductImageList extends BaseEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long ProductImageId;
-
+    
     @Column(nullable = false)
     private Boolean mainSelected;
 
     @Builder
-    public ProductImageList(Long productImageId, Boolean mainSelected) {
-        ProductImageId = productImageId;
+    public ProductImageList(Boolean mainSelected) {
+        
         this.mainSelected = mainSelected;
     }
 }

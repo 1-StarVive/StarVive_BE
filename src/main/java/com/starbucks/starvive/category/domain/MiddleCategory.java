@@ -3,8 +3,6 @@ package com.starbucks.starvive.category.domain;
 import com.starbucks.starvive.common.domain.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,20 +15,13 @@ import java.util.UUID;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class MiddleCategory extends BaseEntity {
 
-    @Id
-    @GeneratedValue
-    @Column(columnDefinition = "BINARY(16)", nullable = false)
-    private UUID middleCategoryId;
-
     @Column(nullable = false)
     private String name;
 
     private String topCategoryId;
 
     @Builder
-    public MiddleCategory(UUID middleCategoryId,
-                          String name, String topCategoryId) {
-        this.middleCategoryId = middleCategoryId;
+    public MiddleCategory(String name, String topCategoryId) {
         this.name = name;
         this.topCategoryId = topCategoryId;
     }

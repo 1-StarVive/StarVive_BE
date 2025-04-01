@@ -17,11 +17,7 @@ import java.util.UUID;
 @NoArgsConstructor
 public class ColorOption extends BaseEntity {
 
-    @Id
-    @GeneratedValue
-    @Column(columnDefinition = "BINARY(16)", nullable = false)
-    private UUID colorId;
-
+    
     @Column(nullable = false)
     private String name;
 
@@ -29,8 +25,8 @@ public class ColorOption extends BaseEntity {
     private String colorCode;
 
     @Builder
-    public ColorOption(UUID colorId, String name, String colorCode) {
-        this.colorId = colorId;
+    public ColorOption(String name, String colorCode) {
+        
         this.name = name;
         this.colorCode = colorCode;
     }

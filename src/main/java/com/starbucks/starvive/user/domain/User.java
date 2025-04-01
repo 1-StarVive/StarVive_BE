@@ -15,10 +15,6 @@ import java.util.UUID;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User extends BaseEntity {
 
-    @Id
-    @Column(columnDefinition = "BINARY(16)", nullable = false)
-    private UUID userId;
-
     @Column(nullable = false, unique = true, length = 20)
     private String loginId;
 
@@ -53,10 +49,9 @@ public class User extends BaseEntity {
     private UserStatus status;
 
     @Builder
-    private User(UUID userId, String loginId, String email, String password, String name,
+    private User(String loginId, String email, String password, String name,
                  String nickname, String phoneNumber, LocalDate birth,
                  Gender gender, SocialLoginType socialLoginType) {
-        this.userId = (userId != null) ? userId : UUID.randomUUID();
         this.loginId = loginId;
         this.email = email;
         this.password = password;

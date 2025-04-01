@@ -11,11 +11,6 @@ import java.util.UUID;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Product extends BaseEntity {
 
-    @Id
-    @GeneratedValue
-    @Column(columnDefinition = "BINARY(16)", nullable = false)
-    private UUID productId;
-
     @Column(nullable = false)
     private String name;
 
@@ -32,11 +27,10 @@ public class Product extends BaseEntity {
     private ProductStatus productStatus;
 
     @Builder
-    public Product(UUID productId, String name,
+    public Product(String name,
                    String description,
                    int baseDiscountRate,
                    ProductStatus productStatus) {
-        this.productId = productId;
         this.name = name;
         this.description = description;
         this.baseDiscountRate = baseDiscountRate;

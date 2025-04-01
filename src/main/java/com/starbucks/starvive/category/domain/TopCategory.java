@@ -3,8 +3,6 @@ package com.starbucks.starvive.category.domain;
 import com.starbucks.starvive.common.domain.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -18,11 +16,6 @@ import java.util.UUID;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class TopCategory extends BaseEntity {
 
-    @Id
-    @GeneratedValue
-    @Column(columnDefinition = "BINARY(16)", nullable = false)
-    private UUID topCategoryId;
-
     @Column(nullable = false)
     private String name;
 
@@ -33,9 +26,8 @@ public class TopCategory extends BaseEntity {
     private String thumbAlt;
 
     @Builder
-    public TopCategory(UUID topCategoryId, String name,
+    public TopCategory(String name,
                        String thumbImageUrl, String thumbAlt) {
-        this.topCategoryId = topCategoryId;
         this.name = name;
         this.thumbImageUrl = thumbImageUrl;
         this.thumbAlt = thumbAlt;

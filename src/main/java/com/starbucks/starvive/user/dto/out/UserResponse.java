@@ -36,7 +36,7 @@ public class UserResponse {
     
     public static UserResponse from(User user) {
         return UserResponse.builder()
-                .userId(user.getUserId())
+              
                 .email(user.getEmail())
                 .name(user.getName())
                 .nickname(user.getNickname())

@@ -13,11 +13,7 @@ import java.util.UUID;
 @NoArgsConstructor
 public class LimitedEdition extends BaseEntity {
 
-    @Id
-    @GeneratedValue
-    @Column(columnDefinition = "BINARY(16)", nullable = false)
-    private UUID limitedEditionId;
-
+    
     @Column(nullable = false)
     private LocalDate saleStartAt;
 

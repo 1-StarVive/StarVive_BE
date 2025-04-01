@@ -14,10 +14,7 @@ import java.util.UUID;
 @NoArgsConstructor
 public class ProductDetailImage extends BaseEntity {
 
-    @Id
-    @GeneratedValue
-    @Column(columnDefinition = "BINARY(16)", nullable = false)
-    private UUID productDetailId;
+   
 
     @Lob
     @Column(nullable = false, columnDefinition = "TEXT")
@@ -26,9 +23,9 @@ public class ProductDetailImage extends BaseEntity {
     private String productId;
 
     @Builder
-    public ProductDetailImage(UUID productDetailId, String productDetailContent,
+    public ProductDetailImage(String productDetailContent,
                               String productId) {
-        this.productDetailId = productDetailId;
+        
         this.productDetailContent = productDetailContent;
         this.productId = productId;
     }

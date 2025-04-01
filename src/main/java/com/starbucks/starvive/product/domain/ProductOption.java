@@ -14,11 +14,6 @@ import java.util.UUID;
 @NoArgsConstructor
 public class ProductOption extends BaseEntity {
 
-    @Id
-    @GeneratedValue
-    @Column(columnDefinition = "BINARY(16)", nullable = false)
-    private UUID productOptionId;
-
     @Column(nullable = false)
     private Integer stock; // 상품 옵션의 남은 재고 수량
 
@@ -41,10 +36,9 @@ public class ProductOption extends BaseEntity {
 
 
     @Builder
-    public ProductOption(UUID productOptionId, Integer stock, int price,
+    public ProductOption(Integer stock, int price,
                          String productId, String colorId, String sizeId,
                          Boolean carvedAvailable) {
-        this.productOptionId = productOptionId;
         this.stock = stock;
         this.price = price;
         this.productId = productId;
