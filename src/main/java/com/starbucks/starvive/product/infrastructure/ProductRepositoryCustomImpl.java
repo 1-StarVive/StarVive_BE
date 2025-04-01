@@ -25,18 +25,6 @@ public class ProductRepositoryCustomImpl implements ProductCustomRepository {
     QProductImage productImage = QProductImage.productImage;
     QProductOption productOption = QProductOption.productOption;
 
-    BooleanBuilder builder = new BooleanBuilder();
-
-    StringTemplate imageIdBinary = Expressions.stringTemplate(
-            "BIN_TO_UUID({0})",
-            product.productId
-    );
-
-    StringTemplate optionIdBinary = Expressions.stringTemplate(
-            "BIN_TO_UUID({0})",
-            product.productId
-    );
-
     @Override
     public List<ProductListVO> findAllProducts() {
         return jpaQueryFactory
@@ -47,16 +35,15 @@ public class ProductRepositoryCustomImpl implements ProductCustomRepository {
                         productImage.imageUrl,
                         productImage.imageAlt,
                         productOption.price,
-                        product.baseDiscountRate
+                        product.baseDiscountRate,
+                        product.productIdStr,
+                        product.createdAt
                 ))
                 .from(product)
                 .join(productImage)
-                .on(imageIdBinary.eq(productImage.productId))
-                //.on(productImage.productId.eq(imageIdBinary))
+                .on(product.productIdStr.eq(productImage.productId))
                 .join(productOption)
-                .on(optionIdBinary.eq(productOption.productId))
-                //.on(productOption.productId.eq(optionIdBinary))
-                .where(builder)
+                .on(product.productIdStr.eq(productOption.productId))
                 .fetch();
     }
 }
