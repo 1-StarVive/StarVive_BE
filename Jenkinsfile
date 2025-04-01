@@ -78,8 +78,27 @@ pipeline {
     }
     
     post {
-        always {
-            sh 'rm -rf ~/.gradle/caches/ || true'
-        }
+    always {
+        sh '''
+            # Gradle 캐시 정리
+            rm -rf ~/.gradle/caches/ || true
+            
+            # 미사용 Docker 리소스 정리
+            docker system prune -f || true
+            
+            # 빌드 임시 파일 정리
+            find . -name "*@tmp" -type d -exec rm -rf {} \\; 2>/dev/null || true
+            
+            # 오래된 Docker 이미지 정리 (7일 이상 된 것)
+            docker images -q --filter "dangling=true" | xargs docker rmi -f || true
+            
+            # 워크스페이스 크기 확인 (로그 목적)
+            echo "Current workspace size:"
+            du -sh . || true
+        '''
+        
+        // 워크스페이스 정리 (성공, 실패 모두 정리)
+        cleanWs()
     }
+}
 }
