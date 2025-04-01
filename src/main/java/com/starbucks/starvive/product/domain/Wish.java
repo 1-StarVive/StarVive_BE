@@ -7,10 +7,17 @@ import lombok.NoArgsConstructor;
 
 import java.util.UUID;
 
+import org.hibernate.annotations.UuidGenerator;
+
 @Entity
 @Getter
 @NoArgsConstructor
-public class Wish extends BaseEntity {
+public class Wish {
+
+    @Id
+    @UuidGenerator
+    @Column(updatable = false, nullable = false, columnDefinition = "BINARY(16)")
+    private UUID wishId;
 
     private String productId;
 

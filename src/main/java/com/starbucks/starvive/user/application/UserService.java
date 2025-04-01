@@ -1,15 +1,13 @@
 package com.starbucks.starvive.user.application;
 
+import com.starbucks.starvive.user.dto.in.SignInRequestDto;
+import com.starbucks.starvive.user.dto.out.SignInResponseDto;
+import com.starbucks.starvive.user.dto.in.SignUpRequestDto;
 
-import com.starbucks.starvive.user.repository.UserRepository;
+public interface UserService {
 
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
+    void signUp(SignUpRequestDto signUpRequestDto);
 
+    SignInResponseDto signIn(SignInRequestDto signInRequestDto);
 
-
-@Service
-@RequiredArgsConstructor
-public class UserService {
-  
 } 

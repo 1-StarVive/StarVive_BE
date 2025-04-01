@@ -9,12 +9,17 @@ import lombok.NoArgsConstructor;
 
 import java.util.UUID;
 
+import org.hibernate.annotations.UuidGenerator;
+
 @Entity
 @Getter
 @NoArgsConstructor
 public class ProductDetailImage extends BaseEntity {
 
-   
+    @Id
+    @UuidGenerator
+    @Column(updatable = false, nullable = false, columnDefinition = "BINARY(16)")
+    private UUID productDetailId;
 
     @Lob
     @Column(nullable = false, columnDefinition = "TEXT")

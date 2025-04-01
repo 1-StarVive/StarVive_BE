@@ -12,18 +12,27 @@ public enum UserStatus {
     INACTIVE("비활성"),
     DELETED("삭제됨");
 
-    private final String status;
+    private final String description;
 
     @JsonValue
-    public String getStatus() { return status; }
+    public String getStatus() { return description; }
 
     @JsonCreator
     public static UserStatus fromString(String value) {
+        // 먼저 열거형 이름으로 시도
         for (UserStatus status : UserStatus.values()) {
-            if (status.status.equals(value)) {
+            if (status.name().equals(value)) {
                 return status;
             }
         }
+        
+        // 그 다음 설명 값으로 시도
+        for (UserStatus status : UserStatus.values()) {
+            if (status.description.equals(value)) {
+                return status;
+            }
+        }
+        
         throw new IllegalArgumentException("Unknown value: " + value);
     }
 }

@@ -7,16 +7,17 @@ import lombok.NoArgsConstructor;
 
 import java.util.UUID;
 
+import org.hibernate.annotations.UuidGenerator;
+
 @Getter
 @Entity
 @NoArgsConstructor
 public class FeaturedSectionProduct {
 
     @Id
-    @GeneratedValue
-    @Column(columnDefinition = "BINARY(16)")
-    private UUID featuredSectionProductId;
-
+    @UuidGenerator
+    @Column(updatable = false, nullable = false, columnDefinition = "BINARY(16)")
+    private UUID id;
     @Column(columnDefinition = "BINARY(16)", nullable = false)
     private String productId;
 

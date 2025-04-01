@@ -15,15 +15,6 @@ public interface UserRepository extends JpaRepository<User, UUID> {
     // 이메일로 사용자 찾기
     Optional<User> findByEmail(Email email);
     
-    // 닉네임으로 사용자 찾기
-    Optional<User> findByNickname(String nickname);
-    
-    // 이메일과 상태로 사용자 찾기
-    Optional<User> findByEmailAndStatus(Email email, UserStatus status);
-    
     // 이메일이 존재하는지 확인
     boolean existsByEmail(Email email);
-    
-    // 닉네임이 존재하는지 확인
-    boolean existsByNickname(String nickname);
 } 

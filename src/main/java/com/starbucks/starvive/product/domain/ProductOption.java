@@ -9,10 +9,17 @@ import lombok.NoArgsConstructor;
 
 import java.util.UUID;
 
+import org.hibernate.annotations.UuidGenerator;
+
 @Entity
 @Getter
 @NoArgsConstructor
 public class ProductOption extends BaseEntity {
+
+    @Id
+    @UuidGenerator
+    @Column(updatable = false, nullable = false, columnDefinition = "BINARY(16)")
+    private UUID productOptionId;
 
     @Column(nullable = false)
     private Integer stock; // 상품 옵션의 남은 재고 수량
