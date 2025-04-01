@@ -18,7 +18,7 @@ public class User extends BaseEntity {
 
     @Id
     @UuidGenerator
-    @Column(name = "user_id", updatable = false, nullable = false, columnDefinition = "BINARY(16)")
+    @Column(updatable = false, nullable = false, columnDefinition = "BINARY(16)")
     private UUID userId;
 
     @Column(nullable = false, unique = true, length = 20)

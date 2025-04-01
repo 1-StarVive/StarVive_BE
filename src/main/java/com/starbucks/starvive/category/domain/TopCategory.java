@@ -20,7 +20,7 @@ public class TopCategory extends BaseEntity {
 
     @Id
     @UuidGenerator
-    @Column(name = "top_category_id", updatable = false, nullable = false, columnDefinition = "BINARY(16)")
+    @Column(updatable = false, nullable = false, columnDefinition = "BINARY(16)")
     private UUID topCategoryId;
 
     @Column(nullable = false)
