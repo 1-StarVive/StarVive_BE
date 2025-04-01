@@ -10,8 +10,10 @@ import java.util.UUID;
 @Getter
 public class Purchase extends BaseEntity {
 
-    @Id
-    @GeneratedValue
     @Column(columnDefinition = "BINARY(16)", nullable = false)
-    private UUID purchaseId;
+    private UUID userId;
+
+    @Column(columnDefinition = "BINARY(16)", nullable = false)
+    private UUID productId;
+    
 }

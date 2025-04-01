@@ -1,9 +1,9 @@
 package com.starbucks.starvive.cart.domain;
 
+import com.starbucks.starvive.common.domain.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.math.BigDecimal;
 import java.util.Date;
 import java.util.UUID;
 
@@ -12,11 +12,7 @@ import java.util.UUID;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
-public class Cart {
-
-    @Id
-    @GeneratedValue
-    private UUID cartId; // 장바구니 항목 고유 식별자
+public class Cart extends BaseEntity {
 
     @Column(columnDefinition = "BINARY(16)", nullable = false)
     private UUID userId; // 사용자 식별자

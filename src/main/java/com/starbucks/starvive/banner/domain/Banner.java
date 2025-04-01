@@ -13,11 +13,6 @@ import java.util.UUID;
 @NoArgsConstructor
 public class Banner extends BaseEntity {
 
-    @Id
-    @GeneratedValue
-    @Column(columnDefinition = "BINARY(16)", nullable = false)
-    private UUID bannerId;
-
     @Column(nullable = false)
     private String imageBannerUrl;
 

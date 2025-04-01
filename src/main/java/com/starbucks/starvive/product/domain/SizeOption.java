@@ -13,11 +13,6 @@ import java.util.UUID;
 @NoArgsConstructor
 public class SizeOption extends BaseEntity {
 
-    @Id
-    @GeneratedValue
-    @Column(columnDefinition = "BINARY(16)", nullable = false)
-    private UUID sizeId;
-
     @Column(nullable = false)
     private String itemSize;
 
@@ -25,8 +20,8 @@ public class SizeOption extends BaseEntity {
     private Capacity capacity;
 
     @Builder
-    public SizeOption(UUID sizeId, String itemSize, Capacity capacity) {
-        this.sizeId = sizeId;
+    public SizeOption(String itemSize, Capacity capacity) {
+        
         this.itemSize = itemSize;
         this.capacity = capacity;
     }
