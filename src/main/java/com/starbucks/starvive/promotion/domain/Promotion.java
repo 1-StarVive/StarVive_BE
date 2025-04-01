@@ -10,14 +10,16 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+import org.hibernate.annotations.UuidGenerator;
+
 @Entity
 @Getter
 @NoArgsConstructor
 public class Promotion extends BaseEntity {
 
     @Id
-    @GeneratedValue
-    @Column(columnDefinition = "BINARY(16)", nullable = false)
+    @UuidGenerator
+    @Column(updatable = false, nullable = false, columnDefinition = "BINARY(16)")
     private UUID promotionId;
 
     @Column(nullable = false)

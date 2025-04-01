@@ -6,21 +6,26 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.UUID;
+
+import org.hibernate.annotations.UuidGenerator;
+
 @Entity
 @Getter
 @NoArgsConstructor
 public class ProductImageList extends BaseEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long ProductImageId;
+    @UuidGenerator
+    @Column(updatable = false, nullable = false, columnDefinition = "BINARY(16)")
+    private UUID productImageId;
 
     @Column(nullable = false)
     private Boolean mainSelected;
 
     @Builder
-    public ProductImageList(Long productImageId, Boolean mainSelected) {
-        ProductImageId = productImageId;
+    public ProductImageList(UUID productImageId, Boolean mainSelected) {
+        this.productImageId = productImageId;
         this.mainSelected = mainSelected;
     }
 }

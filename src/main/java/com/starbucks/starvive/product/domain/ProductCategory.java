@@ -12,14 +12,15 @@ import lombok.NoArgsConstructor;
 
 import java.util.UUID;
 
+import org.hibernate.annotations.UuidGenerator;
 @Entity
 @Getter
 @NoArgsConstructor
 public class ProductCategory extends BaseEntity {
 
     @Id
-    @GeneratedValue
-    @Column(columnDefinition = "BINARY(16)", nullable = false)
+    @UuidGenerator
+    @Column(updatable = false, nullable = false, columnDefinition = "BINARY(16)")
     private UUID productCategoryId;
 
     private String topCategoryId;
@@ -31,10 +32,10 @@ public class ProductCategory extends BaseEntity {
     private String productId;
 
     @Builder
-    public ProductCategory(UUID productCategoryId, String topCategoryId,
+    public ProductCategory(String topCategoryId,
                            String middleCategoryId, String bottomCategoryId,
                            String productId) {
-        this.productCategoryId = productCategoryId;
+   
         this.topCategoryId = topCategoryId;
         this.middleCategoryId = middleCategoryId;
         this.bottomCategoryId = bottomCategoryId;

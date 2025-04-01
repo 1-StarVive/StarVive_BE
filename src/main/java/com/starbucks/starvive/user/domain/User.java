@@ -6,6 +6,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.UuidGenerator;
 
 import java.time.LocalDate;
 import java.util.UUID;
@@ -16,7 +17,8 @@ import java.util.UUID;
 public class User extends BaseEntity {
 
     @Id
-    @Column(columnDefinition = "BINARY(16)", nullable = false)
+    @UuidGenerator
+    @Column(updatable = false, nullable = false, columnDefinition = "BINARY(16)")
     private UUID userId;
 
     @Column(nullable = false, unique = true, length = 20)
@@ -37,7 +39,7 @@ public class User extends BaseEntity {
     @Column(nullable = false, length = 20)
     private String phoneNumber;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private LocalDate birth;
 
     @Enumerated(EnumType.STRING)
@@ -53,10 +55,10 @@ public class User extends BaseEntity {
     private UserStatus status;
 
     @Builder
-    private User(UUID userId, String loginId, String email, String password, String name,
+    private User(String loginId, String email, String password, String name,
                  String nickname, String phoneNumber, LocalDate birth,
-                 Gender gender, SocialLoginType socialLoginType) {
-        this.userId = (userId != null) ? userId : UUID.randomUUID();
+                 Gender gender, SocialLoginType socialLoginType, UserStatus status) {
+        this.userId = UUID.randomUUID();
         this.loginId = loginId;
         this.email = email;
         this.password = password;
@@ -66,6 +68,6 @@ public class User extends BaseEntity {
         this.birth = birth;
         this.gender = gender;
         this.socialLoginType = socialLoginType;
-        this.status = UserStatus.ACTIVE;
+        this.status = status;
     }
 }

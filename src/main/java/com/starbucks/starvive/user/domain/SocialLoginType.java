@@ -12,15 +12,23 @@ public enum SocialLoginType {
     KAKAO("카카오"),
     TOSS("토스");
 
-    private final String socialType;
+    private final String description;
 
     @JsonValue
-    public String getSocialType() { return socialType; }
+    public String getSocialType() { return description; }
 
     @JsonCreator
     public static SocialLoginType fromSocialType(String value) {
+        // 먼저 열거형 이름으로 시도
         for (SocialLoginType type : SocialLoginType.values()) {
-            if (type.getSocialType().equals(value)) {
+            if (type.name().equals(value)) {
+                return type;
+            }
+        }
+        
+        // 그 다음 설명 값으로 시도
+        for (SocialLoginType type : SocialLoginType.values()) {
+            if (type.description.equals(value)) {
                 return type;
             }
         }

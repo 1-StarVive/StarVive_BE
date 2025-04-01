@@ -8,14 +8,16 @@ import lombok.NoArgsConstructor;
 
 import java.util.UUID;
 
+import org.hibernate.annotations.UuidGenerator;
+
 @Entity
 @Getter
 @NoArgsConstructor
 public class SizeOption extends BaseEntity {
 
     @Id
-    @GeneratedValue
-    @Column(columnDefinition = "BINARY(16)", nullable = false)
+    @UuidGenerator
+    @Column(updatable = false, nullable = false, columnDefinition = "BINARY(16)")
     private UUID sizeId;
 
     @Column(nullable = false)
@@ -25,8 +27,8 @@ public class SizeOption extends BaseEntity {
     private Capacity capacity;
 
     @Builder
-    public SizeOption(UUID sizeId, String itemSize, Capacity capacity) {
-        this.sizeId = sizeId;
+    public SizeOption(String itemSize, Capacity capacity) {
+        
         this.itemSize = itemSize;
         this.capacity = capacity;
     }

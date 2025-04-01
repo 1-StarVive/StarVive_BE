@@ -9,14 +9,16 @@ import lombok.NoArgsConstructor;
 
 import java.util.UUID;
 
+import org.hibernate.annotations.UuidGenerator;
+
 @Entity
 @Getter
 @NoArgsConstructor
 public class ProductOption extends BaseEntity {
 
     @Id
-    @GeneratedValue
-    @Column(columnDefinition = "BINARY(16)", nullable = false)
+    @UuidGenerator
+    @Column(updatable = false, nullable = false, columnDefinition = "BINARY(16)")
     private UUID productOptionId;
 
     @Column(nullable = false)
@@ -35,10 +37,9 @@ public class ProductOption extends BaseEntity {
     private String sizeId;
 
     @Builder
-    public ProductOption(UUID productOptionId, Integer stock, int price,
+    public ProductOption(Integer stock, int price,
                          String productId, String colorId, String sizeId,
                          Boolean carvedAvailable) {
-        this.productOptionId = productOptionId;
         this.stock = stock;
         this.price = price;
         this.productId = productId;

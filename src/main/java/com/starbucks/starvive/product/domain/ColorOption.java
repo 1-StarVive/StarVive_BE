@@ -12,13 +12,14 @@ import lombok.NoArgsConstructor;
 
 import java.util.UUID;
 
+import org.hibernate.annotations.UuidGenerator;
 @Entity
 @Getter
 @NoArgsConstructor
 public class ColorOption extends BaseEntity {
 
     @Id
-    @GeneratedValue
+    @UuidGenerator
     @Column(columnDefinition = "BINARY(16)", nullable = false)
     private UUID colorId;
 
@@ -29,8 +30,8 @@ public class ColorOption extends BaseEntity {
     private String colorCode;
 
     @Builder
-    public ColorOption(UUID colorId, String name, String colorCode) {
-        this.colorId = colorId;
+    public ColorOption(String name, String colorCode) {
+        
         this.name = name;
         this.colorCode = colorCode;
     }

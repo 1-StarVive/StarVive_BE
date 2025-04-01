@@ -9,14 +9,16 @@ import lombok.NoArgsConstructor;
 
 import java.util.UUID;
 
+import org.hibernate.annotations.UuidGenerator;
+
 @Entity
 @Getter
 @NoArgsConstructor
 public class ProductDetailImage extends BaseEntity {
 
     @Id
-    @GeneratedValue
-    @Column(columnDefinition = "BINARY(16)", nullable = false)
+    @UuidGenerator
+    @Column(updatable = false, nullable = false, columnDefinition = "BINARY(16)")
     private UUID productDetailId;
 
     @Lob
@@ -26,9 +28,9 @@ public class ProductDetailImage extends BaseEntity {
     private String productId;
 
     @Builder
-    public ProductDetailImage(UUID productDetailId, String productDetailContent,
+    public ProductDetailImage(String productDetailContent,
                               String productId) {
-        this.productDetailId = productDetailId;
+        
         this.productDetailContent = productDetailContent;
         this.productId = productId;
     }
