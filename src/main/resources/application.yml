@@ -6,7 +6,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/starvive_database
     username: root
-    password: 20010815
+    password: 1234
 
   jpa:
     hibernate:
@@ -17,3 +17,10 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.MySQL8Dialect
         format_sql: true
+
+# JWT Settings
+JWT:
+  secret-key: 'NStlcmJ1Y2tzU3RhclZpdmUtU2VjcmV0S2V5Rm9ySldUU2lnbmluZ1B1cnBvc2VzLTIwMjQwNDA0' # Replace with a strong, secure key in production (e.g., from env variables)
+  token:
+    access-expire-time: 3600000 # 1 hour in milliseconds
+    refresh-expire-time: 604800000 # 7 days in milliseconds
