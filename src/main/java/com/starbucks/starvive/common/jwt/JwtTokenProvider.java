@@ -91,12 +91,30 @@ public class JwtTokenProvider {
 
         if (principal instanceof User) {
             userIdString = ((User) principal).getUserId().toString();
+        } else if (principal instanceof org.springframework.security.core.userdetails.UserDetails) {
+             // Assuming getUsername() returns UUID string for UserDetails from DB authentication
+             userIdString = ((org.springframework.security.core.userdetails.UserDetails) principal).getUsername();
         } else {
             throw new IllegalArgumentException("Cannot extract user ID from principal type: " + principal.getClass());
         }
 
         Date now = new Date();
-        long refreshTokenExpirationMs = Long.parseLong(env.getProperty("JWT.token.refresh-expire-time"));
+        long refreshTokenExpirationMs = getRefreshTokenExpirationTime();
+        Date expiration = new Date(now.getTime() + refreshTokenExpirationMs);
+        
+        return Jwts.builder()
+                .setSubject(userIdString)
+                .setIssuedAt(now)
+                .setExpiration(expiration)
+                .signWith(getSignKey())
+                .compact();
+    }
+    
+    // Add overloaded method to accept UUID directly
+    public String generateRefreshToken(UUID userId) {
+        String userIdString = userId.toString();
+        Date now = new Date();
+        long refreshTokenExpirationMs = getRefreshTokenExpirationTime();
         Date expiration = new Date(now.getTime() + refreshTokenExpirationMs);
         
         return Jwts.builder()

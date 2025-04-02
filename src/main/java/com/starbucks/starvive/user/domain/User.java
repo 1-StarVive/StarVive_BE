@@ -25,22 +25,22 @@ public class User extends BaseEntity implements UserDetails {
     @Column(updatable = false, nullable = false, columnDefinition = "BINARY(16)")
     private UUID userId;
 
-    @Column(nullable = false, unique = true, length = 20)
+    @Column(nullable = true, unique = true, length = 320)
     private String loginId;
 
     @Column(nullable = false, unique = true, length = 320)
     private String email;
 
-    @Column(nullable = false, length = 100)
+    @Column(nullable = true, length = 100)
     private String password;
 
     @Column(nullable = false, length = 20)
     private String name;
 
-    @Column(nullable = false, length = 20)
+    @Column(nullable = true, length = 20)
     private String nickname;
 
-    @Column(nullable = false, length = 20)
+    @Column(nullable = true, length = 20)
     private String phoneNumber;
 
     @Column(nullable = true)

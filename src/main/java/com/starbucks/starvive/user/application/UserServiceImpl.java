@@ -95,10 +95,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional(readOnly = true)
+    @Transactional
     public Optional<String> refreshAccessToken(String refreshToken) {
         // 1. Validate JWT signature
         if (!jwtTokenProvider.validateRefreshToken(refreshToken)) {
+            logger.warn("Refresh token validation failed: {}", refreshToken);
             return Optional.empty();
         }
 
@@ -107,14 +108,17 @@ public class UserServiceImpl implements UserService {
                 .map(tokenEntity -> {
                     // 3. Check expiry from DB
                     if (tokenEntity.isExpired()) {
-                        // Need a separate transactional method or context for delete here if readOnly = true is used
-                        // For simplicity, keeping the main method transactional without readOnly
-                        // Or handle expiry exception differently
-                        refreshTokenRepository.delete(tokenEntity); // This might cause issues if readOnly = true
+                        logger.info("Refresh token expired, deleting: {}", refreshToken);
+                        refreshTokenRepository.delete(tokenEntity); // Delete expired token
                         throw new TokenRefreshException(refreshToken, "Refresh token was expired. Please make a new signin request");
                     }
                     // 4. Generate new access token
-                    return jwtTokenProvider.generateAccessToken(tokenEntity.getUserId());
+                    logger.info("Issuing new access token for user: {}", tokenEntity.getUserId());
+                    return Optional.of(jwtTokenProvider.generateAccessToken(tokenEntity.getUserId()));
+                })
+                .orElseGet(() -> {
+                    logger.warn("Refresh token not found in DB: {}", refreshToken);
+                    return Optional.empty(); // Handle case where token not found after validation (e.g., deleted concurrently)
                 });
     }
 
