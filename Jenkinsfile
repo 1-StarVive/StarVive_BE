@@ -89,7 +89,7 @@ pipeline {
     
     post {
     always {
-        node {
+        node('') {
             sh '''
                 # Gradle 캐시 정리
                 rm -rf ~/.gradle/caches/ || true
