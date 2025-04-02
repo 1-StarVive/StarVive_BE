@@ -4,6 +4,11 @@ pipeline {
     environment {
         GRADLE_OPTS = '-Dorg.gradle.daemon=false -Dorg.gradle.jvmargs="-Xmx512m -XX:MaxMetaspaceSize=256m"'
         DB_CREDS = credentials('db-credentials-dev')
+        GOOGLE_CLIENT_ID_CRED = credentials('google-client-id')
+        GOOGLE_CLIENT_SECRET_CRED = credentials('google-client-secret')
+        KAKAO_CLIENT_ID_CRED = credentials('kakao-client-id')
+        KAKAO_CLIENT_SECRET_CRED = credentials('kakao-client-secret')
+        JWT_SECRET_KEY_CRED = credentials('jwt-secret-key')
         DB_NAME = 'starvive_dev'
         SERVER_PORT = '8082'
         CONTAINER_NAME = 'springboot-container-dev'
@@ -42,11 +47,16 @@ pipeline {
                     docker stop ${CONTAINER_NAME} || true
                     docker rm ${CONTAINER_NAME} || true
                     
-                    # 새로운 컨테이너 실행
+                    # 새로운 컨테이너 실행 - 환경 변수 주입
                     docker run -d --name ${CONTAINER_NAME} \
                     -e SPRING_DATASOURCE_URL=jdbc:mysql://localhost:3306/${DB_NAME} \
                     -e SPRING_DATASOURCE_USERNAME=${DB_CREDS_USR} \
                     -e SPRING_DATASOURCE_PASSWORD=${DB_CREDS_PSW} \
+                    -e GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID_CRED} \
+                    -e GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET_CRED} \
+                    -e KAKAO_CLIENT_ID=${KAKAO_CLIENT_ID_CRED} \
+                    -e KAKAO_CLIENT_SECRET=${KAKAO_CLIENT_SECRET_CRED} \
+                    -e JWT_SECRET_KEY=${JWT_SECRET_KEY_CRED} \
                     -e SERVER_PORT=${SERVER_PORT} \
                     --network=host \
                     springboot-app:${IMAGE_TAG}
@@ -97,7 +107,7 @@ pipeline {
             du -sh . || true
         '''
         
-        // 워크스페이스 정리 (성공, 실패 모두 정리)
+        # 워크스페이스 정리 (성공, 실패 모두 정리)
         cleanWs()
     }
 }

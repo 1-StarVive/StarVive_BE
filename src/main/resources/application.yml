@@ -6,7 +6,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/starvive_database
     username: root
-    password: 1234
+    password: ${DB_PASSWORD}
 
   jpa:
     hibernate:
@@ -30,8 +30,8 @@ spring:
               - profile
               - email
           kakao:
-            client-id: ${KAKAO_CLIENT_ID} # 실제 값으로 변경 필요
-            client-secret: ${KAKAO_CLIENT_SECRET} # 실제 값으로 변경 필요
+            client-id: ${KAKAO_CLIENT_ID}
+            client-secret: ${KAKAO_CLIENT_SECRET}
             client-authentication-method: client_secret_post
             authorization-grant-type: authorization_code
             redirect-uri: http://localhost:8080/login/oauth2/code/kakao
@@ -51,7 +51,7 @@ spring:
 
 # JWT Settings
 JWT:
-  secret-key: 'NStlcmJ1Y2tzU3RhclZpdmUtU2VjcmV0S2V5Rm9ySldUU2lnbmluZ1B1cnBvc2VzLTIwMjQwNDA0' # Replace with a strong, secure key in production (e.g., from env variables)
+  secret-key: ${JWT_SECRET_KEY}
   token:
     access-expire-time: 3600000 # 1 hour in milliseconds
     refresh-expire-time: 604800000 # 7 days in milliseconds
