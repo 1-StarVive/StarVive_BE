@@ -1,11 +1,9 @@
 package com.starbucks.starvive.featuredSection.vo;
 
-import com.starbucks.starvive.product.domain.Product;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
 import java.util.UUID;
 
 @Getter
@@ -15,8 +13,8 @@ import java.util.UUID;
 public class FeaturedSectionProductVo {
 
     private UUID productId;
-    private String thumbnailUrl;
-    private String thumbnailAlt;
+    private String imgThumbUrl;
+    private String imgThumbAlt;
     private String name;
     private int price;
     private int discountRate;

@@ -17,11 +17,24 @@ public class FeaturedSectionProduct {
     @Id
     @UuidGenerator
     @Column(updatable = false, nullable = false, columnDefinition = "BINARY(16)")
-    private UUID id;
-    @Column(columnDefinition = "BINARY(16)", nullable = false)
-    private String productId;
+    private UUID FeaturedSectionProductId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "featuredSectionId")
-    private FeaturedSection featuredSection;
+    @Column(columnDefinition = "BINARY(16)", nullable = false)
+    private UUID productId;
+
+    @Column(columnDefinition = "BINARY(16)", nullable = false)
+    private UUID featuredSectionId;
+
+    @Column(columnDefinition = "BINARY(16)", nullable = false)
+    private UUID productOptionId;
+
+    @Column(columnDefinition = "BINARY(16)", nullable = false)
+    private UUID productImageId;
+
+    public FeaturedSectionProduct(UUID productId, UUID featuredSectionId, UUID productOptionId, UUID productImageId) {
+        this.productId = productId;
+        this.featuredSectionId = featuredSectionId;
+        this.productOptionId = productOptionId;
+        this.productImageId = productImageId;
+    }
 }
