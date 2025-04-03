@@ -4,12 +4,15 @@ import com.starbucks.starvive.common.jwt.JwtTokenProvider;
 import com.starbucks.starvive.user.domain.*;
 import com.starbucks.starvive.user.repository.RefreshTokenRepository;
 import com.starbucks.starvive.user.repository.UserRepository;
+import com.starbucks.starvive.user.dto.out.SignInResponseDto;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -34,10 +37,11 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     private final JwtTokenProvider jwtTokenProvider;
     private final UserRepository userRepository;
     private final RefreshTokenRepository refreshTokenRepository;
+    private final ObjectMapper objectMapper;
 
     // 리다이렉트 URL 설정
-    @Value("${oauth2.redirect.url:http://localhost:3000/auth/callback}")
-    private String redirectUrl;
+    // @Value("${oauth2.redirect.url:http://localhost:3000/auth/callback}")
+    // private String redirectUrl;
 
     // 인증 성공 시 처리
     @Override
@@ -45,7 +49,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         if (!(authentication instanceof OAuth2AuthenticationToken)) {
             log.error("Authentication is not an instance of OAuth2AuthenticationToken");
-            sendErrorRedirect(request, response, "invalid_authentication_type");
+            sendErrorResponse(response, "invalid_authentication_type");
             return;
         }
 
@@ -59,7 +63,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
             socialLoginType = SocialLoginType.valueOf(registrationId.toUpperCase());
         } catch (IllegalArgumentException e) {
             log.error("Unsupported registrationId: {}", registrationId);
-            sendErrorRedirect(request, response, "unsupported_provider");
+            sendErrorResponse(response, "unsupported_provider");
             return;
         }
 
@@ -69,7 +73,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
         if (socialId == null) {
             log.error("Could not extract socialId from OAuth2User for provider: {}", registrationId);
-            sendErrorRedirect(request, response, "oauth_socialid_error");
+            sendErrorResponse(response, "oauth_socialid_error");
             return;
         }
 
@@ -77,25 +81,28 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         User user = findOrCreateUser(socialLoginType, socialId, email, name);
         if (user == null) {
              log.error("Failed to find or create user for social login: {} / {}", socialLoginType, socialId);
-             sendErrorRedirect(request, response, "user_processing_error");
+             sendErrorResponse(response, "user_processing_error");
              return;
         }
 
-        // 3. JWT 토큰 생성
+        // 3. JWT 토큰 생성 및 만료 시간 가져오기
         String accessToken = jwtTokenProvider.generateAccessToken(user.getUserId());
         String refreshToken = jwtTokenProvider.generateRefreshToken(user.getUserId());
+        long expiresIn = jwtTokenProvider.getAccessTokenExpirationTime();
 
         // 4. 리프레시 토큰 저장
         saveRefreshToken(user, refreshToken);
 
-        // 5. 토큰을 포함한 리다이렉트 URL 생성 및 리다이렉트
-        String targetUrl = UriComponentsBuilder.fromUriString(redirectUrl)
-                .queryParam("accessToken", accessToken)
-                .queryParam("refreshToken", refreshToken)
-                .build().toUriString();
+        // 5. JSON 응답 생성 및 전송 (리다이렉트 대신)
+        SignInResponseDto responseDto = SignInResponseDto.from(user, accessToken, refreshToken, expiresIn);
 
-        log.info("Redirecting OAuth2 user ({} / {}) to {}", socialLoginType, user.getUserId(), redirectUrl);
-        getRedirectStrategy().sendRedirect(request, response, targetUrl);
+        response.setStatus(HttpServletResponse.SC_OK);
+        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+        response.setCharacterEncoding("UTF-8");
+        objectMapper.writeValue(response.getWriter(), responseDto);
+
+        log.info("Successfully processed OAuth2 login for user ({} / {}), returning tokens in response body.", socialLoginType, user.getUserId());
+        // clearAuthenticationAttributes(request); // 필요 시 이전 인증 속성 제거
     }
 
     // 소셜 정보 기반으로 사용자 조회/생성/연동 처리
@@ -223,11 +230,12 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         return null;
     }
 
-    // 에러 리다이렉트
-    private void sendErrorRedirect(HttpServletRequest request, HttpServletResponse response, String errorCode) throws IOException {
-        String targetUrl = UriComponentsBuilder.fromUriString(redirectUrl)
-                .queryParam("error", errorCode)
-                .build().toUriString();
-        getRedirectStrategy().sendRedirect(request, response, targetUrl);
+    // 에러 응답 전송 (JSON 형태)
+    private void sendErrorResponse(HttpServletResponse response, String errorCode) throws IOException {
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+        response.setCharacterEncoding("UTF-8");
+        Map<String, String> errorDetails = Map.of("error", "OAuth2 Authentication Failed", "errorCode", errorCode);
+        objectMapper.writeValue(response.getWriter(), errorDetails);
     }
 } 

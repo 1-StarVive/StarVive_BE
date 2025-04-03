@@ -15,15 +15,13 @@ public class SignInResponseDto {
 
     private String accessToken;
     private String refreshToken;
-    private String userId;
-    private String email;
+    private long expiresIn;
     
-    public static SignInResponseDto from(User user, String accessToken, String refreshToken) {
+    public static SignInResponseDto from(User user, String accessToken, String refreshToken, long expiresIn) {
         return SignInResponseDto.builder()
             .accessToken(accessToken)
             .refreshToken(refreshToken)
-            .userId(user.getUserId().toString())
-            .email(user.getEmail())
+            .expiresIn(expiresIn)
             .build();
     }
 }

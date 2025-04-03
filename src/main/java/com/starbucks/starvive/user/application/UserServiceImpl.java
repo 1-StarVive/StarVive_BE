@@ -68,33 +68,33 @@ public class UserServiceImpl implements UserService {
             );
 
             // 2. Principal에서 인증된 User 객체 가져오기
-            // UserDetailsService가 UserDetails를 구현하는 User 객체를 반환한다고 가정
             User authenticatedUser = (User) authentication.getPrincipal();
 
             // 3. Authentication 객체를 사용하여 토큰 생성
             String accessToken = this.createAccessToken(authentication);
             String refreshToken = this.createRefreshToken(authentication);
 
-            // 4. Refresh Token 저장
-            Instant expiryDate = Instant.now().plusMillis(jwtTokenProvider.getRefreshTokenExpirationTime());
+            // 4. Access Token 만료 시간 가져오기 (ms)
+            long expiresIn = jwtTokenProvider.getAccessTokenExpirationTime();
+
+            // 5. Refresh Token 저장
+            Instant expiryDate = Instant.now().plusMillis(jwtTokenProvider.getRefreshTokenExpirationTime()); // Refresh 토큰 저장 시에는 Refresh 만료 시간 사용
             RefreshToken refreshTokenEntity = RefreshToken.builder()
                 .token(refreshToken)
-                .userId(authenticatedUser.getUserId()) // 인증된 사용자의 ID 사용
+                .userId(authenticatedUser.getUserId())
                 .expiryDate(expiryDate)
                 .build();
 
-            refreshTokenRepository.deleteByUserId(authenticatedUser.getUserId()); // 인증된 사용자의 ID 사용
+            refreshTokenRepository.deleteByUserId(authenticatedUser.getUserId());
             refreshTokenRepository.save(refreshTokenEntity);
 
-            // 5. 응답 DTO 반환
-            return SignInResponseDto.from(authenticatedUser, accessToken, refreshToken); // 인증된 사용자 사용
+            // 6. 응답 DTO 반환 (expiresIn 포함)
+            return SignInResponseDto.from(authenticatedUser, accessToken, refreshToken, expiresIn);
 
         } catch (org.springframework.security.core.AuthenticationException e) {
             logger.warn("Authentication failed for loginId {}: {}", signInRequestDto.getLoginId(), e.getMessage());
-            // 명확성을 위해 특정 예외 다시 던지거나 필요에 따라 처리
             throw new org.springframework.security.authentication.BadCredentialsException("Invalid credentials");
         } catch (Exception e) {
-            // 예기치 않은 오류 기록
             logger.error("Unexpected error during sign in for loginId {}", signInRequestDto.getLoginId(), e);
             throw new RuntimeException("An unexpected error occurred during sign in.");
         }

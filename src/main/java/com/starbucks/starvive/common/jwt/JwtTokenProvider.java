@@ -161,7 +161,29 @@ public class JwtTokenProvider {
      * @return Refresh Token 만료 시간 (ms)
      */
     public long getRefreshTokenExpirationTime() {
-        return Long.parseLong(env.getProperty("JWT.token.refresh-expire-time"));
+        // 환경 변수 또는 application.yml에서 값 가져오기
+        String expirationTime = env.getProperty("JWT.token.refresh-expire-time");
+        if (expirationTime == null) {
+            logger.error("Refresh token expiration time (JWT.token.refresh-expire-time) is not configured.");
+            // 기본값 또는 적절한 예외 처리
+            return 7 * 24 * 60 * 60 * 1000L; // 예: 7일
+        }
+        return Long.parseLong(expirationTime);
+    }
+
+    /**
+     * Access Token의 만료 시간(밀리초)을 설정에서 가져옵니다.
+     * @return Access Token 만료 시간 (ms)
+     */
+    public long getAccessTokenExpirationTime() {
+        // 환경 변수 또는 application.yml에서 값 가져오기
+        String expirationTime = env.getProperty("JWT.token.access-expire-time");
+        if (expirationTime == null) {
+            logger.error("Access token expiration time (JWT.token.access-expire-time) is not configured.");
+            // 기본값 또는 적절한 예외 처리
+            return 60 * 60 * 1000L; // 예: 1시간
+        }
+        return Long.parseLong(expirationTime);
     }
 
     /**
