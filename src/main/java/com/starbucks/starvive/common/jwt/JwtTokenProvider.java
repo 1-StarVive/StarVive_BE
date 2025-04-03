@@ -171,19 +171,25 @@ public class JwtTokenProvider {
         return Long.parseLong(expirationTime);
     }
 
-    /**
-     * Access Token의 만료 시간(밀리초)을 설정에서 가져옵니다.
-     * @return Access Token 만료 시간 (ms)
-     */
+    // 엑세스스토큰 유효시간 초 단위로 반환
     public long getAccessTokenExpirationTime() {
-        // 환경 변수 또는 application.yml에서 값 가져오기
-        String expirationTime = env.getProperty("JWT.token.access-expire-time");
-        if (expirationTime == null) {
-            logger.error("Access token expiration time (JWT.token.access-expire-time) is not configured.");
-            // 기본값 또는 적절한 예외 처리
-            return 60 * 60 * 1000L; // 예: 1시간
+        // 환경 변수 또는 application.yml에서 값 가져오기 (밀리초 단위로 가정)
+        String expirationTimeMs = env.getProperty("JWT.token.access-expire-time");
+        long expirationMs;
+        if (expirationTimeMs == null) {
+            logger.error("Access token expiration time (JWT.token.access-expire-time) is not configured. Using default: 1 hour.");
+            // 기본값 설정 (예: 1시간 = 3600초 * 1000ms)
+            expirationMs = 60 * 60 * 1000L;
+        } else {
+            try {
+                expirationMs = Long.parseLong(expirationTimeMs);
+            } catch (NumberFormatException e) {
+                logger.error("Invalid format for JWT.token.access-expire-time: {}. Using default: 1 hour.", expirationTimeMs, e);
+                expirationMs = 60 * 60 * 1000L;
+            }
         }
-        return Long.parseLong(expirationTime);
+        // 밀리초를 초로 변환하여 반환
+        return expirationMs / 1000L;
     }
 
     /**
