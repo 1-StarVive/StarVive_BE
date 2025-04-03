@@ -10,7 +10,7 @@ pipeline {
         KAKAO_CLIENT_SECRET_CRED = credentials('kakao-client-secret')
         JWT_SECRET_KEY_CRED = credentials('jwt-secret-key')
         DB_NAME = 'starvive_dev'
-        SERVER_PORT = '80'
+        SERVER_PORT = '8082'
         CONTAINER_NAME = 'springboot-container-dev'
         IMAGE_TAG = 'dev'
     }
