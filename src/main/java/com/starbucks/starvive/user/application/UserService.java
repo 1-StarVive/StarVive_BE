@@ -4,7 +4,6 @@ import com.starbucks.starvive.user.dto.in.SignInRequestDto;
 import com.starbucks.starvive.user.dto.out.SignInResponseDto;
 import com.starbucks.starvive.user.dto.in.SignUpRequestDto;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import java.util.UUID;
 import java.util.Optional;
 

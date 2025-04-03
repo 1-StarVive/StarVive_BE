@@ -37,6 +37,9 @@ public class User extends BaseEntity implements UserDetails {
     @Column(nullable = false, length = 20)
     private String name;
 
+    @Column(name = "social_id", nullable = true, length = 255)
+    private String socialId;
+
     @Column(nullable = true, length = 20)
     private String nickname;
 
@@ -60,12 +63,13 @@ public class User extends BaseEntity implements UserDetails {
 
     @Builder
     private User(String loginId, String email, String password, String name,
-                 String nickname, String phoneNumber, LocalDate birth,
+                 String socialId, String nickname, String phoneNumber, LocalDate birth,
                  Gender gender, SocialLoginType socialLoginType, UserStatus status) {
         this.loginId = loginId;
         this.email = email;
         this.password = password;
         this.name = name;
+        this.socialId = socialId;
         this.nickname = nickname;
         this.phoneNumber = phoneNumber;
         this.birth = birth;
@@ -73,6 +77,17 @@ public class User extends BaseEntity implements UserDetails {
         this.socialLoginType = socialLoginType;
         this.status = status;
     }
+
+    /**
+     * 기존 사용자의 소셜 로그인 정보를 업데이트(연동)합니다.
+     * @param socialLoginType 연동할 소셜 로그인 타입 (예: KAKAO, GOOGLE)
+     * @param socialId 해당 소셜 플랫폼의 고유 ID
+     */
+    public void updateSocialInfo(SocialLoginType socialLoginType, String socialId) {
+        this.socialLoginType = socialLoginType;
+        this.socialId = socialId;
+    }
+
     ////////////////////////////////
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

@@ -39,78 +39,78 @@ public class SecurityConfig {
 
         // 자격 증명(쿠키 등)을 포함한 요청을 허용 여부
         config.setAllowCredentials(true);
-        // 요청을 허용할 출처 패턴 설정정
+        // 요청을 허용할 출처 패턴 설정 (모든 출처 허용)
         config.addAllowedOriginPattern("*");
-        // 허용할 헤더
+        // 허용할 헤더 (모든 헤더 허용)
         config.addAllowedHeader("*");
-        // 허용할 HTTP메서드
+        // 허용할 HTTP 메서드 (모든 메서드 허용)
         config.addAllowedMethod("*");
         // 브라우저(프론트엔드)에서 접근 가능하도록 노출할 응답 헤더 설정
         config.setExposedHeaders(List.of("Authorization", "Content-Type", "X-CSRF-TOKEN", "Set-Cookie"));
 
-        // 위에서 만든 CORS 설정을 모든 경로에 적용
+        // 위에서 만든 CORS 설정을 모든 경로("/**")에 적용
         source.registerCorsConfiguration("/**", config);
         return source;
     }
 
-    // 인증 실패 시 처리
+    // 인증 실패 시 처리 (401 Unauthorized 응답)
     @Bean
     public AuthenticationEntryPoint unauthorizedEntryPoint() {
-        return (request, response, authException) -> 
+        return (request, response, authException) ->
             response.sendError(HttpStatus.UNAUTHORIZED.value(), "Unauthorized");
     }
 
-    // 필터 체인 설정
+    // Spring Security 필터 체인 설정
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            // CSRF 보호 비활성화
+            // CSRF(Cross-Site Request Forgery) 보호 비활성화 (Stateless API 서버이므로)
             .csrf(AbstractHttpConfigurer::disable)
-            // CORS 설정 적용
+            // 위에서 정의한 CORS 설정 적용
             .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-            // 세션 관리 설정
+            // 세션 관리 정책 설정: STATELESS (세션을 사용하지 않음)
             .sessionManagement((sessionManagement) -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-            // 인증 요청 처리
+            // HTTP 요청에 대한 인가(Authorization) 규칙 설정
             .authorizeHttpRequests(auth -> auth
+                // 특정 경로들은 인증 없이 접근 허용 (permitAll)
                 .requestMatchers(
-                    // 허용할 경로
-        "/api/users/signin",
+                    "/api/users/signin",
                     "/api/users/signup",
                     "/api/users/refresh",
-                    "/login/oauth2/code/**",
-                    "/oauth2/**",
-                    "/swagger-ui/**",
-                    "/v3/api-docs/**",
-                    "/error",
-                    "/api/v1/auth/**",
-                    "/api/v1/size/**",
-                    "/api/v1/color/**",
-                    "/api/v1/products/**",
-                    "/api/v1/category/**",
-                    "/api/v1/vendor/**"
+                    "/login/oauth2/code/**", 
+                    "/oauth2/**", 
+                    "/swagger-ui/**", 
+                    "/v3/api-docs/**", 
+                    "/error", 
+                    "/api/v1/auth/**", 
+                    "/api/v1/size/**", 
+                    "/api/v1/color/**", 
+                    "/api/v1/products/**", 
+                    "/api/v1/category/**", 
+                    "/api/v1/vendor/**" 
                 ).permitAll()
                 // GET 요청 중 /api/v1/review/** 경로는 인증 없이 허용
                 .requestMatchers(HttpMethod.GET, "/api/v1/review/**").permitAll()
                 // POST 요청 중 /api/users/signout 경로는 인증 필요
                 .requestMatchers("/api/users/signout").authenticated()
-                // 나머지 요청은 인증 필요
+                // 위에서 명시적으로 설정된 경로 외의 모든 요청은 인증(authenticated) 필요
                 .anyRequest().authenticated()
             )
-            // OAuth2 로그인 설정
+            // OAuth2 로그인 관련 설정
             .oauth2Login(oauth2 -> oauth2
-                // 사용자 정보 엔드포인트 설정
+                // 사용자 정보를 가져오는 엔드포인트 관련 설정
                 .userInfoEndpoint(userInfo -> userInfo
-                    // 사용자 서비스 설정
+                    // 커스텀 OAuth2 사용자 서비스 지정
                     .userService(customOAuth2UserService)
                 )
-                // 인증 성공 시 처리
+                // OAuth2 인증 성공 시 실행될 핸들러 지정
                 .successHandler(oAuth2AuthenticationSuccessHandler)
             )
-            // 인증 제공자 설정
+            // 사용할 인증 제공자(AuthenticationProvider) 설정 (ApplicationConfig에서 정의된 DaoAuthenticationProvider)
             .authenticationProvider(daoAuthenticationProvider)
-            // JWT 필터 적용
+            // 직접 구현한 JWT 인증 필터를 UsernamePasswordAuthenticationFilter 앞에 추가
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-            // 인증 실패 시 처리
+            // 예외 처리 설정: 인증되지 않은 접근(AuthenticationEntryPoint) 처리
             .exceptionHandling(exceptions -> exceptions.authenticationEntryPoint(unauthorizedEntryPoint())
             );
         return http.build();
