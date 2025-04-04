@@ -3,9 +3,7 @@ package com.starbucks.starvive.product.domain;
 import com.starbucks.starvive.common.domain.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,6 +11,7 @@ import lombok.NoArgsConstructor;
 import java.util.UUID;
 
 import org.hibernate.annotations.UuidGenerator;
+
 @Entity
 @Getter
 @NoArgsConstructor
@@ -23,19 +22,23 @@ public class ProductCategory extends BaseEntity {
     @Column(updatable = false, nullable = false, columnDefinition = "BINARY(16)")
     private UUID productCategoryId;
 
-    private String topCategoryId;
+    @Column(nullable = false, columnDefinition = "BINARY(16)")
+    private UUID productId;
 
-    private String middleCategoryId;
+    @Column(nullable = false, columnDefinition = "BINARY(16)")
+    private UUID topCategoryId;
 
-    private String bottomCategoryId;
+    @Column(nullable = false, columnDefinition = "BINARY(16)")
+    private UUID middleCategoryId;
 
-    private String productId;
+    @Column(nullable = false, columnDefinition = "BINARY(16)")
+    private UUID bottomCategoryId;
 
     @Builder
-    public ProductCategory(String topCategoryId,
-                           String middleCategoryId, String bottomCategoryId,
-                           String productId) {
-   
+    public ProductCategory(UUID productCategoryId, UUID topCategoryId,
+                           UUID middleCategoryId, UUID bottomCategoryId,
+                           UUID productId) {
+        this.productCategoryId = productCategoryId;
         this.topCategoryId = topCategoryId;
         this.middleCategoryId = middleCategoryId;
         this.bottomCategoryId = bottomCategoryId;

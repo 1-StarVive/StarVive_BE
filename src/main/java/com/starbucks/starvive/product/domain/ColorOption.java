@@ -30,8 +30,8 @@ public class ColorOption extends BaseEntity {
     private String colorCode;
 
     @Builder
-    public ColorOption(String name, String colorCode) {
-        
+    public ColorOption(UUID colorId, String name, String colorCode) {
+        this.colorId = colorId;
         this.name = name;
         this.colorCode = colorCode;
     }

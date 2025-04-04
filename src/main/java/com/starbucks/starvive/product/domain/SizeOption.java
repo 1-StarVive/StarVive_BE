@@ -27,8 +27,8 @@ public class SizeOption extends BaseEntity {
     private Capacity capacity;
 
     @Builder
-    public SizeOption(String itemSize, Capacity capacity) {
-        
+    public SizeOption(UUID sizeId, String itemSize, Capacity capacity) {
+        this.sizeId = sizeId;
         this.itemSize = itemSize;
         this.capacity = capacity;
     }

@@ -90,7 +90,7 @@ public class SecurityConfig {
                     "/api/v1/vendor/**" 
                 ).permitAll()
                 // GET 요청 중 /api/v1/review/** 경로는 인증 없이 허용
-                .requestMatchers(HttpMethod.GET, "/api/v1/review/**").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/v1/**").permitAll()
                 // POST 요청 중 /api/users/signout 경로는 인증 필요
                 .requestMatchers("/api/users/signout").authenticated()
                 // 위에서 명시적으로 설정된 경로 외의 모든 요청은 인증(authenticated) 필요

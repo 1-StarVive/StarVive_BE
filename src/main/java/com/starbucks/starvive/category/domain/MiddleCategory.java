@@ -26,12 +26,12 @@ public class MiddleCategory extends BaseEntity {
     @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "BINARY(16)")
     private UUID topCategoryId;
 
     @Builder
-    public MiddleCategory(String name, UUID topCategoryId) {
-        this.middleCategoryId = UUID.randomUUID();
+    public MiddleCategory(UUID middleCategoryId, String name, UUID topCategoryId) {
+        this.middleCategoryId = middleCategoryId;
         this.name = name;
         this.topCategoryId = topCategoryId;
     }

@@ -30,22 +30,20 @@ public class ProductOption extends BaseEntity {
     @Column(nullable = false)
     private Boolean carvedAvailable; // 각인 여부
 
-    private String productId;
+    @Column(nullable = false, columnDefinition = "BINARY(16)")
+    private UUID productId;
 
-    private String colorId;
+    @Column(nullable = false, columnDefinition = "BINARY(16)")
+    private UUID colorId;
 
-    private String sizeId;
-
-    // 작성자 : 김보미
-    //@ManyToOne(fetch = FetchType.LAZY)
-   // @JoinColumn(name = "product_id")
-   // private Product product;
-
+    @Column(nullable = false, columnDefinition = "BINARY(16)")
+    private UUID sizeId;
 
     @Builder
-    public ProductOption(Integer stock, int price,
-                         String productId, String colorId, String sizeId,
+    public ProductOption(UUID productOptionId, Integer stock, int price,
+                         UUID productId, UUID colorId, UUID sizeId,
                          Boolean carvedAvailable) {
+        this.productOptionId = productOptionId;
         this.stock = stock;
         this.price = price;
         this.productId = productId;

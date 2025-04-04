@@ -25,12 +25,14 @@ public class BottomCategory extends BaseEntity {
     @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "BINARY(16)")
     private UUID middleCategoryId;
 
     @Builder
-    public BottomCategory(String name, UUID middleCategoryId) {
-        this.bottomCategoryId = UUID.randomUUID();
+    public BottomCategory(UUID bottomCategoryId,
+                          String name,
+                          UUID middleCategoryId) {
+        this.bottomCategoryId = bottomCategoryId;
         this.name = name;
         this.middleCategoryId = middleCategoryId;
     }
