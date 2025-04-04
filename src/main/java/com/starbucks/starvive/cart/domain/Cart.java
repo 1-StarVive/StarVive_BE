@@ -24,6 +24,9 @@ public class Cart extends BaseEntity {
     @Column(columnDefinition = "BINARY(16)", nullable = false)
     private UUID productOptionId; // 상품 옵션 식별자 (= productId로 사용)
 
+    @Column(columnDefinition = "BINARY(16)", nullable = false)
+    private UUID productId;
+
     @Column(nullable = false)
     private Integer quantity; // 상품 수량
 
@@ -32,12 +35,16 @@ public class Cart extends BaseEntity {
     private LocalDate deletedAt; // soft delete 필드
 
     @Builder
-    public Cart(UUID cartId, UUID userId, UUID productOptionId, Integer quantity, Boolean checked) {
+    public Cart(UUID cartId, UUID userId, UUID productOptionId,
+                UUID productId, Integer quantity,
+                Boolean checked, LocalDate deletedAt) {
         this.cartId = cartId;
         this.userId = userId;
         this.productOptionId = productOptionId;
+        this.productId = productId;
         this.quantity = quantity;
         this.checked = checked;
+        this.deletedAt = deletedAt;
     }
 
     // 수량 변경

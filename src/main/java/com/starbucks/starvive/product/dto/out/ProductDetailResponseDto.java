@@ -1,6 +1,5 @@
 package com.starbucks.starvive.product.dto.out;
 
-import com.starbucks.starvive.product.domain.Product;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

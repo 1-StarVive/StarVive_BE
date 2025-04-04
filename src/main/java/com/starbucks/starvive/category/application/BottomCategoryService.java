@@ -7,10 +7,5 @@ import java.util.UUID;
 
 public interface BottomCategoryService {
 
-    /**
-     *
-     * @param middleCategoryId
-     * @return
-     */
     List<BottomCategoryResponse> findBottomCategories(UUID middleCategoryId);
 }

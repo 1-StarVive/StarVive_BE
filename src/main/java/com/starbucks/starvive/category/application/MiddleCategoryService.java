@@ -7,10 +7,5 @@ import java.util.UUID;
 
 public interface MiddleCategoryService {
 
-    /**
-     *
-     * @param topCategoryId
-     * @return
-     */
     List<MiddleCategoryResponse> findMiddleCategories(UUID topCategoryId);
 }

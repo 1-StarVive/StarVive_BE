@@ -1,6 +1,5 @@
 package com.starbucks.starvive.product.dto.out;
 
-import com.starbucks.starvive.category.dto.out.MiddleWithBottomCategoryResponse;
 import com.starbucks.starvive.common.utils.CursorPage;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,17 +16,13 @@ public class FilteredProductListResponse {
 
     private String name;
 
-    private List<MiddleWithBottomCategoryResponse> middleCategories;
-
     private CursorPage<ProductListResponse> products;
 
     @Builder
     public FilteredProductListResponse(UUID topCategoryId, String name,
-                                       List<MiddleWithBottomCategoryResponse> middleCategories,
                                        CursorPage<ProductListResponse> products) {
         this.topCategoryId = topCategoryId;
         this.name = name;
-        this.middleCategories = middleCategories;
         this.products = products;
     }
 }
