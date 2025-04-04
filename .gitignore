@@ -37,4 +37,4 @@ out/
 .vscode/
 
 # Application config
-application.yml
+application-local.yml

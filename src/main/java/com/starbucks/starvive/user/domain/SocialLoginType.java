@@ -10,7 +10,7 @@ import lombok.RequiredArgsConstructor;
 public enum SocialLoginType {
     GOOGLE("구글"),
     KAKAO("카카오"),
-    TOSS("토스");
+    NONE("미연동");
 
     private final String description;
 
