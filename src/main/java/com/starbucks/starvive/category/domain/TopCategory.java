@@ -33,8 +33,8 @@ public class TopCategory extends BaseEntity {
     private String thumbAlt;
 
     @Builder
-    public TopCategory(String name, String thumbImageUrl, String thumbAlt) {
-        this.topCategoryId = UUID.randomUUID();
+    public TopCategory(UUID topCategoryId, String name, String thumbImageUrl, String thumbAlt) {
+        this.topCategoryId = topCategoryId;
         this.name = name;
         this.thumbImageUrl = thumbImageUrl;
         this.thumbAlt = thumbAlt;

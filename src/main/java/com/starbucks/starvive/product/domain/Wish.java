@@ -19,9 +19,11 @@ public class Wish {
     @Column(updatable = false, nullable = false, columnDefinition = "BINARY(16)")
     private UUID wishId;
 
-    private String productId;
+    @Column(nullable = false, columnDefinition = "BINARY(16)")
+    private UUID productId;
 
-    private String userId;
+    @Column(nullable = false, columnDefinition = "BINARY(16)")
+    private UUID userId;
 
 
      //상태 찜 취소

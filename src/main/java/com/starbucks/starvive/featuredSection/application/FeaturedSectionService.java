@@ -1,21 +1,6 @@
 package com.starbucks.starvive.featuredSection.application;
 
-import com.starbucks.starvive.featuredSection.domain.FeaturedSectionProduct;
-import com.starbucks.starvive.featuredSection.dto.out.FeaturedSectionProductResponseDto;
-import com.starbucks.starvive.featuredSection.dto.out.FeaturedSectionResponseDto;
-import com.starbucks.starvive.featuredSection.infrastructure.FeaturedSectionProductRepository;
-import com.starbucks.starvive.featuredSection.infrastructure.FeaturedSectionRepository;
-import com.starbucks.starvive.featuredSection.vo.FeaturedSectionProductVo;
-import com.starbucks.starvive.image.domain.ProductImage;
-import com.starbucks.starvive.image.infrastructure.ProductImageRepository;
-import com.starbucks.starvive.product.domain.Product;
-import com.starbucks.starvive.product.domain.ProductOption;
-import com.starbucks.starvive.product.infrastructure.ProductOptionRepository;
-import com.starbucks.starvive.product.infrastructure.ProductRepository;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import java.util.List;
-import java.util.UUID;
 
 
 @Service

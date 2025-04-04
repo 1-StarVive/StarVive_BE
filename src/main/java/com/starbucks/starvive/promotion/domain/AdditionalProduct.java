@@ -24,5 +24,6 @@ public class AdditionalProduct extends BaseEntity {
 
     private String productChildId; // 자기 참조 ..
 
-    private String productId;
+    @Column(nullable = false, columnDefinition = "BINARY(16)")
+    private UUID productId;
 }

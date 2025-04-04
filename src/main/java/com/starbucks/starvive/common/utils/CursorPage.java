@@ -11,22 +11,18 @@ import java.util.List;
 public class CursorPage<T> {
 
     private List<T> content;
-    private Long nextCursor;
-    private Long prevCursor;
+    private String nextCursor;
+    private String prevCursor;
     private Boolean hasNext;
     private Boolean hasPrevious;
     private Integer pageSize;
     private Integer page;
 
-    public boolean hasNext() { return nextCursor != null; }
-
-    public boolean hasBefore() { return hasPrevious; }
-
     @Builder
     public CursorPage(
             List<T> content,
-            Long nextCursor,
-            Long prevCursor,
+            String nextCursor,
+            String  prevCursor,
             Boolean hasNext,
             Boolean hasPrevious,
             Integer pageSize,

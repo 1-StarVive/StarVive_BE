@@ -5,11 +5,10 @@ import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.UuidGenerator;
 
 import java.time.LocalDate;
 import java.util.UUID;
-
-import org.hibernate.annotations.UuidGenerator;
 
 @Entity
 @Getter
@@ -35,11 +34,13 @@ public class Banner extends BaseEntity {
 
     @Column(nullable = false)
     private Boolean activated;  // 배너 상태
-    
+
+
     @Builder
-    public Banner(String imageBannerUrl, String imageBannerAlt, String linkUrl, 
-                 LocalDate postedAt, Boolean activated) {
-        this.bannerId = UUID.randomUUID();
+    public Banner(UUID bannerId, String imageBannerUrl,
+                  String imageBannerAlt, String linkUrl,
+                  LocalDate postedAt, Boolean activated) {
+        this.bannerId = bannerId;
         this.imageBannerUrl = imageBannerUrl;
         this.imageBannerAlt = imageBannerAlt;
         this.linkUrl = linkUrl;

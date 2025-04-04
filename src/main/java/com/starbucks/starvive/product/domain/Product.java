@@ -4,7 +4,6 @@ import com.starbucks.starvive.common.domain.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.UuidGenerator;
-import org.hibernate.annotations.Formula;
 
 import java.util.UUID;
 
@@ -30,17 +29,13 @@ public class Product extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private ProductStatus productStatus;
 
-    @Formula("BIN_TO_UUID(product_id)")
-    private String productIdStr;
-
     @Builder
-    public Product (String name, String description,
-                   int baseDiscountRate, ProductStatus productStatus,
-                   String productIdStr) {
+    public Product (UUID productId, String name, String description,
+                   int baseDiscountRate, ProductStatus productStatus) {
+        this.productId = productId;
         this.name = name;
         this.description = description;
         this.baseDiscountRate = baseDiscountRate;
         this.productStatus = productStatus;
-        this.productIdStr = productIdStr;
     }
 }
