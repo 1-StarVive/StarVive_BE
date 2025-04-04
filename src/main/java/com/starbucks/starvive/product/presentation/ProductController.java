@@ -13,7 +13,7 @@ public class ProductController {
     @GetMapping
     public FilteredProductListResponse getFilteredProducts(
             @ModelAttribute FilterProductListRequest request
-            ) {
+    ) {
 
         return null;
     }
