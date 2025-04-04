@@ -29,7 +29,7 @@ public class FeaturedSectionService {
     private final ProductImageRepository productImageRepository;
 
     /**
-     * [GET] 추천 섹션 리스트 조회
+     *  추천 섹션 리스트 조회
      * - 섹션 ID와 이름만 반환
      * - 상품 정보는 포함하지 않음
      */
@@ -40,7 +40,7 @@ public class FeaturedSectionService {
     }
 
     /**
-     * [POST] 추천 섹션 상품 리스트 조회
+     *  추천 섹션 상품 리스트 조회
      * - 요청한 섹션 ID 목록에 대해
      * - 각 섹션에 포함된 추천 상품을 구성해서 반환
      */
@@ -59,13 +59,13 @@ public class FeaturedSectionService {
                         UUID productImageId = fsp.getProductImageId();
 
                         Product product = productRepository.findById(productId)
-                                .orElseThrow(() -> new RuntimeException("Product not found"));
+                                .orElseThrow(() -> new RuntimeException("상품을 찾을 수 없습니다."));
 
                         ProductOption option = productOptionRepository.findByProductOptionId(productId)
-                                .orElseThrow(() -> new RuntimeException("ProductOption not found"));
+                                .orElseThrow(() -> new RuntimeException("상품옵션을 찾을 수 없습니다."));
 
                         ProductImage image = productImageRepository.findByProductIdAndProductImageId(productId,productImageId)
-                                .orElseThrow(() -> new RuntimeException("Thumbnail image not found"));
+                                .orElseThrow(() -> new RuntimeException("썸네일이미지를 찾을 수 없습니다."));
 
 
 

@@ -37,7 +37,7 @@ public class CartService {
                         .build());
 
         cart.updateQuantity(cart.getQuantity() + dto.getQuantity());
-        cartRepository.save(cart);
+        //cartRepository.save(cart);
 
         return new AddCartItemResponseDto("상품이 장바구니에 추가되었습니다.", cart.getQuantity());
     }
@@ -49,7 +49,7 @@ public class CartService {
                     ProductOption option = productOptionRepository.findById(c.getProductOptionId())
                             .orElseThrow(() -> new NoSuchElementException("상품 옵션을 찾을 수 없습니다."));
 
-                    // 👉 여기 추가: 연관관계 없이 productId로 직접 조회
+                    //  여기 추가: 연관관계 없이 productId로 직접 조회
                     UUID productId = option.getProductId();  // ProductOption 엔티티에 이 필드가 있어야 합니다
                     Product product = productRepository.findById(productId)
                             .orElseThrow(() -> new NoSuchElementException("상품을 찾을 수 없습니다."));
