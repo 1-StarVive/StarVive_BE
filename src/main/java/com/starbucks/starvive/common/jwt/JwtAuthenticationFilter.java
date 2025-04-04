@@ -14,12 +14,7 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import java.util.UUID;
 
-/**
- * JWT 인증 필터.
- * HTTP 요청 헤더에서 JWT 토큰을 추출하고 유효성을 검증하여
- * SecurityContext에 인증 정보를 설정합니다.
- * OncePerRequestFilter를 상속받아 요청당 한 번만 실행됨을 보장합니다.
- */
+// 당신은 누구인가를 알아보는 필터
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
@@ -29,7 +24,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         
-        // 특정 경로들은 필터링을 건너니다 (예: 로그인, 회원가입, Swagger).
         String requestURI = request.getRequestURI();
         if (requestURI.startsWith("/api/users/signin") || 
             requestURI.startsWith("/api/users/signup") ||
@@ -47,7 +41,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         final String jwt;
         final String userIdString;
 
-        // 헤더가 없거나 "Bearer "로 시작하지 않으면 필터링 건너니다
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
             return;
@@ -91,7 +84,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 return;
             }
         }
-        // 다음 필터로 요청/응답 전달
         filterChain.doFilter(request, response);
     }
 

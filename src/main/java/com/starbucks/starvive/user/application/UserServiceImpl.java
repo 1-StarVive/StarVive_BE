@@ -14,6 +14,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.transaction.annotation.Transactional;
 import com.starbucks.starvive.user.domain.User;
+import com.starbucks.starvive.user.domain.UserStatus;
+import com.starbucks.starvive.user.domain.Gender;
 import com.starbucks.starvive.user.domain.RefreshToken;
 import com.starbucks.starvive.user.dto.in.SignInRequestDto;
 import com.starbucks.starvive.user.dto.out.SignInResponseDto;
@@ -22,7 +24,8 @@ import com.starbucks.starvive.user.repository.UserRepository;
 import com.starbucks.starvive.user.repository.RefreshTokenRepository;
 import com.starbucks.starvive.common.jwt.JwtTokenProvider;
 import com.starbucks.starvive.common.exception.TokenRefreshException;
-
+import com.starbucks.starvive.common.util.NicknameGenerator;
+import com.starbucks.starvive.user.domain.SocialLoginType;
 @Service
 public class UserServiceImpl implements UserService {
 
@@ -39,17 +42,23 @@ public class UserServiceImpl implements UserService {
         User user = signUpRequestDto.toEntity();
         String encodedPassword = passwordEncoder.encode(user.getPassword());
 
+        // 사용자가 입력한 닉네임 가져오기
+        String requestedNickname = user.getNickname();
+        // 닉네임이 없거나 비어있으면 랜덤 닉네임 생성
+        String finalNickname = (requestedNickname == null || requestedNickname.isBlank())?
+         NicknameGenerator.generateRandomNickname(): requestedNickname;
+
         User userToSave = User.builder()
             .loginId(user.getLoginId())
             .email(user.getEmail())
             .password(encodedPassword)
-            .name(user.getName())
-            .nickname(user.getNickname())
-            .phoneNumber(user.getPhoneNumber())
+            .name(user.getName().isBlank()? "사용자": user.getName())
+            .nickname(finalNickname) // 최종 결정된 닉네임 사용
+            .phoneNumber(user.getPhoneNumber().isBlank()? " ": user.getPhoneNumber())
             .birth(user.getBirth())
-            .gender(user.getGender())
-            .socialLoginType(user.getSocialLoginType())
-            .status(user.getStatus())
+            .gender(user.getGender() == null ? Gender.OTHER: user.getGender())
+            .socialLoginType(user.getSocialLoginType() == null ? SocialLoginType.NONE : user.getSocialLoginType())
+            .status(UserStatus.ACTIVE)
             .build();
 
         this.userRepository.save(userToSave);
@@ -92,11 +101,11 @@ public class UserServiceImpl implements UserService {
             return SignInResponseDto.from(authenticatedUser, accessToken, refreshToken, expiresIn);
 
         } catch (org.springframework.security.core.AuthenticationException e) {
-            logger.warn("Authentication failed for loginId {}: {}", signInRequestDto.getLoginId(), e.getMessage());
-            throw new org.springframework.security.authentication.BadCredentialsException("Invalid credentials");
+            logger.warn("로그인 실패  : {}", signInRequestDto.getLoginId());
+            throw new org.springframework.security.authentication.BadCredentialsException("로그인 실패");
         } catch (Exception e) {
-            logger.error("Unexpected error during sign in for loginId {}", signInRequestDto.getLoginId(), e);
-            throw new RuntimeException("An unexpected error occurred during sign in.");
+            logger.error("로그인 중 예상치 못한 오류  : {}", signInRequestDto.getLoginId(), e);
+            throw new RuntimeException("로그인 중 예상치 못한 오류 발생");
         }
     }
 
@@ -111,7 +120,7 @@ public class UserServiceImpl implements UserService {
     public Optional<String> refreshAccessToken(String refreshToken) {
         // 1. JWT 서명 검증
         if (!jwtTokenProvider.validateRefreshToken(refreshToken)) {
-            logger.warn("Refresh token validation failed: {}", refreshToken);
+            logger.warn("리프레시토큰 인증실패  : {}", refreshToken);
             return Optional.empty();
         }
 
@@ -120,16 +129,16 @@ public class UserServiceImpl implements UserService {
                 .map(tokenEntity -> {
                     // 3. DB에서 만료 여부 확인
                     if (tokenEntity.isExpired()) {
-                        logger.info("Refresh token expired, deleting: {}", refreshToken);
+                        logger.info("리프레시토큰 만료, 삭제중: {}", refreshToken);
                         refreshTokenRepository.delete(tokenEntity); // 만료된 토큰 삭제
-                        throw new TokenRefreshException(refreshToken, "Refresh token was expired. Please make a new signin request");
+                        throw new TokenRefreshException(refreshToken, "리프레시토큰 만료, 새로운 로그인 요청");
                     }
                     // 4. 새로운 Access Token 생성
-                    logger.info("Issuing new access token for user: {}", tokenEntity.getUserId());
+                    logger.info("새로운 엑세스토큰 발급중: {}", tokenEntity.getUserId());
                     return Optional.of(jwtTokenProvider.generateAccessToken(tokenEntity.getUserId()));
                 })
                 .orElseGet(() -> {
-                    logger.warn("Refresh token not found in DB: {}", refreshToken);
+                    logger.warn("리프레시토큰 데이터베이스에 없음: {}", refreshToken);
                     return Optional.empty(); // 검증 후 토큰을 찾을 수 없는 경우 처리 (예: 동시 삭제)
                 });
     }
@@ -158,11 +167,11 @@ public class UserServiceImpl implements UserService {
     @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(String loginId) {
         User user = this.userRepository.findByLoginId(loginId)
-                .orElseThrow(() -> new org.springframework.security.core.userdetails.UsernameNotFoundException("User not found with loginId: " + loginId));
+                .orElseThrow(() -> new org.springframework.security.core.userdetails.UsernameNotFoundException("유저 없음: " + loginId));
         if (user instanceof UserDetails) {
             return (UserDetails) user;
         } else {
-            throw new IllegalStateException("User object does not implement UserDetails for loginId: " + loginId);
+            throw new IllegalStateException("유저 객체가 UserDetails를 구현하지 않음: " + loginId);
         }
     }
 }

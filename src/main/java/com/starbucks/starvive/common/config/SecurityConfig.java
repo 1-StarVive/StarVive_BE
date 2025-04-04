@@ -60,7 +60,7 @@ public class SecurityConfig {
             response.sendError(HttpStatus.UNAUTHORIZED.value(), "Unauthorized");
     }
 
-    // Spring Security 필터 체인 설정
+    // Spring Security 필터 체인 설정, 이거는 어디에서 온건가 검증증
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http

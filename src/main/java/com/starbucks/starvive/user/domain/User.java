@@ -78,11 +78,6 @@ public class User extends BaseEntity implements UserDetails {
         this.status = status;
     }
 
-    /**
-     * 기존 사용자의 소셜 로그인 정보를 업데이트(연동)합니다.
-     * @param socialLoginType 연동할 소셜 로그인 타입 (예: KAKAO, GOOGLE)
-     * @param socialId 해당 소셜 플랫폼의 고유 ID
-     */
     public void updateSocialInfo(SocialLoginType socialLoginType, String socialId) {
         this.socialLoginType = socialLoginType;
         this.socialId = socialId;

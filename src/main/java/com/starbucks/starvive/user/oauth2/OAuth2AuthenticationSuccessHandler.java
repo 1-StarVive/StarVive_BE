@@ -20,6 +20,7 @@ import org.springframework.security.web.authentication.SimpleUrlAuthenticationSu
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.util.UriComponentsBuilder;
+import com.starbucks.starvive.common.util.NicknameGenerator;
 
 import java.io.IOException;
 import java.time.Instant;
@@ -48,8 +49,8 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     @Transactional
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         if (!(authentication instanceof OAuth2AuthenticationToken)) {
-            log.error("Authentication is not an instance of OAuth2AuthenticationToken");
-            sendErrorResponse(response, "invalid_authentication_type");
+            log.error("인증 타입이 OAuth2AuthenticationToken이 아님");
+            sendErrorResponse(response, "인증 타입 오류");
             return;
         }
 
@@ -62,8 +63,8 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         try {
             socialLoginType = SocialLoginType.valueOf(registrationId.toUpperCase());
         } catch (IllegalArgumentException e) {
-            log.error("Unsupported registrationId: {}", registrationId);
-            sendErrorResponse(response, "unsupported_provider");
+            log.error("지원하지 않는 프로바이더: {}", registrationId);
+            sendErrorResponse(response, "지원하지 않는 프로바이더");
             return;
         }
 
@@ -72,16 +73,16 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         String name = extractNameBasedOnProvider(oAuth2User, registrationId);
 
         if (socialId == null) {
-            log.error("Could not extract socialId from OAuth2User for provider: {}", registrationId);
-            sendErrorResponse(response, "oauth_socialid_error");
+            log.error("OAuth2User에서 소셜ID 추출 실패: {}", registrationId);
+            sendErrorResponse(response, "소셜ID 추출 실패");
             return;
         }
 
         // 2. 소셜 정보로 사용자 조회 또는 생성/연동
         User user = findOrCreateUser(socialLoginType, socialId, email, name);
         if (user == null) {
-             log.error("Failed to find or create user for social login: {} / {}", socialLoginType, socialId);
-             sendErrorResponse(response, "user_processing_error");
+             log.error("소셜 로그인 중 사용자 조회 또는 생성/연동 실패: {} / {}", socialLoginType, socialId);
+             sendErrorResponse(response, "사용자 처리 오류");
              return;
         }
 
@@ -101,8 +102,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         response.setCharacterEncoding("UTF-8");
         objectMapper.writeValue(response.getWriter(), responseDto);
 
-        log.info("Successfully processed OAuth2 login for user ({} / {}), returning tokens in response body.", socialLoginType, user.getUserId());
-        // clearAuthenticationAttributes(request); // 필요 시 이전 인증 속성 제거
+        log.info("Successfully processed OAuth2 로그인 처리 완료: {} / {}", socialLoginType, user.getUserId());
     }
 
     // 소셜 정보 기반으로 사용자 조회/생성/연동 처리
@@ -112,7 +112,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
         if (userOptional.isPresent()) {
             // 1-1. 소셜 정보로 사용자가 이미 존재하면 해당 사용자 반환
-            log.info("Existing social user found: {} / {}", socialLoginType, socialId);
+            log.info("소셜 로그인 중 사용자 존재: {} / {}", socialLoginType, socialId);
             return userOptional.get();
         } else {
             // 1-2. 소셜 정보로 사용자가 없으면 이메일로 기존 사용자 조회 시도
@@ -122,36 +122,34 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
             }
 
             if (emailUserOptional.isPresent()) {
-                // 2-1. 이메일로 기존 사용자가 존재하면 해당 사용자에 소셜 정보 연동(업데이트)
-                log.info("Existing user found by email [{}], linking social info: {} / {}", email, socialLoginType, socialId);
+                // 이메일로 기존 사용자가 존재하면 해당 사용자에 소셜 정보 연동(업데이트)
+                log.info("이메일로 기존 사용자 존재: {} / {}", email, socialLoginType, socialId);
                 User existingUser = emailUserOptional.get();
 
-                // User 엔티티의 updateSocialInfo 메소드 호출하여 연동
                 existingUser.updateSocialInfo(socialLoginType, socialId);
-                // JPA 변경 감지(Dirty Checking)에 의해 트랜잭션 종료 시 업데이트되거나,
-                // 명시적으로 save 호출 (현재는 @Transactional 범위 내이므로 자동 업데이트 기대)
-                // return userRepository.save(existingUser); // 명시적 저장이 필요하면 주석 해제
                 return existingUser; // 업데이트된 기존 사용자 반환
 
             } else {
                 // 2-2. 이메일로도 사용자가 없으면 신규 사용자 생성
-                log.info("Creating new user for social login: {} / {}", socialLoginType, socialId);
+                log.info("소셜 로그인 중 신규 사용자 생성: {} / {}", socialLoginType, socialId);
 
                 // 이메일이 없거나 중복될 경우를 대비한 임시 이메일 생성 로직 추가
                  String finalEmail = email;
                  if (finalEmail == null || userRepository.existsByEmail(finalEmail)) {
                      finalEmail = socialLoginType.toString().toLowerCase() + "_" + socialId + "@social.local"; // 고유성 보장을 위한 임시 이메일
-                     log.warn("Email not provided or already exists. Using temporary email: {}", finalEmail);
+                     log.warn("임시 이메일 생성: {} / {}", finalEmail);
                  }
 
+                // 닉네임 설정: 이름이 있으면 이름을 사용, 없으면 랜덤 닉네임 생성
+                String finalNickname = (name != null && !name.isBlank()) ? name : NicknameGenerator.generateRandomNickname();
 
                 User newUser = User.builder()
                         .loginId(null) // 소셜 로그인이므로 일반 loginId 없음
                         .email(finalEmail) // 최종 결정된 이메일 사용
                         .password(null) // 소셜 로그인이므로 비밀번호 없음
-                        .name(name != null ? name : "사용자") // 이름 없으면 기본값
+                        .name(name != null ? name : "사용자") // 이름 없으면 기본값 
                         .socialId(socialId) // 소셜 ID 설정
-                        .nickname(null) // 닉네임은 필요시 추가 설정
+                        .nickname(finalNickname) // 최종 결정된 닉네임 사용 (랜덤 또는 제공된 이름)
                         .phoneNumber(null)
                         .birth(null) // 생년월일 등 추가 정보는 필요시 별도 수집
                         .gender(Gender.OTHER) // UNKNOWN 대신 OTHER 사용 (사용자 확인)
@@ -161,7 +159,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
                 try {
                      return userRepository.save(newUser);
                  } catch (Exception e) {
-                     log.error("Failed to save new social user: {} / {}", socialLoginType, socialId, e);
+                     log.error("소셜 로그인 중 신규 사용자 저장 실패: {} / {}", socialLoginType, socialId, e);
                      // 데이터 저장 중 예외 발생 시 (예: 예상치 못한 DB 제약 조건 위반) null 반환
                      return null;
                  }
@@ -180,7 +178,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
         refreshTokenRepository.deleteByUserId(user.getUserId());
         refreshTokenRepository.save(refreshTokenEntity);
-        log.info("Saved refresh token for user: {} / {}", user.getSocialLoginType(), user.getUserId());
+        log.info("리프레시 토큰 저장 완료: {} / {}", user.getSocialLoginType(), user.getUserId());
     }
 
     // Provider별 소셜 ID 추출
@@ -191,7 +189,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
              Object idObj = oAuth2User.getAttribute("id");
              return idObj != null ? String.valueOf(idObj) : null;
         }
-        log.warn("Social ID extraction not implemented for provider: {}", registrationId);
+        log.warn("소셜 ID 추출 지원 안됨: {}", registrationId);
         return null;
     }
 
@@ -209,7 +207,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
                 return (String) kakaoAccount.get("email");
             }
         }
-        log.warn("Email extraction not supported or available for provider: {}", registrationId);
+        log.warn("이메일 추출 지원 안됨: {}", registrationId);
         return null;
     }
 
@@ -226,7 +224,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
                  }
              }
         }
-        log.warn("Name extraction not implemented for provider: {}", registrationId);
+        log.warn("이름 추출 지원 안됨: {}", registrationId);
         return null;
     }
 
@@ -235,7 +233,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.setCharacterEncoding("UTF-8");
-        Map<String, String> errorDetails = Map.of("error", "OAuth2 Authentication Failed", "errorCode", errorCode);
+        Map<String, String> errorDetails = Map.of("error", "OAuth2 인증 실패", "errorCode", errorCode);
         objectMapper.writeValue(response.getWriter(), errorDetails);
     }
 } 
