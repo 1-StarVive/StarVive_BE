@@ -9,6 +9,11 @@ import java.util.UUID;
 @Repository
 public interface CategoryCustomRepository {
 
+    /**
+     *
+     * @param topCategoryId
+     * @return
+     */
     List<TopWithMiddleBottomCategoryResponse> findCategoryByTopCategoryId(UUID topCategoryId);
 
 }

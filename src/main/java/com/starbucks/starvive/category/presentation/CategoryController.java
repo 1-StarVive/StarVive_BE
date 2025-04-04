@@ -30,16 +30,31 @@ public class CategoryController {
         return topCategoryService.findTopCategories();
     }
 
+    /**
+     *
+     * @param topCategoryId
+     * @return
+     */
     @GetMapping("/{topCategoryId}/middle")
     public List<MiddleCategoryResponse> getMiddleCategories(@PathVariable UUID topCategoryId) {
         return middleCategoryService.findMiddleCategories(topCategoryId);
     }
 
+    /**
+     *
+     * @param middleCategoryId
+     * @return
+     */
     @GetMapping("/{middleCategoryId}/bottom")
     public List<BottomCategoryResponse> getBottomCategories(@PathVariable UUID middleCategoryId) {
         return bottomCategoryService.findBottomCategories(middleCategoryId);
     }
 
+    /**
+     *
+     * @param topCategoryId
+     * @return
+     */
     @GetMapping("/{topCategoryId}")
     public List<TopWithMiddleBottomCategoryResponse> getCategoryByTopId(@PathVariable UUID topCategoryId) {
         return topCategoryService.findCategoryByTopCategoryId(topCategoryId);

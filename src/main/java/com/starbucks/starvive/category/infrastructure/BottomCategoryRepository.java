@@ -8,5 +8,10 @@ import java.util.UUID;
 
 public interface BottomCategoryRepository extends JpaRepository<BottomCategory, UUID> {
 
+    /**
+     *
+     * @param middleCategoryId
+     * @return
+     */
     List<BottomCategory> findByMiddleCategoryId(UUID middleCategoryId);
 }

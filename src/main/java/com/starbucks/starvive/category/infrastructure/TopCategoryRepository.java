@@ -8,6 +8,10 @@ import java.util.UUID;
 
 public interface TopCategoryRepository extends JpaRepository<TopCategory, UUID> {
 
+    /**
+     *
+     * @return
+     */
     List<TopCategory> findAll();
 
 
