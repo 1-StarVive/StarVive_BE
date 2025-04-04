@@ -13,6 +13,7 @@ import java.time.LocalDate;
 @Getter
 @Builder
 public class SignUpRequestDto {
+    
     private String loginId;
     private String email;
     private String password;

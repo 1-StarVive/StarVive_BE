@@ -25,11 +25,12 @@ public class ProductDetailImage extends BaseEntity {
     @Column(nullable = false, columnDefinition = "TEXT")
     private String productDetailContent;
 
-    private String productId;
+    @Column(nullable = false, columnDefinition = "BINARY(16)")
+    private UUID productId;
 
     @Builder
     public ProductDetailImage(String productDetailContent,
-                              String productId) {
+                              UUID productId) {
         
         this.productDetailContent = productDetailContent;
         this.productId = productId;

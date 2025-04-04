@@ -25,7 +25,8 @@ public class LimitedEdition extends BaseEntity {
     @Column(nullable = false)
     private LocalDate saleEndAt;
 
-    private String productId;
+    @Column(nullable = false, columnDefinition = "BINARY(16)")
+    private UUID productId;
 
     @Enumerated(EnumType.STRING)
     private LimitedEditionStatus limitedEditionStatus;

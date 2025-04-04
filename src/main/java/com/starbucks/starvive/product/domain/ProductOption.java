@@ -2,10 +2,13 @@ package com.starbucks.starvive.product.domain;
 
 import com.starbucks.starvive.common.domain.BaseEntity;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
 import java.util.UUID;
+
 import org.hibernate.annotations.UuidGenerator;
 
 @Entity
@@ -27,21 +30,18 @@ public class ProductOption extends BaseEntity {
     @Column(nullable = false)
     private Boolean carvedAvailable; // 각인 여부
 
+    @Column(nullable = false, columnDefinition = "BINARY(16)")
     private UUID productId;
 
-    private String colorId;
+    @Column(nullable = false, columnDefinition = "BINARY(16)")
+    private UUID colorId;
 
-    private String sizeId;
-
-    // 작성자 : 김보미
-    //@ManyToOne(fetch = FetchType.LAZY)
-   // @JoinColumn(name = "product_id")
-   // private Product product;
-
+    @Column(nullable = false, columnDefinition = "BINARY(16)")
+    private UUID sizeId;
 
     @Builder
-    public ProductOption(UUID productOptionId, int stock, int price,
-                         UUID productId, String colorId, String sizeId,
+    public ProductOption(UUID productOptionId, Integer stock, int price,
+                         UUID productId, UUID colorId, UUID sizeId,
                          Boolean carvedAvailable) {
         this.productOptionId = productOptionId;
         this.stock = stock;
@@ -51,4 +51,5 @@ public class ProductOption extends BaseEntity {
         this.sizeId = sizeId;
         this.carvedAvailable = carvedAvailable;
     }
+
 }

@@ -3,16 +3,15 @@ package com.starbucks.starvive.cart.domain;
 import com.starbucks.starvive.common.domain.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
-
-import java.util.Date;
-import java.util.UUID;
-
 import org.hibernate.annotations.UuidGenerator;
+
+import java.time.LocalDate;
+import java.util.UUID;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Cart {
+public class Cart extends BaseEntity {
 
     @Id
     @UuidGenerator
@@ -25,25 +24,27 @@ public class Cart {
     @Column(columnDefinition = "BINARY(16)", nullable = false)
     private UUID productOptionId; // 상품 옵션 식별자 (= productId로 사용)
 
+    @Column(columnDefinition = "BINARY(16)", nullable = false)
+    private UUID productId;
+
     @Column(nullable = false)
     private Integer quantity; // 상품 수량
 
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date date; // 생성일자 (담은 시각)
-
     private Boolean checked; // 체크 여부 (예: 주문 선택)
 
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date deletedAt; // soft delete용 필드
+    private LocalDate deletedAt; // soft delete 필드
 
     @Builder
-    public Cart(UUID userId, UUID productOptionId, Integer quantity, Date date, Boolean checked) {
-        this.cartId = UUID.randomUUID();
+    public Cart(UUID cartId, UUID userId, UUID productOptionId,
+                UUID productId, Integer quantity,
+                Boolean checked, LocalDate deletedAt) {
+        this.cartId = cartId;
         this.userId = userId;
         this.productOptionId = productOptionId;
+        this.productId = productId;
         this.quantity = quantity;
-        this.date = date;
         this.checked = checked;
+        this.deletedAt = deletedAt;
     }
 
     // 수량 변경
@@ -52,11 +53,8 @@ public class Cart {
     }
 
     // 삭제 처리 (soft delete)
-    public void softDelete() {
-        this.deletedAt = new Date();
-    }
+    public void softDelete() { this.deletedAt = LocalDate.now(); }}
 
     //public boolean Deleted() {
         //return this.deletedAt != null;}
 
-}

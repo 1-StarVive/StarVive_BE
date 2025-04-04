@@ -18,13 +18,15 @@ public class PromotionProduct extends BaseEntity {
     @Column(updatable = false, nullable = false, columnDefinition = "BINARY(16)")
     private UUID promotionProductId;
 
-    private String productId;
+    @Column(nullable = false, columnDefinition = "BINARY(16)")
+    private UUID productId;
 
-    private String promotionId;
+    @Column(nullable = false, columnDefinition = "BINARY(16)")
+    private UUID promotionId;
 
     @Builder
-    public PromotionProduct(UUID promotionProductId, String productId,
-                            String promotionId) {
+    public PromotionProduct(UUID promotionProductId, UUID productId,
+                            UUID promotionId) {
         this.promotionProductId = promotionProductId;
         this.productId = productId;
         this.promotionId = promotionId;
