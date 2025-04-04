@@ -45,4 +45,7 @@ public class CategoryController {
     public List<BottomCategoryResponse> getBottomCategories(@RequestParam("middleId") UUID middleCategoryId) {
         return bottomCategoryService.findBottomCategories(middleCategoryId);
     }
+
+    // 상위 카테고리 등록
+
 }

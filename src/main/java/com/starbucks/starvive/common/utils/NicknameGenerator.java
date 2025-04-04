@@ -1,4 +1,4 @@
-package com.starbucks.starvive.common.util;
+package com.starbucks.starvive.common.utils;
 
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;

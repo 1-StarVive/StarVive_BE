@@ -24,7 +24,7 @@ import com.starbucks.starvive.user.repository.UserRepository;
 import com.starbucks.starvive.user.repository.RefreshTokenRepository;
 import com.starbucks.starvive.common.jwt.JwtTokenProvider;
 import com.starbucks.starvive.common.exception.TokenRefreshException;
-import com.starbucks.starvive.common.util.NicknameGenerator;
+import com.starbucks.starvive.common.utils.NicknameGenerator;
 import com.starbucks.starvive.user.domain.SocialLoginType;
 @Service
 public class UserServiceImpl implements UserService {
