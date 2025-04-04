@@ -31,7 +31,8 @@ public class FeaturedSectionProduct {
     @Column(columnDefinition = "BINARY(16)", nullable = false)
     private UUID productImageId;
 
-    public FeaturedSectionProduct(UUID productId, UUID featuredSectionId, UUID productOptionId, UUID productImageId) {
+    public FeaturedSectionProduct(UUID FeaturedSectionProductId, UUID productId, UUID featuredSectionId, UUID productOptionId, UUID productImageId) {
+        this.FeaturedSectionProductId = FeaturedSectionProductId;
         this.productId = productId;
         this.featuredSectionId = featuredSectionId;
         this.productOptionId = productOptionId;

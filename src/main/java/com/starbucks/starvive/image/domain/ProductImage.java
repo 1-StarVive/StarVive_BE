@@ -19,21 +19,23 @@ public class ProductImage extends BaseEntity {
     @Id
     @UuidGenerator
     @Column(updatable = false, nullable = false, columnDefinition = "BINARY(16)")
-    private UUID id;
+    private UUID productImageId;
 
     @Column(nullable = false)
-    private String imageUrl;
+    private String imgThumbUrl;
 
     @Column(nullable = false)
-    private String imageAlt;
+    private String imgThumbAlt;
 
     @Column(nullable = false)
     private UUID productId;
 
     @Builder
-    public ProductImage(String imageUrl, String imageAlt, UUID productId) {
-        this.imageUrl = imageUrl;
-        this.imageAlt = imageAlt;
+    public ProductImage(UUID productImageId, String imgThumbUrl, String imgThumbAlt, UUID productId) {
+        this.productImageId = productImageId;
+        this.imgThumbUrl = imgThumbUrl;
+        this.imgThumbAlt = imgThumbAlt;
         this.productId = productId;
     }
+
 }

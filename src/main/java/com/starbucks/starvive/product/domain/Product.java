@@ -26,8 +26,17 @@ public class Product extends BaseEntity {
     @Column(nullable = false)
     private int baseDiscountRate;
 
-    @Column(nullable = false)
-    private int price;
+    private boolean hasBest; // 베스트 여부
+    //  베스트 상품 지정 도메인 메서드
+    public void markAsBest() {
+        this.hasBest = true;
+    }
+
+    //  베스트 상품 해제 도메인 메서드 (선택)
+    public void unmarkAsBest() {
+        this.hasBest = false;
+
+    }
 
     @Enumerated(EnumType.STRING)
     private ProductStatus productStatus;
@@ -35,12 +44,18 @@ public class Product extends BaseEntity {
     @Builder
     public Product(String name, String description,
                    int baseDiscountRate, int price,
+                   boolean hasBest,
                    ProductStatus productStatus) {
         this.productId = UUID.randomUUID();
         this.name = name;
         this.description = description;
         this.baseDiscountRate = baseDiscountRate;
-        this.price = price;
+        this.hasBest = hasBest;
+       // this.price = price;
         this.productStatus = productStatus;
+    }
+
+    public void setBest(boolean b) {
+
     }
 }

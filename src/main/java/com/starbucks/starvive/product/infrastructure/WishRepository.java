@@ -8,7 +8,7 @@ import java.util.UUID;
 
 public interface WishRepository extends JpaRepository<Wish, UUID> {
 
-    List<Wish> findByUserId(String userId);
+    List<Wish> findByUserId(UUID userId);
 
-    Optional<Wish> findByUserIdAndProductId(String userId, String productId);
+    Optional<Wish> findByUserIdAndProductId(UUID userId, UUID productId);
 }

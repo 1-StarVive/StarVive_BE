@@ -20,13 +20,10 @@ public class FeaturedSection {
     private String name; // 추천 섹션 이름
     private boolean activated;
 
-    public FeaturedSection(String name, boolean activated) {
+    public FeaturedSection(UUID featuredSectionId, String name, boolean activated) {
+        this.featuredSectionId = featuredSectionId;
         this.name = name;
         this.activated = activated;
     }
-
-    //@Column(columnDefinition = "BINARY(16)", nullable = false)
-    //private String productId;
-
 
 }

@@ -11,7 +11,7 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProductListVO {
+public class ProductListVo {
 
     private UUID productId;
 
@@ -23,11 +23,11 @@ public class ProductListVO {
 
     private int productPrice;
 
-    private Double productDiscountRate;
+    private int baseDiscountRate;
 
-    private Boolean isNew;
+   // private Boolean isNew;
 
-    private Boolean isTop;
+   // private Boolean isTop;
 
-    private Boolean isLimitedEdition;
+   // private Boolean isLimitedEdition;
 }

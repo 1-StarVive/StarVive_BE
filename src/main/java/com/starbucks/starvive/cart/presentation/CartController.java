@@ -21,18 +21,18 @@ public class CartController {
     private final CartService cartService;
 
     // 장바구니에 상품 추가
-    @PostMapping
+    @PostMapping("/item")
     public ResponseEntity<AddCartItemResponseDto> add(
             @RequestParam UUID userId,
             @RequestBody AddCartItemRequestDto dto) {
         return ResponseEntity.ok(cartService.addItem(userId, dto));
     }
     
-    // 장바구니 목록 조회
-//    @GetMapping
-//    public ResponseEntity<List<CartItemResponseDto>> getCart(@RequestParam UUID userId) {
-//        return ResponseEntity.ok(cartService.getCartList(userId));
-//    }
+    //장바구니 목록 조회
+    @GetMapping
+    public ResponseEntity<List<CartItemResponseDto>> getCart(@RequestParam UUID userId) {
+        return ResponseEntity.ok(cartService.getCartList(userId));
+   }
 
     // 장바구니 상품 수량 변경
     @PatchMapping("/{cartId}")

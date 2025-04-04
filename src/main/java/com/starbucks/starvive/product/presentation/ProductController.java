@@ -1,7 +1,7 @@
 package com.starbucks.starvive.product.presentation;
 
 import com.starbucks.starvive.product.application.ProductService;
-import com.starbucks.starvive.product.dto.out.ProductListResponseDTO;
+import com.starbucks.starvive.product.dto.out.ProductListResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,7 +22,7 @@ public class ProductController {
             description = "Product All List API 입니다",
             tags = {"Product-Service"})
     @GetMapping
-    public List<ProductListResponseDTO> getProductAllList() {
+    public List<ProductListResponseDto> getProductAllList() {
         return List.of();
     }
 }

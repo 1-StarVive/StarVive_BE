@@ -1,5 +1,6 @@
 package com.starbucks.starvive.featuredSection.vo;
 
+import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -19,7 +20,8 @@ public class FeaturedSectionProductVo {
     private int price;
     private int discountRate;
     private int discountedPrice;
-    private String code;
+    @Column(nullable = false)
+    private int baseDiscountRate;
     private boolean limitedEdition; // 한정판 여부
     private boolean topProduct;     // 베스트 상픔 여부
     private boolean newProduct;     // 신상품 여부

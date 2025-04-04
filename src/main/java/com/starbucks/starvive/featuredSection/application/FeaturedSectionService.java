@@ -15,7 +15,6 @@ import com.starbucks.starvive.product.infrastructure.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.awt.*;
 import java.util.List;
 import java.util.UUID;
 
@@ -68,7 +67,7 @@ public class FeaturedSectionService {
                         ProductImage image = productImageRepository.findByProductIdAndProductImageId(productId,productImageId)
                                 .orElseThrow(() -> new RuntimeException("Thumbnail image not found"));
 
-                        int discountedPrice = option.getPrice() * (100 - product.getBaseDiscountRate()) / 100;
+
 
                         return FeaturedSectionProductVo.builder()
                                 .productId(productId)
@@ -77,7 +76,7 @@ public class FeaturedSectionService {
                                 .name(product.getName())
                                 .price(option.getPrice())
                                 .discountRate(product.getBaseDiscountRate())
-                                .discountedPrice(discountedPrice)
+                                //.discountedPrice(discountedPrice)
                                 //.limitedEdition(option.LimitedEdition())
                                 //.topProduct(option.TopProduct())
                                 //.newProduct(option.NewProduct())
