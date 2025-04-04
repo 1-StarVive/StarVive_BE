@@ -16,10 +16,5 @@ public class FilterProductCustomImpl {
     private static final int DEFAULT_PAGE_NUMBER = 0;
 
     private final JPAQueryFactory jpaQueryFactory;
-
-//    @Override
-//    public CursorPage<ProductListResponse> findFilteredProducts(FilterProductListRequest request) {
-//        return nulll;
-//    }
 }
 

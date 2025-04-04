@@ -8,10 +8,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface FilterProductCustomRepository {
 
-    /**
-     *
-     * @param request
-     * @return
-     */
     CursorPage<ProductListResponse> findFilteredProducts(FilterProductListRequest request);
 }
