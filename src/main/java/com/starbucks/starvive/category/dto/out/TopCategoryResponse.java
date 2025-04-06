@@ -1,6 +1,7 @@
 package com.starbucks.starvive.category.dto.out;
 
 import com.starbucks.starvive.category.domain.TopCategory;
+
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

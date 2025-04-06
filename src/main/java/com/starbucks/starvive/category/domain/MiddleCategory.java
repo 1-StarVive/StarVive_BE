@@ -1,5 +1,6 @@
 package com.starbucks.starvive.category.domain;
 
+import com.starbucks.starvive.category.dto.in.MiddleCategoryRequest;
 import com.starbucks.starvive.common.domain.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -29,10 +30,22 @@ public class MiddleCategory extends BaseEntity {
     @Column(nullable = false, columnDefinition = "BINARY(16)")
     private UUID topCategoryId;
 
+    @Column(nullable = false)
+    private boolean deleted = false;
+
     @Builder
     public MiddleCategory(UUID middleCategoryId, String name, UUID topCategoryId) {
         this.middleCategoryId = middleCategoryId;
         this.name = name;
         this.topCategoryId = topCategoryId;
+    }
+
+    public void updateMiddleCategory(MiddleCategoryRequest middleCategoryRequest) {
+        this.name = middleCategoryRequest.getName();
+        this.topCategoryId = middleCategoryRequest.getTopCategoryId();
+    }
+
+    public void softDelete() {
+        this.deleted = true;
     }
 }

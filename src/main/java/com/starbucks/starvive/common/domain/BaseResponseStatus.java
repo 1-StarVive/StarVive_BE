@@ -65,6 +65,8 @@ public enum BaseResponseStatus {
 
     NO_EXIST_OPTIONS_IN_PRODUCT(HttpStatus.NOT_FOUND, false, 3007, "해당 상품에 옵션이 존재하지 않습니다"),
 
+    ALREADY_DELETED_CATEGORY(HttpStatus.BAD_REQUEST, false, 3008, "이미 삭제된 카테고리입니다."),
+
     /**
      * 4000: comment service error
      */
