@@ -4,14 +4,14 @@ import com.starbucks.starvive.category.domain.MiddleCategory;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public interface MiddleCategoryRepository extends JpaRepository<MiddleCategory, UUID> {
 
-    /**
-     *
-     * @param topCategoryId
-     * @return
-     */
-    List<MiddleCategory> findByTopCategoryId(UUID topCategoryId);
+    Optional<MiddleCategory> findByNameAndTopCategoryId(String name, UUID topCategoryId);
+
+    List<MiddleCategory> findAllByDeletedFalse();
+
+    List<MiddleCategory> findAllByTopCategoryIdAndDeletedFalse(UUID topCategoryId);
 }

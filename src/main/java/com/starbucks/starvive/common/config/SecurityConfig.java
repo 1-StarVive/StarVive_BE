@@ -87,7 +87,10 @@ public class SecurityConfig {
                     "/api/v1/color/**", 
                     "/api/v1/products/**", 
                     "/api/v1/category/**", 
-                    "/api/v1/vendor/**" 
+                    "/api/v1/vendor/**" ,
+                    "/api/v1/topCategories/**",
+                    "/api/v1/middleCategories/**",
+                    "/api/v1/bottomCategories/**"
                 ).permitAll()
                 // GET 요청 중 /api/v1/review/** 경로는 인증 없이 허용
                 .requestMatchers(HttpMethod.GET, "/api/v1/**").permitAll()

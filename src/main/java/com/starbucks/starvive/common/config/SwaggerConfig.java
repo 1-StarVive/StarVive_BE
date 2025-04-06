@@ -16,14 +16,14 @@ import org.springframework.context.annotation.Profile;
         )
 )
 
-//@SecurityScheme(
-//        name = "Bearer Auth",
-//        type = SecuritySchemeType.HTTP,
-//        bearerFormat = "JWT",
-//        scheme = "bearer"
-//)
+@SecurityScheme(
+        name = "Bearer Auth",
+        type = SecuritySchemeType.HTTP,
+        bearerFormat = "JWT",
+        scheme = "bearer"
+)
 
-@Profile("!prod")
+@Profile({"local", "dev"})
 @Configuration
 public class SwaggerConfig {
 
