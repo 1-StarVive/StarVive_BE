@@ -2,11 +2,15 @@ package com.starbucks.starvive.category.dto.in;
 
 import com.starbucks.starvive.category.domain.TopCategory;
 import com.starbucks.starvive.category.vo.TopCategoryVo;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class TopCategoryRequest {
 
     private String name;

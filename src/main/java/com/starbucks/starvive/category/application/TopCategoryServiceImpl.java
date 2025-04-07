@@ -5,9 +5,11 @@ import com.starbucks.starvive.category.dto.in.TopCategoryRequest;
 import com.starbucks.starvive.category.dto.out.TopCategoryListResponse;
 import com.starbucks.starvive.category.infrastructure.TopCategoryRepository;
 import com.starbucks.starvive.common.exception.BaseException;
+import com.starbucks.starvive.common.s3.S3Uploader;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.UUID;
@@ -18,17 +20,18 @@ import static com.starbucks.starvive.common.domain.BaseResponseStatus.*;
 @RequiredArgsConstructor
 public class TopCategoryServiceImpl implements TopCategoryService {
 
+    private final S3Uploader s3Uploader;
     private final TopCategoryRepository topCategoryRepository;
 
-    @Transactional
     @Override
+    @Transactional
     public void addTopCategory(TopCategoryRequest topCategoryRequest) {
-        if (topCategoryRepository.findByName(topCategoryRequest.getName()).isPresent()) {
+        if (topCategoryRepository.findByNameAndDeletedFalse(topCategoryRequest.getName()).isPresent()) {
             throw new BaseException(DUPLICATED_OPTION);
         }
 
-        TopCategory topCategory = topCategoryRequest.toEntity();
-        topCategoryRepository.save(topCategory);
+        TopCategory category = topCategoryRequest.toEntity();
+        topCategoryRepository.save(category);
     }
 
     @Override

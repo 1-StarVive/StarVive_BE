@@ -2,6 +2,7 @@ package com.starbucks.starvive.category.application;
 
 import com.starbucks.starvive.category.dto.in.TopCategoryRequest;
 import com.starbucks.starvive.category.dto.out.TopCategoryListResponse;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.UUID;
