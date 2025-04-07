@@ -97,7 +97,18 @@ public enum BaseResponseStatus {
      * 6000: gpt-api error
      */
     // Media
-    NO_EXIST_MEDIA(HttpStatus.NOT_FOUND, false, 6001, "존재하지 않는 미디어입니다");
+    NO_EXIST_MEDIA(HttpStatus.NOT_FOUND, false, 6001, "존재하지 않는 미디어입니다"),
+
+    /**
+     * 7000: AWS S3 error
+     */
+    S3_UPLOAD_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, false, 7001, "S3 파일 업로드에 실패했습니다."),
+    S3_DELETE_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, false, 7002, "S3 파일 삭제에 실패했습니다."),
+    S3_INVALID_FILE_FORMAT(HttpStatus.BAD_REQUEST, false, 7003, "잘못된 형식의 파일입니다."),
+    S3_FILE_NOT_FOUND(HttpStatus.NOT_FOUND, false, 7004, "S3에서 파일을 찾을 수 없습니다."),
+    S3_CONNECTION_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, false, 7005, "S3 연결에 실패했습니다."),
+    S3_EMPTY_FILE_NAME(HttpStatus.BAD_REQUEST, false, 7006, "업로드할 파일명이 비어 있습니다."),
+    S3_UPDATE_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, false, 7006, "S3 파일 수정에 실패했습니다.");
 
     private final HttpStatusCode httpStatusCode;
     private final boolean isSuccess;
