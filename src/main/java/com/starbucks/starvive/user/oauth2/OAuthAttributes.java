@@ -11,7 +11,7 @@ import java.util.Map;
 
 @Getter
 @Builder
-public class OAuthAttributes { // Make it a public top-level class
+public class OAuthAttributes { 
     private Map<String, Object> attributes;
     private String nameAttributeKey;
     private String name;
@@ -22,10 +22,10 @@ public class OAuthAttributes { // Make it a public top-level class
     public static OAuthAttributes of(String registrationId, Map<String, Object> attributes) {
         if ("kakao".equalsIgnoreCase(registrationId)) {
             return ofKakao("id", attributes);
-        } else if ("google".equalsIgnoreCase(registrationId)) { // Explicitly check for google
+        } else if ("google".equalsIgnoreCase(registrationId)) { 
             return ofGoogle("sub", attributes);
         }
-        // Handle other providers or throw an exception
+       
         throw new IllegalArgumentException("Unsupported OAuth2 provider: " + registrationId);
     }
 

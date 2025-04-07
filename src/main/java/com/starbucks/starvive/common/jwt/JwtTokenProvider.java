@@ -42,10 +42,10 @@ public class JwtTokenProvider {
 
     public Claims extractAllClaims(String token) {
         return Jwts.parserBuilder()
-                .setSigningKey(getSignKey()) // 서명 검증을 위한 키 설정
+                .setSigningKey(getSignKey())
                 .build()
-                .parseClaimsJws(token) // 토큰 파싱 및 서명 검증 (실패 시 예외 발생)
-                .getBody(); // 검증 성공 시 Payload(Claims) 반환
+                .parseClaimsJws(token)
+                .getBody();
     }
 
     public String generateAccessToken(Authentication authentication) {
@@ -55,25 +55,21 @@ public class JwtTokenProvider {
         if (principal instanceof User) {
             userIdString = ((User) principal).getUserId().toString();
         } else if (principal instanceof org.springframework.security.core.userdetails.UserDetails) {
-            // 이 경우는 UserDetailsService가 User 객체 대신 기본 UserDetails를 반환할 때 발생 가능하나,
-            // 현재 구현에서는 User 객체를 반환하므로 이 분기는 사실상 예외적인 상황을 대비합니다.
             throw new IllegalArgumentException("Authentication 객체에 예기치 않은 Principal 타입: " + principal.getClass());
         } else {
-            // OAuth2User 등 다른 타입의 Principal이 올 경우에 대한 처리 (현재 로직에서는 User 기대)
             throw new IllegalArgumentException("Principal 타입에서 사용자 ID를 추출할 수 없습니다: " + principal.getClass());
         }
 
-        Date now = new Date(); // 현재 시간
-        // 설정에서 Access Token 만료 시간(ms) 가져오기
-        long accessTokenExpirationMs = getAccessTokenExpirationTime() * 1000L; // getAccessTokenExpirationTime()은 초 단위 반환 가정
+        Date now = new Date();
+        long accessTokenExpirationMs = getAccessTokenExpirationTime() * 1000L;
         Date expiration = new Date(now.getTime() + accessTokenExpirationMs);
 
         return Jwts.builder()
-                .setSubject(userIdString) // 토큰의 주체(Subject)로 사용자 ID 설정
-                .setIssuedAt(now) // 토큰 발급 시간 설정
-                .setExpiration(expiration) // 토큰 만료 시간설정
-                .signWith(getSignKey()) // 서명 키와 알고리즘으로 서명
-                .compact(); // 직렬화된 토큰 문자열 생성
+                .setSubject(userIdString)
+                .setIssuedAt(now)
+                .setExpiration(expiration)
+                .signWith(getSignKey())
+                .compact();
     }
     
 
@@ -104,7 +100,7 @@ public class JwtTokenProvider {
         }
 
         Date now = new Date();
-        long refreshTokenExpirationMs = getRefreshTokenExpirationTime(); // Refresh Token 만료 시간(ms) 가져오기
+        long refreshTokenExpirationMs = getRefreshTokenExpirationTime();
         Date expiration = new Date(now.getTime() + refreshTokenExpirationMs);
 
         return Jwts.builder()
@@ -118,7 +114,7 @@ public class JwtTokenProvider {
     public String generateRefreshToken(UUID userId) {
         String userIdString = userId.toString();
         Date now = new Date();
-        long refreshTokenExpirationMs = getRefreshTokenExpirationTime(); // Refresh Token 만료 시간(ms) 가져오기
+        long refreshTokenExpirationMs = getRefreshTokenExpirationTime();
         Date expiration = new Date(now.getTime() + refreshTokenExpirationMs);
 
         return Jwts.builder()
@@ -130,11 +126,9 @@ public class JwtTokenProvider {
     }
 
     public long getRefreshTokenExpirationTime() {
-        // 환경 변수 또는 application.yml에서 "JWT.token.refresh-expire-time" 값 가져오기
         String expirationTime = env.getProperty("JWT.token.refresh-expire-time");
         if (expirationTime == null) {
             logger.error("Refresh Token 만료 시간(JWT.token.refresh-expire-time) 설정이 없습니다. 기본값(7일)을 사용합니다.");
-            // 기본값: 7일 (밀리초 단위)
             return 7 * 24 * 60 * 60 * 1000L;
         }
         try {
@@ -146,45 +140,39 @@ public class JwtTokenProvider {
     }
 
     public long getAccessTokenExpirationTime() {
-        // 환경 변수 또는 application.yml에서 "JWT.token.access-expire-time" 값 가져오기 (밀리초 단위로 가정)
         String expirationTimeMs = env.getProperty("JWT.token.access-expire-time");
         long expirationMs;
         if (expirationTimeMs == null) {
             logger.error("Access Token 만료 시간(JWT.token.access-expire-time) 설정이 없습니다. 기본값(1시간)을 사용합니다.");
-            // 기본값: 1시간 (밀리초 단위)
             expirationMs = 60 * 60 * 1000L;
         } else {
             try {
                 expirationMs = Long.parseLong(expirationTimeMs);
             } catch (NumberFormatException e) {
                 logger.error("Access Token 만료 시간(JWT.token.access-expire-time) 형식이 잘못되었습니다: {}. 기본값(1시간)을 사용합니다.", expirationTimeMs, e);
-                // 기본값: 1시간 (밀리초 단위)
                 expirationMs = 60 * 60 * 1000L;
             }
         }
-        // 밀리초를 초로 변환하여 반환
         return expirationMs / 1000L;
     }
 
     public boolean validateRefreshToken(String token) {
         try {
-            // 토큰 파싱 및 서명 검증 시도
             Jwts.parserBuilder().setSigningKey(getSignKey()).build().parseClaimsJws(token);
-            return true; // 검증 성공
+            return true;
         } catch (SignatureException ex) {
             logger.error("잘못된 JWT 서명입니다.");
         } catch (MalformedJwtException ex) {
             logger.error("잘못된 JWT 토큰 형식입니다.");
         } catch (ExpiredJwtException ex) {
             logger.warn("만료된 JWT 토큰입니다 (validateRefreshToken에서는 오류 아님): {}", ex.getMessage());
-            return true; // 서명 자체는 유효했을 수 있으므로 일단 true 반환 (필요시 false로 변경 가능)
+            return true;
         } catch (UnsupportedJwtException ex) {
             logger.error("지원되지 않는 JWT 토큰입니다.");
         } catch (IllegalArgumentException ex) {
-            // 토큰 문자열이 null이거나 비어있는 경우 등
             logger.error("JWT 클레임 문자열이 비어 있거나 부적절합니다.");
         }
-        return false; // 검증 실패
+        return false;
     }
 
     public UUID getUserIdFromRefreshToken(String token) {
@@ -193,14 +181,11 @@ public class JwtTokenProvider {
     }
     
     public SecretKey getSignKey()  {
-        // 설정에서 비밀 키 문자열 가져오기
         String secret = env.getProperty("JWT.secret-key");
         if (secret == null) {
             logger.error("JWT secret key (JWT.secret-key) is not configured!");
-            // 적절한 예외 처리 또는 기본 키 사용 (보안상 매우 위험)
             throw new IllegalStateException("JWT secret key is not configured.");
         }
-        // 비밀 키 문자열을 byte 배열로 변환하여 HMAC-SHA 키 생성
         return Keys.hmacShaKeyFor(secret.getBytes());
     }
 
