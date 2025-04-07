@@ -13,7 +13,7 @@ import static com.starbucks.starvive.common.domain.BaseResponseStatus.DUPLICATED
 @RequiredArgsConstructor
 public class PromotionServiceImpl implements PromotionService {
 
-    private PromotionRepository promotionRepository;
+    private final PromotionRepository promotionRepository;
 
     @Override
     public void addPromotion(PromotionRequest promotionRequest) {

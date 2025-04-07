@@ -18,6 +18,25 @@ spring:
         dialect: org.hibernate.dialect.MySQL8Dialect
         format_sql: true
 
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 20MB
+      location: upload
+      enabled: true
+
+  cloud:
+    aws:
+      credentials:
+        access-key: ${ACCESS_KEY}
+        secret-key: ${SECRET_KEY}
+      s3:
+        bucket: ${BUCKET}
+      region:
+        static: ${STATIC}
+      stack:
+        auto: false
+
   # Move security config under the main spring block
   security:
     oauth2:
