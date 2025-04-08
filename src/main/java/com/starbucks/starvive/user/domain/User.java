@@ -61,10 +61,30 @@ public class User extends BaseEntity implements UserDetails {
     @Column(nullable = false)
     private UserStatus status;
 
+    @Column(nullable = false, columnDefinition = "TINYINT(1)")
+    private boolean termsAgreed; // 이용약관_동의
+
+    @Column(nullable = false, columnDefinition = "TINYINT(1)")
+    private boolean privacyAgreed; // 개인정보_수집_및_이용_동의
+
+    @Column(nullable = false, columnDefinition = "TINYINT(1)")
+    private boolean cardTermsAgreed; // 스타벅스_카드_이용약관
+
+    @Column(nullable = false, columnDefinition = "TINYINT(1)")
+    private boolean marketingEmailAgreed; // 마케팅_정보_수신_동의_이메일
+
+    @Column(nullable = false, columnDefinition = "TINYINT(1)")
+    private boolean marketingSmsAgreed; // 마케팅_정보_수신_동의_SMS
+
+    @Column(nullable = false, columnDefinition = "TINYINT(1)")
+    private boolean nicknameTermAgreed; // nicknameTerm: 닉네임 관련 약관 동의 여부
+
     @Builder
     private User(String loginId, String email, String password, String name,
                  String socialId, String nickname, String phoneNumber, LocalDate birth,
-                 Gender gender, SocialLoginType socialLoginType, UserStatus status) {
+                 Gender gender, SocialLoginType socialLoginType, UserStatus status,
+                 boolean termsAgreed, boolean privacyAgreed, boolean cardTermsAgreed,
+                 boolean marketingEmailAgreed, boolean marketingSmsAgreed, boolean nicknameTermAgreed) {
         this.loginId = loginId;
         this.email = email;
         this.password = password;
@@ -76,6 +96,12 @@ public class User extends BaseEntity implements UserDetails {
         this.gender = gender;
         this.socialLoginType = socialLoginType;
         this.status = status;
+        this.termsAgreed = termsAgreed;
+        this.privacyAgreed = privacyAgreed;
+        this.cardTermsAgreed = cardTermsAgreed;
+        this.marketingEmailAgreed = marketingEmailAgreed;
+        this.marketingSmsAgreed = marketingSmsAgreed;
+        this.nicknameTermAgreed = nicknameTermAgreed;
     }
 
     public void updateSocialInfo(SocialLoginType socialLoginType, String socialId) {
