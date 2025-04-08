@@ -22,8 +22,14 @@ public class SignUpRequestDto {
     private String phoneNumber;
     private LocalDate birth;
     private Gender gender;
-    private SocialLoginType socialLoginType;
-    private UserStatus status;
+
+    // 약관 동의 관련 필드 추가
+    private boolean termsAgreed;
+    private boolean privacyAgreed;
+    private boolean cardTermsAgreed;
+    private boolean marketingEmailAgreed;
+    private boolean marketingSmsAgreed;
+    private boolean nicknameTermAgreed;
 
     public static SignUpRequestDto from(SignUpRequestVo vo) {
         return SignUpRequestDto.builder()
@@ -35,8 +41,13 @@ public class SignUpRequestDto {
             .phoneNumber(vo.getPhoneNumber())
             .birth(vo.getBirth())
             .gender(vo.getGender())
-            .socialLoginType(vo.getSocialLoginType())
-            .status(vo.getStatus())
+            // 약관 동의 필드 매핑 추가
+            .termsAgreed(vo.isTermsAgreed())
+            .privacyAgreed(vo.isPrivacyAgreed())
+            .cardTermsAgreed(vo.isCardTermsAgreed())
+            .marketingEmailAgreed(vo.isMarketingEmailAgreed())
+            .marketingSmsAgreed(vo.isMarketingSmsAgreed())
+            .nicknameTermAgreed(vo.isNicknameTermAgreed())
             .build();
     }
 
@@ -50,8 +61,13 @@ public class SignUpRequestDto {
             .phoneNumber(phoneNumber)
             .birth(birth)
             .gender(gender)
-            .socialLoginType(socialLoginType)
-            .status(status)
+            // 약관 동의 필드 매핑 추가
+            .termsAgreed(termsAgreed)
+            .privacyAgreed(privacyAgreed)
+            .cardTermsAgreed(cardTermsAgreed)
+            .marketingEmailAgreed(marketingEmailAgreed)
+            .marketingSmsAgreed(marketingSmsAgreed)
+            .nicknameTermAgreed(nicknameTermAgreed)
             .build();
     }
 }
