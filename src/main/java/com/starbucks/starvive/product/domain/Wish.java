@@ -1,17 +1,18 @@
 package com.starbucks.starvive.product.domain;
 
-import com.starbucks.starvive.common.domain.BaseEntity;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
 import java.util.UUID;
-
 import org.hibernate.annotations.UuidGenerator;
 
 @Entity
 @Getter
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Wish {
 
     @Id
@@ -25,6 +26,13 @@ public class Wish {
     @Column(nullable = false, columnDefinition = "BINARY(16)")
     private UUID userId;
 
+    @Column(nullable = false)
+    private UUID productOptionId;
 
-     //상태 찜 취소
+    public static Wish create(UUID userId, UUID productId) {
+        return Wish.builder()
+                .userId(userId)
+                .productId(productId)
+                .build();
+    }
 }

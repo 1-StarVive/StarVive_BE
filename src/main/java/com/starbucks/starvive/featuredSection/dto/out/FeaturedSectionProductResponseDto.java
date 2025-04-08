@@ -1,18 +1,24 @@
 package com.starbucks.starvive.featuredSection.dto.out;
 
-import com.starbucks.starvive.featuredSection.vo.FeaturedSectionProductVo;
+import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-import java.util.List;
+
+import java.util.UUID;
 
 @Getter
-@Builder
-@NoArgsConstructor
 @AllArgsConstructor
 public class FeaturedSectionProductResponseDto {
 
-    private String featuredSectionId;
-    private List<FeaturedSectionProductVo> products;
+
+    private UUID productId;
+    private String imageThumbUrl;
+    private String imageThumbAlt;
+    private String name;
+    private int price;
+  //  private int discountRate;
+   // private int discountedPrice;
+  //  @Column(nullable = false)
+    private int baseDiscountRate;
+
 }

@@ -9,11 +9,8 @@ import java.util.UUID;
 @Getter
 public class FeaturedSectionProductRequestDto {
 
-    private final List<String> featuredSectionsIds;
+    private List<UUID> featuredSectionsIds;
 
-    public FeaturedSectionProductRequestDto(List<String> featuredSectionsIds) {
-        this.featuredSectionsIds = featuredSectionsIds;
-    }
 
 
 

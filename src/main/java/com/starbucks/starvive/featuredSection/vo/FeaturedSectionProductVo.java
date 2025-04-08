@@ -1,30 +1,40 @@
 package com.starbucks.starvive.featuredSection.vo;
 
+import com.starbucks.starvive.featuredSection.Projection.FeaturedSectionProductProjection;
+import com.starbucks.starvive.featuredSection.dto.out.FeaturedSectionProductResponseDto;
 import jakarta.persistence.Column;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import java.util.UUID;
 
 @Getter
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
 public class FeaturedSectionProductVo {
 
-    private UUID productId;
-    private String imgThumbUrl;
-    private String imgThumbAlt;
-    private String name;
-    private int price;
-    private int discountRate;
-    private int discountedPrice;
+    private final UUID featuredSectionId;
+    private final UUID productId;
+    private final String imageThumbUrl;
+    private final String imageThumbAlt;
+    private final String name;
+    private final int price;
+  //  private final int discountRate;
+   // private final int discountedPrice;
     @Column(nullable = false)
-    private int baseDiscountRate;
-    private boolean limitedEdition; // 한정판 여부
-    private boolean topProduct;     // 베스트 상픔 여부
-    private boolean newProduct;     // 신상품 여부
+    private final int baseDiscountRate;
 
+    public FeaturedSectionProductVo(FeaturedSectionProductProjection featuredSectionProductProjection ) {
+        this.featuredSectionId = featuredSectionProductProjection.getFeaturedSectionId();
+        this.productId = featuredSectionProductProjection.getProductId();
+        this.imageThumbUrl = featuredSectionProductProjection.getImageThumbUrl();
+        this.imageThumbAlt = featuredSectionProductProjection.getImageThumbAlt();
+        this.name = featuredSectionProductProjection.getName();
+        this.price = featuredSectionProductProjection.getPrice();
+       // this.discountRate = featuredSectionProductProjection.getDiscountRate();
+      //  this.discountedPrice =  price * (100 - discountRate) / 100;
+        this.baseDiscountRate = featuredSectionProductProjection.getBaseDiscountRate();
+    }
 
+    public FeaturedSectionProductResponseDto toItemDto() {
+        return new FeaturedSectionProductResponseDto(
+                productId, imageThumbUrl, imageThumbAlt, name, price,baseDiscountRate
+        );
+    }
 }

@@ -20,37 +20,32 @@ public class CartController {
 
     private final CartService cartService;
 
-    // 장바구니에 상품 추가
-    @PostMapping("/item")
-    public ResponseEntity<AddCartItemResponseDto> add(
-            @RequestParam UUID userId,
-            @RequestBody AddCartItemRequestDto dto) {
-        return ResponseEntity.ok(cartService.addItem(userId, dto));
+    @PostMapping
+    public ResponseEntity<Void> addItem(@RequestBody UUID userId, AddCartItemRequestDto addCartItemRequestDto) {
+        cartService.addItem(userId, addCartItemRequestDto);
+        return ResponseEntity.ok().build();
     }
-    
-    //장바구니 목록 조회
+
     @GetMapping
-    public ResponseEntity<List<CartItemResponseDto>> getCart(@RequestParam UUID userId) {
+    public ResponseEntity<List<CartItemResponseDto>> getList(@RequestParam UUID userId) {
         return ResponseEntity.ok(cartService.getCartList(userId));
-   }
+    }
 
-    // 장바구니 상품 수량 변경
     @PatchMapping("/{cartId}")
-    public ResponseEntity<UpdateQuantityResponseDto> updateQuantity(
-            @PathVariable UUID cartId,
-            @RequestBody UpdateQuantityRequestDto dto) {
-        return ResponseEntity.ok(cartService.updateQuantity(cartId, dto.getQuantity()));
+    public ResponseEntity<Void> updateQuantity(@RequestBody UpdateQuantityRequestDto updateQuantityRequestDto) {
+        cartService.updateQuantity(updateQuantityRequestDto);
+        return ResponseEntity.ok().build();
     }
 
-    // 장바구니 개별 상품 삭제
-    @DeleteMapping
-    public ResponseEntity<DeleteCartItemResponseDto> delete(@RequestBody DeleteCartItemRequestDto dto) {
-        return ResponseEntity.ok(cartService.deleteItem(dto.getCartId()));
+    @DeleteMapping("/{cartId}")
+    public ResponseEntity<Void> deleteItem(@PathVariable UUID cartId) {
+        cartService.deleteItem(cartId);
+        return ResponseEntity.noContent().build();
     }
 
-    // 장바구니 전체 비우기
-    @DeleteMapping("/items")
-    public ResponseEntity<ClearCartResponseDto> clearCart(@RequestParam UUID userId) {
-        return ResponseEntity.ok(cartService.clearCart(userId));
+    @DeleteMapping("/products")
+    public ResponseEntity<Void> clearCart(@RequestBody DeleteCartItemRequestDto deleteCartItemRequestDto) {
+        cartService.clearCart(deleteCartItemRequestDto.getUserId());
+        return ResponseEntity.noContent().build();
     }
 }

@@ -3,7 +3,6 @@ package com.starbucks.starvive.product.domain;
 import com.starbucks.starvive.common.domain.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
-
 import java.util.UUID;
 
 @Entity

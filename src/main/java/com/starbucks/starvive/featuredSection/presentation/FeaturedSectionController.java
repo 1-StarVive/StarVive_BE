@@ -2,7 +2,7 @@ package com.starbucks.starvive.featuredSection.presentation;
 
 import com.starbucks.starvive.featuredSection.application.FeaturedSectionService;
 import com.starbucks.starvive.featuredSection.dto.in.FeaturedSectionProductRequestDto;
-import com.starbucks.starvive.featuredSection.dto.out.FeaturedSectionProductResponseDto;
+import com.starbucks.starvive.featuredSection.dto.out.FeaturedSectionProductGroupResponseDto;
 import com.starbucks.starvive.featuredSection.dto.out.FeaturedSectionResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -11,25 +11,42 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/featured-Sections")
+@RequestMapping("/api")
 @RequiredArgsConstructor
 public class FeaturedSectionController {
 
-    private final FeaturedSectionService sectionService;
+    private final FeaturedSectionService featuredSectionService;
 
-    // 추천 섹션 리스트 (이름과 ID만 반환)
-     @GetMapping
-     public ResponseEntity<List<FeaturedSectionResponseDto>> getSections() {
-         return ResponseEntity.ok(sectionService.getOnlySections());
-     }
+    /**
+     * ✅ 1. 추천 섹션 리스트만 조회
+     * GET /featured-section
+     */
+    @GetMapping("/featured-sections")
+    public ResponseEntity<List<FeaturedSectionResponseDto>> getSectionList() {
+        return ResponseEntity.ok(featuredSectionService.getSectionList());
+    }
 
-     //  특정 섹션 ID 배열로 섹션 + 상품 목록 조회
-     @PostMapping("/products")
-     public ResponseEntity<List<FeaturedSectionProductResponseDto>> getSectionProducts(
-             @RequestBody FeaturedSectionProductRequestDto request
-     ) {
-         return ResponseEntity.ok(
-                 sectionService.getSectionsByIds(request.getFeaturedSectionsIds())
-         );
-     }
+    /**
+     * ✅ 2. 추천 섹션 ID 리스트로 섹션별 상품 리스트 조회
+     * POST /featured-section/products
+     */
+    @GetMapping("/featured-section/products")
+    public ResponseEntity<List<FeaturedSectionProductGroupResponseDto>> getProductsBySection(
+            @RequestBody FeaturedSectionProductRequestDto featuredSectionProductRequestDto) {
+        return ResponseEntity.ok(featuredSectionService.getProductsBySections(featuredSectionProductRequestDto.getFeaturedSectionsIds()));
+    }
+
+    //@PostMapping("/featured-section")
+
+
+    //@PutMapping("/featured-section")
+
+
+    //@DeleteMapping("/featured-section")
+
+
+   // @PostMapping("/featured-section/regist-products")
+
+
+
 }

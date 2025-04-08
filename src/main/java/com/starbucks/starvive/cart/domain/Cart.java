@@ -10,7 +10,9 @@ import java.util.UUID;
 
 @Entity
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Cart extends BaseEntity {
 
     @Id
@@ -19,7 +21,7 @@ public class Cart extends BaseEntity {
     private UUID cartId;
 
     @Column(columnDefinition = "BINARY(16)", nullable = false)
-    private UUID userId; // 사용자 식별자
+    private UUID userId;
 
     @Column(columnDefinition = "BINARY(16)", nullable = false)
     private UUID productOptionId; // 상품 옵션 식별자 (= productId로 사용)
@@ -28,33 +30,25 @@ public class Cart extends BaseEntity {
     private UUID productId;
 
     @Column(nullable = false)
-    private Integer quantity; // 상품 수량
+    private Integer quantity;
 
-    private Boolean checked; // 체크 여부 (예: 주문 선택)
+    private Boolean checked;
 
-    private LocalDate deletedAt; // soft delete 필드
-
-    @Builder
-    public Cart(UUID cartId, UUID userId, UUID productOptionId,
-                UUID productId, Integer quantity,
-                Boolean checked, LocalDate deletedAt) {
-        this.cartId = cartId;
-        this.userId = userId;
-        this.productOptionId = productOptionId;
-        this.productId = productId;
-        this.quantity = quantity;
-        this.checked = checked;
-        this.deletedAt = deletedAt;
+    public void increaseQuantity(int value) {
+        this.quantity += value;
     }
 
-    // 수량 변경
-    public void updateQuantity(int quantity) {
-        this.quantity = quantity;
+    public void updateQuantity(int newQuantity) {
+        this.quantity = newQuantity;
     }
 
-    // 삭제 처리 (soft delete)
-    public void softDelete() { this.deletedAt = LocalDate.now(); }}
+    //private LocalDate deletedAt; // soft delete 필드
+    private boolean deleted;
 
-    //public boolean Deleted() {
-        //return this.deletedAt != null;}
 
+         public Cart(UUID userId, UUID productOptionId, int quantity) {
+            this.userId = userId;
+            this.productOptionId = productOptionId;
+            this.quantity = quantity;
+        }
+    }

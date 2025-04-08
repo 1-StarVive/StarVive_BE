@@ -8,8 +8,12 @@ import java.util.UUID;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class WishAddRequestDto {
+public class ProductOptionCreateRequestDto {
 
-    private UUID userId;
+    private int price;
+    private Integer stock;
+    private Boolean carvedAvailable;
     private UUID productId;
+    private UUID colorId;
+    private UUID sizeId;
 }

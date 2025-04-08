@@ -2,9 +2,9 @@ package com.starbucks.starvive.featuredSection.domain;
 
 import com.starbucks.starvive.product.domain.Product;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
 import java.util.UUID;
 
 import org.hibernate.annotations.UuidGenerator;
@@ -12,12 +12,13 @@ import org.hibernate.annotations.UuidGenerator;
 @Getter
 @Entity
 @NoArgsConstructor
+@Builder
 public class FeaturedSectionProduct {
 
     @Id
     @UuidGenerator
     @Column(updatable = false, nullable = false, columnDefinition = "BINARY(16)")
-    private UUID FeaturedSectionProductId;
+    private UUID featuredSectionProductId;
 
     @Column(columnDefinition = "BINARY(16)", nullable = false)
     private UUID productId;
@@ -31,8 +32,8 @@ public class FeaturedSectionProduct {
     @Column(columnDefinition = "BINARY(16)", nullable = false)
     private UUID productImageId;
 
-    public FeaturedSectionProduct(UUID FeaturedSectionProductId, UUID productId, UUID featuredSectionId, UUID productOptionId, UUID productImageId) {
-        this.FeaturedSectionProductId = FeaturedSectionProductId;
+    public FeaturedSectionProduct(UUID featuredSectionProductId, UUID productId, UUID featuredSectionId, UUID productOptionId, UUID productImageId) {
+        this.featuredSectionProductId = featuredSectionProductId;
         this.productId = productId;
         this.featuredSectionId = featuredSectionId;
         this.productOptionId = productOptionId;
