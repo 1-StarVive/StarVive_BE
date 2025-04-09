@@ -7,6 +7,7 @@ import com.starbucks.starvive.product.dto.in.ProductCreateRequestDto;
 import com.starbucks.starvive.product.dto.in.ProductImageCreateRequestDto;
 import com.starbucks.starvive.product.dto.in.ProductOptionCreateRequestDto;
 import com.starbucks.starvive.product.dto.out.FilteredProductListResponse;
+import com.starbucks.starvive.product.dto.out.ProductDetailResponseDto;
 import com.starbucks.starvive.product.dto.out.ProductResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -94,10 +95,19 @@ public class ProductController {
      * ✅ 상품 삭제
      * DELETE /products/{productId}
      */
-    @DeleteMapping("/{productId}")
+    @DeleteMapping("/products/{productId}")
     public ResponseEntity<BaseResponseEntity<Void>> deleteProduct(@PathVariable UUID productId) {
         productService.deleteProduct(productId);
         return ResponseEntity.ok(BaseResponseEntity.ok());
+    }
+
+    //상품 상세 조회
+    @GetMapping("/products/{productId}/detail")
+    public ResponseEntity<BaseResponseEntity<ProductDetailResponseDto>> getProductDetail(
+            @PathVariable UUID productId
+    ) {
+        ProductDetailResponseDto productDetail = productService.getProductDetail(productId);
+        return ResponseEntity.ok(BaseResponseEntity.ok(productDetail));
     }
 
 }

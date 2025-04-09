@@ -21,7 +21,7 @@ public class WishRankingService {
 //        redisTemplate.opsForZSet().incrementScore(WISH_KEY, productId.toString(), 1.0);
 //    }
 //
-//    // 상위 N개 찜 랭킹 상품 조회
+//    // 상위 N개 찜 랭킹 상품
 //    public List<WishCountDto> getTopWishes(int topN) {
 //        Set<ZSetOperations.TypedTuple<String>> topSet = redisTemplate.opsForZSet()
 //                .reverseRangeWithScores(WISH_KEY, 0, topN - 1);

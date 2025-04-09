@@ -9,9 +9,11 @@ import com.starbucks.starvive.product.domain.ProductOption;
 import com.starbucks.starvive.product.dto.in.ProductCreateRequestDto;
 import com.starbucks.starvive.product.dto.in.ProductImageCreateRequestDto;
 import com.starbucks.starvive.product.dto.in.ProductOptionCreateRequestDto;
+import com.starbucks.starvive.product.dto.out.ProductDetailResponseDto;
 import com.starbucks.starvive.product.dto.out.ProductResponseDto;
 import com.starbucks.starvive.product.infrastructure.ProductOptionRepository;
 import com.starbucks.starvive.product.infrastructure.ProductRepository;
+import com.starbucks.starvive.product.projection.ProductDetailProjection;
 import com.starbucks.starvive.product.vo.ProductVo;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -90,5 +92,14 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public void deleteProduct(UUID productId) {
         productRepository.deleteById(productId);
+    }
+
+
+    @Override
+    public ProductDetailResponseDto getProductDetail(UUID productId) {
+        ProductDetailProjection projection = productRepository
+                .findProductDetailByProductId(productId)
+                .orElseThrow(() -> new BaseException(BaseResponseStatus.NO_EXIST_PRODUCT_DETAIL));
+        return ProductDetailResponseDto.fromProjection(projection);
     }
 }

@@ -1,23 +1,31 @@
 package com.starbucks.starvive.product.dto.out;
 
+import com.starbucks.starvive.product.projection.ProductDetailProjection;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import java.util.UUID;
 
-// 작성자 : 김보미
-
 @Getter
-@Builder
 @AllArgsConstructor
 public class ProductDetailResponseDto {
+
     private UUID productId;
     private String name;
-    private String thumbnailUrl;
-    private String altText;
     private int price;
-    private int discountRate;
-    private int discountedPrice;
-    private String code;
+    private String imageThumbUrl;
+    private String imageThumbAlt;
+    private String productDetailContent;
+
+    public static ProductDetailResponseDto fromProjection(ProductDetailProjection productDetailProjection) {
+        return new ProductDetailResponseDto(
+                productDetailProjection.getProductId(),
+                productDetailProjection.getName(),
+                productDetailProjection.getPrice(),
+                productDetailProjection.getImageThumbUrl(),
+                productDetailProjection.getImageThumbAlt(),
+                productDetailProjection.getProductDetailContent()
+        );
+    }
 
 }

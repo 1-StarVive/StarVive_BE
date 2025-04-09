@@ -75,6 +75,9 @@ public enum BaseResponseStatus {
     // FeaturedSection
     NO_EXIST_FEATURED_SECTION(HttpStatus.NOT_FOUND,false, 3013,"존재하지 않는 추천 섹셥입니다."),
 
+    // productDetail
+    NO_EXIST_PRODUCT_DETAIL(HttpStatus.NOT_FOUND, false, 3014,"상품 상세 정보를 찾을 수 없습니다."),
+
     /**
      * 4000: comment service error
      */
