@@ -4,8 +4,6 @@ import com.starbucks.starvive.common.domain.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.UuidGenerator;
-
-import java.time.LocalDate;
 import java.util.UUID;
 
 @Entity

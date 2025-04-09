@@ -32,8 +32,6 @@ public class ProductServiceImpl implements ProductService {
     public UUID createProduct(ProductCreateRequestDto productCreateRequestDto) {
                Product product = productRepository.save(Product.builder()
                 .name(productCreateRequestDto.getName())
-               .description(productCreateRequestDto.getDescription())
-                .baseDiscountRate(productCreateRequestDto.getBaseDiscountRate())
                 .productStatus(productCreateRequestDto.getProductStatus())
                 .build());
         return product.getProductId();
@@ -46,8 +44,6 @@ public class ProductServiceImpl implements ProductService {
                 .price(ProductOptionCreateRequestDto.getPrice())
                 .stock(ProductOptionCreateRequestDto.getStock())
                 .carvedAvailable(ProductOptionCreateRequestDto.getCarvedAvailable())
-                .colorId(ProductOptionCreateRequestDto.getColorId())
-                .sizeId(ProductOptionCreateRequestDto.getSizeId())
                 .build());
         return option.getProductOptionId();
     }
@@ -76,8 +72,6 @@ public class ProductServiceImpl implements ProductService {
         return ProductResponseDto.builder()
                 .productId(product.getProductId())
                 .name(product.getName())
-                .description(product.getDescription())
-                .baseDiscountRate(product.getBaseDiscountRate())
                 .productStatus(product.getProductStatus())
                 .build();
     }
@@ -89,8 +83,6 @@ public class ProductServiceImpl implements ProductService {
 
         product.update(
                 productCreateRequestDto.getName(),
-                productCreateRequestDto.getDescription(),
-                productCreateRequestDto.getBaseDiscountRate(),
                 productCreateRequestDto.getProductStatus()
         );
     }

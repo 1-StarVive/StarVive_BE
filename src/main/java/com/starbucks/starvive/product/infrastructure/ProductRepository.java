@@ -14,7 +14,7 @@ public interface ProductRepository extends JpaRepository<Product, UUID> {
     @Query("""
         SELECT p.productId AS productId,
                p.name AS name,
-               p.baseDiscountRate AS baseDiscountRate,
+               o.baseDiscountRate AS baseDiscountRate,
                o.productOptionId AS productOptionId,
                o.price AS price,
                i.productImageId AS productImageId,

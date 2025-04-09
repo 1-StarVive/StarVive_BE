@@ -21,7 +21,7 @@ public interface FeaturedSectionProductRepository extends JpaRepository<Featured
            i.imageThumbAlt AS imageThumbAlt,
            p.name AS name,
            o.price AS price,
-           p.baseDiscountRate AS discountRate
+           o.baseDiscountRate AS discountRate
     FROM FeaturedSectionProduct f
     JOIN Product p ON f.productId = p.productId
     JOIN ProductImage i ON p.productId = i.productId

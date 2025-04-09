@@ -4,7 +4,6 @@ import com.starbucks.starvive.cart.dto.out.CartItemResponseDto;
 import com.starbucks.starvive.cart.projection.CartItemListProjection;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-
 import java.util.UUID;
 
 @Getter

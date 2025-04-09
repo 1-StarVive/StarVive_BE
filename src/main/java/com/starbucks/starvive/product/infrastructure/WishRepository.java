@@ -21,7 +21,7 @@ public interface WishRepository extends JpaRepository<Wish, UUID> {
             "o.price AS price, " +
             "i.imageThumbUrl AS imageThumbUrl, " +
             "i.imageThumbAlt AS imageThumbAlt, " +
-            "p.baseDiscountRate AS discountRate " +
+            "o.baseDiscountRate AS discountRate " +
             "FROM Wish w " +
             "JOIN ProductOption o ON w.productOptionId = o.productOptionId " +
             "JOIN Product p ON o.productId = p.productId " +
