@@ -24,6 +24,7 @@ public enum BaseResponseStatus {
     FAILED_TO_RESTORE(HttpStatus.INTERNAL_SERVER_ERROR, false, 405, "계정 복구에 실패했습니다. 관리자에게 문의해주세요."),
     NO_EXIST_OAUTH(HttpStatus.NOT_FOUND, false, 406, "소셜 로그인 정보가 존재하지 않습니다."),
 
+
     /**
      * 900: 기타 에러
      */
@@ -71,6 +72,11 @@ public enum BaseResponseStatus {
     DUPLICATED_PROMOTION(HttpStatus.CONFLICT, false, 3101, "이미 등록된 이벤트입니다."),
     NO_EXIST_PROMOTION(HttpStatus.NOT_FOUND, false, 3102, "존재하지 않는 이벤트입니다."),
 
+    // FeaturedSection
+    NO_EXIST_FEATURED_SECTION(HttpStatus.NOT_FOUND,false, 3013,"존재하지 않는 추천 섹셥입니다."),
+
+    // productDetail
+    NO_EXIST_PRODUCT_DETAIL(HttpStatus.NOT_FOUND, false, 3014,"상품 상세 정보를 찾을 수 없습니다."),
 
     /**
      * 4000: comment service error

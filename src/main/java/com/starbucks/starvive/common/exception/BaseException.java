@@ -11,4 +11,6 @@ public class BaseException extends RuntimeException{
     public BaseException(BaseResponseStatus status) {
         this.status = status;
     }
+
+
 }
