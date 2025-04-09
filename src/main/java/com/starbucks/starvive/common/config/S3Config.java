@@ -1,40 +1,30 @@
 package com.starbucks.starvive.common.config;
 
-import com.amazonaws.auth.AWSCredentials;
-import com.amazonaws.auth.AWSStaticCredentialsProvider;
-import com.amazonaws.auth.BasicAWSCredentials;
+import com.amazonaws.auth.AWSCredentialsProvider;
+import com.amazonaws.auth.DefaultAWSCredentialsProviderChain;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.util.StringUtils;
 
 @Configuration
 public class S3Config {
 
-    @Value("${cloud.aws.credentials.access-key:}")
-    private String accessKey;
-
-    @Value("${cloud.aws.credentials.secret-key:}")
-    private String secretKey;
-
-    @Value("${cloud.aws.region.static:ap-northeast-2}")
+    // application.yml의 cloud.aws.region.static 또는 환경 변수 AWS_REGION 사용
+    @Value("${cloud.aws.region.static:${AWS_REGION:ap-northeast-2}}") 
     private String region;
 
     @Bean
     public AmazonS3 amazonS3() {
-        AmazonS3ClientBuilder builder = AmazonS3ClientBuilder.standard();
+        // DefaultAWSCredentialsProviderChain 사용: 환경 변수, 시스템 속성, 프로파일 등에서 자격 증명 자동 검색
+        // Jenkins에서 주입된 AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY 환경 변수를 자동으로 사용함
+        AWSCredentialsProvider credentialsProvider = DefaultAWSCredentialsProviderChain.getInstance();
 
-        if (StringUtils.hasText(accessKey) && StringUtils.hasText(secretKey)) {
-            AWSCredentials credentials = new BasicAWSCredentials(accessKey, secretKey);
-            builder.withCredentials(new AWSStaticCredentialsProvider(credentials));
-        }
-
-        if (StringUtils.hasText(region)) {
-            builder.withRegion(region);
-        }
-
-        return builder.build();
+        return AmazonS3ClientBuilder
+                .standard()
+                .withCredentials(credentialsProvider) // 자격 증명 자동 감지
+                .withRegion(region) // 리전 설정
+                .build();
     }
 }
