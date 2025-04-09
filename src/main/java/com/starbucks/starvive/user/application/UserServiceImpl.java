@@ -39,26 +39,29 @@ public class UserServiceImpl implements UserService {
     @Override
     public void signUp(SignUpRequestDto signUpRequestDto) {
 
-        User user = signUpRequestDto.toEntity();
-        String encodedPassword = passwordEncoder.encode(user.getPassword());
+        String encodedPassword = passwordEncoder.encode(signUpRequestDto.getPassword());
 
-        // 사용자가 입력한 닉네임 가져오기
-        String requestedNickname = user.getNickname();
-        // 닉네임이 없거나 비어있으면 랜덤 닉네임 생성
-        String finalNickname = (requestedNickname == null || requestedNickname.isBlank())?
-         NicknameGenerator.generateRandomNickname(): requestedNickname;
+        String requestedNickname = signUpRequestDto.getNickname();
+        String finalNickname = (requestedNickname == null || requestedNickname.isBlank())
+                ? NicknameGenerator.generateRandomNickname() : requestedNickname;
 
         User userToSave = User.builder()
-            .loginId(user.getLoginId())
-            .email(user.getEmail())
-            .password(encodedPassword)
-            .name(user.getName().isBlank()? "사용자": user.getName())
-            .nickname(finalNickname) // 최종 결정된 닉네임 사용
-            .phoneNumber(user.getPhoneNumber().isBlank()? " ": user.getPhoneNumber())
-            .birth(user.getBirth())
-            .gender(user.getGender() == null ? Gender.OTHER: user.getGender())
-            .socialLoginType(user.getSocialLoginType() == null ? SocialLoginType.NONE : user.getSocialLoginType())
-            .status(UserStatus.ACTIVE)
+            .loginId(signUpRequestDto.getLoginId()) 
+            .email(signUpRequestDto.getEmail()) 
+            .password(encodedPassword) 
+            .name(signUpRequestDto.getName().isBlank()? "사용자": signUpRequestDto.getName()) 
+            .nickname(finalNickname) 
+            .phoneNumber(signUpRequestDto.getPhoneNumber().isBlank()? " ": signUpRequestDto.getPhoneNumber()) 
+            .birth(signUpRequestDto.getBirth()) 
+            .gender(signUpRequestDto.getGender() == null ? Gender.OTHER: signUpRequestDto.getGender()) 
+            .socialLoginType(SocialLoginType.NONE) 
+            .status(UserStatus.ACTIVE) 
+            .termsAgreed(signUpRequestDto.isTermsAgreed())
+            .privacyAgreed(signUpRequestDto.isPrivacyAgreed())
+            .cardTermsAgreed(signUpRequestDto.isCardTermsAgreed())
+            .marketingEmailAgreed(signUpRequestDto.isMarketingEmailAgreed())
+            .marketingSmsAgreed(signUpRequestDto.isMarketingSmsAgreed())
+            .nicknameTermAgreed(signUpRequestDto.isNicknameTermAgreed())
             .build();
 
         this.userRepository.save(userToSave);
@@ -68,7 +71,6 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public SignInResponseDto signIn(SignInRequestDto signInRequestDto) {
         try {
-            // 1. AuthenticationManager를 사용하여 인증 수행
             Authentication authentication = this.authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                     signInRequestDto.getLoginId(),
@@ -76,18 +78,14 @@ public class UserServiceImpl implements UserService {
                 )
             );
 
-            // 2. Principal에서 인증된 User 객체 가져오기
             User authenticatedUser = (User) authentication.getPrincipal();
 
-            // 3. Authentication 객체를 사용하여 토큰 생성
             String accessToken = this.createAccessToken(authentication);
             String refreshToken = this.createRefreshToken(authentication);
 
-            // 4. Access Token 만료 시간 가져오기 (ms)
             long expiresIn = jwtTokenProvider.getAccessTokenExpirationTime();
 
-            // 5. Refresh Token 저장
-            Instant expiryDate = Instant.now().plusMillis(jwtTokenProvider.getRefreshTokenExpirationTime()); // Refresh 토큰 저장 시에는 Refresh 만료 시간 사용
+            Instant expiryDate = Instant.now().plusMillis(jwtTokenProvider.getRefreshTokenExpirationTime());
             RefreshToken refreshTokenEntity = RefreshToken.builder()
                 .token(refreshToken)
                 .userId(authenticatedUser.getUserId())
@@ -97,7 +95,6 @@ public class UserServiceImpl implements UserService {
             refreshTokenRepository.deleteByUserId(authenticatedUser.getUserId());
             refreshTokenRepository.save(refreshTokenEntity);
 
-            // 6. 응답 DTO 반환 (expiresIn 포함)
             return SignInResponseDto.from(authenticatedUser, accessToken, refreshToken, expiresIn);
 
         } catch (org.springframework.security.core.AuthenticationException e) {
@@ -118,28 +115,24 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public Optional<String> refreshAccessToken(String refreshToken) {
-        // 1. JWT 서명 검증
         if (!jwtTokenProvider.validateRefreshToken(refreshToken)) {
             logger.warn("리프레시토큰 인증실패  : {}", refreshToken);
             return Optional.empty();
         }
 
-        // 2. DB에서 Refresh Token 찾기
         return refreshTokenRepository.findById(refreshToken)
                 .map(tokenEntity -> {
-                    // 3. DB에서 만료 여부 확인
                     if (tokenEntity.isExpired()) {
                         logger.info("리프레시토큰 만료, 삭제중: {}", refreshToken);
-                        refreshTokenRepository.delete(tokenEntity); // 만료된 토큰 삭제
+                        refreshTokenRepository.delete(tokenEntity);
                         throw new TokenRefreshException(refreshToken, "리프레시토큰 만료, 새로운 로그인 요청");
                     }
-                    // 4. 새로운 Access Token 생성
                     logger.info("새로운 엑세스토큰 발급중: {}", tokenEntity.getUserId());
                     return Optional.of(jwtTokenProvider.generateAccessToken(tokenEntity.getUserId()));
                 })
                 .orElseGet(() -> {
                     logger.warn("리프레시토큰 데이터베이스에 없음: {}", refreshToken);
-                    return Optional.empty(); // 검증 후 토큰을 찾을 수 없는 경우 처리 (예: 동시 삭제)
+                    return Optional.empty();
                 });
     }
 

@@ -22,16 +22,17 @@ public class ProductDetailImage extends BaseEntity {
     private UUID productDetailId;
 
     @Lob
-    @Column(nullable = false, columnDefinition = "TEXT")
+    @Column(nullable = false, columnDefinition = "LONGTEXT")
     private String productDetailContent;
 
     @Column(nullable = false, columnDefinition = "BINARY(16)")
     private UUID productId;
 
     @Builder
-    public ProductDetailImage(String productDetailContent,
+    public ProductDetailImage(UUID productDetailId,
+                              String productDetailContent,
                               UUID productId) {
-        
+        this.productDetailId = productDetailId;
         this.productDetailContent = productDetailContent;
         this.productId = productId;
     }

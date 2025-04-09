@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 
 import java.util.UUID;
 
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.UuidGenerator;
 
 @Entity
@@ -27,17 +28,18 @@ public class MiddleCategory extends BaseEntity {
     @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false, columnDefinition = "BINARY(16)")
     private UUID topCategoryId;
 
     @Column(nullable = false)
+    @ColumnDefault("false")
     private boolean deleted = false;
 
     @Builder
-    public MiddleCategory(UUID middleCategoryId, String name, UUID topCategoryId) {
+    public MiddleCategory(UUID middleCategoryId, String name, UUID topCategoryId, boolean deleted) {
         this.middleCategoryId = middleCategoryId;
         this.name = name;
         this.topCategoryId = topCategoryId;
+        this.deleted = deleted;
     }
 
     public void updateMiddleCategory(MiddleCategoryRequest middleCategoryRequest) {

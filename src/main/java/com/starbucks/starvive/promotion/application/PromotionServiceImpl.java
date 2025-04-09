@@ -3,9 +3,13 @@ package com.starbucks.starvive.promotion.application;
 import com.starbucks.starvive.common.exception.BaseException;
 import com.starbucks.starvive.promotion.domain.Promotion;
 import com.starbucks.starvive.promotion.dto.in.PromotionRequest;
+import com.starbucks.starvive.promotion.dto.out.PromotionResponse;
+import com.starbucks.starvive.promotion.dto.out.PromotionTitleResponse;
 import com.starbucks.starvive.promotion.infrastructure.PromotionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 import static com.starbucks.starvive.common.domain.BaseResponseStatus.DUPLICATED_PROMOTION;
 
@@ -13,15 +17,23 @@ import static com.starbucks.starvive.common.domain.BaseResponseStatus.DUPLICATED
 @RequiredArgsConstructor
 public class PromotionServiceImpl implements PromotionService {
 
-    private PromotionRepository promotionRepository;
+    private final PromotionRepository promotionRepository;
 
     @Override
     public void addPromotion(PromotionRequest promotionRequest) {
-        if(promotionRepository.findByTitle(promotionRequest.getTitle()).isPresent()) {
+        if (promotionRepository.findByTitle(promotionRequest.getTitle()).isPresent()) {
             throw new BaseException(DUPLICATED_PROMOTION);
         }
 
         Promotion promotion = promotionRequest.toPromotion();
         promotionRepository.save(promotion);
+    }
+
+    @Override
+    public List<PromotionTitleResponse> findAllPromotions() {
+        return promotionRepository.findAll()
+                .stream()
+                .map(PromotionTitleResponse::from)
+                .toList();
     }
 }

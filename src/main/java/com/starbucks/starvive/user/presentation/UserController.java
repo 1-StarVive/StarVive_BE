@@ -19,6 +19,11 @@ import com.starbucks.starvive.user.vo.SignInRequestVo;
 import com.starbucks.starvive.common.exception.TokenRefreshException;
 import java.util.UUID;
 import java.util.Optional;
+import jakarta.validation.Valid;
+import org.springframework.validation.BindingResult;
+import org.springframework.http.HttpStatus;
+
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/users")
@@ -27,8 +32,18 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/signup")
-    public void signUp(@RequestBody SignUpRequestVo signUpRequestVo) {
-        userService.signUp(SignUpRequestDto.from(signUpRequestVo));
+    public ResponseEntity<?> signUp(@Valid @RequestBody SignUpRequestVo signUpRequestVo, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            String errorMessages = bindingResult.getAllErrors().stream()
+                    .map(error -> error.getDefaultMessage())
+                    .collect(Collectors.joining(", "));
+            return ResponseEntity.badRequest().body("입력 값 오류: " + errorMessages);
+        }
+
+        SignUpRequestDto signUpRequestDto = SignUpRequestDto.from(signUpRequestVo);
+        userService.signUp(signUpRequestDto);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body("회원가입이 성공적으로 완료되었습니다.");
     }
 
     @PostMapping("/signin")

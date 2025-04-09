@@ -1,8 +1,10 @@
 package com.starbucks.starvive.category.presentation;
 
 import com.starbucks.starvive.category.application.TopCategoryService;
+import com.starbucks.starvive.category.dto.in.TopCategoryForm;
 import com.starbucks.starvive.category.dto.in.TopCategoryRequest;
 import com.starbucks.starvive.category.dto.out.TopCategoryListResponse;
+import com.starbucks.starvive.category.vo.TopCategoryVo;
 import com.starbucks.starvive.common.domain.BaseResponseEntity;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
@@ -22,11 +24,16 @@ public class TopCategoryController {
 
     @Operation(summary = "상위 카테고리 등록", description = "상위 카테고리를 등록합니다.",
             tags = {"top-category-service"})
-    @PostMapping("/add")
+    @PostMapping(value = "/add")
     public BaseResponseEntity<String> addTopCategory(
-            @RequestBody TopCategoryRequest topCategoryRequest
-            ) {
-            topCategoryService.addTopCategory(topCategoryRequest);
+            @ModelAttribute TopCategoryForm topCategoryForm
+    ) {
+
+        TopCategoryVo vo = TopCategoryVo.builder()
+                .name(topCategoryForm.getName())
+                .build();
+
+        topCategoryService.addTopCategory(TopCategoryRequest.from(vo));
 
         return new BaseResponseEntity<>("상위 카테고리 등록 완료");
     }
@@ -54,7 +61,7 @@ public class TopCategoryController {
     @DeleteMapping("/{topCategoryId}")
     public BaseResponseEntity<String> deleteTopCategory(
             @PathVariable UUID topCategoryId
-    ){
+    ) {
         topCategoryService.deleteTopCategory(topCategoryId);
         return new BaseResponseEntity<>("상위 카테고리 삭제 완료");
     }
