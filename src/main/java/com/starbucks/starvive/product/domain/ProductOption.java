@@ -43,7 +43,9 @@ public class ProductOption extends BaseEntity {
     private UUID productId;
 
     @Builder
-    public ProductOption(UUID productOptionId, Integer stock, int price, Boolean carvedAvailable, int baseDiscountRate, String name, UUID productId) {
+    public ProductOption(UUID productOptionId, Integer stock,
+                         int price, Boolean carvedAvailable,
+                         int baseDiscountRate, String name, UUID productId) {
         this.productOptionId = productOptionId;
         this.stock = stock;
         this.price = price;

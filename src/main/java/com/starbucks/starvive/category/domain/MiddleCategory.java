@@ -35,10 +35,11 @@ public class MiddleCategory extends BaseEntity {
     private boolean deleted = false;
 
     @Builder
-    public MiddleCategory(UUID middleCategoryId, String name, UUID topCategoryId) {
+    public MiddleCategory(UUID middleCategoryId, String name, UUID topCategoryId, boolean deleted) {
         this.middleCategoryId = middleCategoryId;
         this.name = name;
         this.topCategoryId = topCategoryId;
+        this.deleted = deleted;
     }
 
     public void updateMiddleCategory(MiddleCategoryRequest middleCategoryRequest) {

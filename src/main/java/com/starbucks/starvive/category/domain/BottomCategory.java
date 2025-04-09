@@ -14,6 +14,7 @@ import java.util.UUID;
 
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.UuidGenerator;
+
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -34,12 +35,12 @@ public class BottomCategory extends BaseEntity {
     private boolean deleted = false;
 
     @Builder
-    public BottomCategory(UUID bottomCategoryId,
-                          String name,
-                          UUID middleCategoryId) {
+    public BottomCategory(UUID bottomCategoryId, String name,
+                          UUID middleCategoryId, boolean deleted) {
         this.bottomCategoryId = bottomCategoryId;
         this.name = name;
         this.middleCategoryId = middleCategoryId;
+        this.deleted = deleted;
     }
 
     public void updateBottomCategoryId(BottomCategoryRequest bottomCategoryRequest) {
