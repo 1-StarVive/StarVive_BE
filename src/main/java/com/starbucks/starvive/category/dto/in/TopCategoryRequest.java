@@ -15,23 +15,15 @@ public class TopCategoryRequest {
 
     private String name;
 
-    private String thumbImageUrl;
-
-    private String thumbAlt;
-
     public TopCategory toEntity() {
         return TopCategory.builder()
                 .name(name)
-                .thumbImageUrl(thumbImageUrl)
-                .thumbAlt(thumbAlt)
                 .build();
     }
 
     public static TopCategoryRequest from(TopCategoryVo topCategoryVo) {
         return TopCategoryRequest.builder()
                 .name(topCategoryVo.getName())
-                .thumbImageUrl(topCategoryVo.getThumbImageUrl())
-                .thumbAlt(topCategoryVo.getThumbAlt())
                 .build();
     }
 }

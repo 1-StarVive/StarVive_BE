@@ -10,14 +10,8 @@ public class TopCategoryVo {
 
     private String name;
 
-    private String thumbImageUrl;
-
-    private String thumbAlt;
-
     @Builder
-    public TopCategoryVo(String name, String thumbImageUrl, String thumbAlt) {
+    public TopCategoryVo(String name) {
         this.name = name;
-        this.thumbImageUrl = thumbImageUrl;
-        this.thumbAlt = thumbAlt;
     }
 }

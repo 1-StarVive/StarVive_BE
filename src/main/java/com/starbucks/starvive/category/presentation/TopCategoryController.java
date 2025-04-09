@@ -6,7 +6,6 @@ import com.starbucks.starvive.category.dto.in.TopCategoryRequest;
 import com.starbucks.starvive.category.dto.out.TopCategoryListResponse;
 import com.starbucks.starvive.category.vo.TopCategoryVo;
 import com.starbucks.starvive.common.domain.BaseResponseEntity;
-import com.starbucks.starvive.common.s3.S3Uploader;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +21,6 @@ import java.util.UUID;
 public class TopCategoryController {
 
     private final TopCategoryService topCategoryService;
-    private final S3Uploader s3Uploader;
 
     @Operation(summary = "상위 카테고리 등록", description = "상위 카테고리를 등록합니다.",
             tags = {"top-category-service"})
@@ -31,12 +29,8 @@ public class TopCategoryController {
             @ModelAttribute TopCategoryForm topCategoryForm
     ) {
 
-        String imageUrl = s3Uploader.upload(topCategoryForm.getImage(), "top-category");
-
         TopCategoryVo vo = TopCategoryVo.builder()
                 .name(topCategoryForm.getName())
-                .thumbImageUrl(imageUrl)
-                .thumbAlt(topCategoryForm.getThumbAlt())
                 .build();
 
         topCategoryService.addTopCategory(TopCategoryRequest.from(vo));

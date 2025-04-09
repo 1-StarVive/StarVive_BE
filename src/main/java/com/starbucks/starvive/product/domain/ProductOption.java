@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 
 import java.util.UUID;
 
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.UuidGenerator;
 
 @Entity
@@ -22,34 +23,35 @@ public class ProductOption extends BaseEntity {
     private UUID productOptionId;
 
     @Column(nullable = false)
+    @ColumnDefault("false")
     private Integer stock; // 상품 옵션의 남은 재고 수량
 
     @Column(nullable = false)
     private int price;
 
     @Column(nullable = false)
+    @ColumnDefault("false")
     private Boolean carvedAvailable; // 각인 여부
+
+    @Column(nullable = false)
+    private int baseDiscountRate;
+
+    @Column(nullable = false)
+    private String name; // 길이 ? 사이즈 ?
 
     @Column(nullable = false, columnDefinition = "BINARY(16)")
     private UUID productId;
 
-    @Column(nullable = false, columnDefinition = "BINARY(16)")
-    private UUID colorId;
-
-    @Column(nullable = false, columnDefinition = "BINARY(16)")
-    private UUID sizeId;
-
     @Builder
-    public ProductOption(UUID productOptionId, Integer stock, int price,
-                         UUID productId, UUID colorId, UUID sizeId,
-                         Boolean carvedAvailable) {
+    public ProductOption(UUID productOptionId, Integer stock,
+                         int price, Boolean carvedAvailable,
+                         int baseDiscountRate, String name, UUID productId) {
         this.productOptionId = productOptionId;
         this.stock = stock;
         this.price = price;
-        this.productId = productId;
-        this.colorId = colorId;
-        this.sizeId = sizeId;
         this.carvedAvailable = carvedAvailable;
+        this.baseDiscountRate = baseDiscountRate;
+        this.name = name;
+        this.productId = productId;
     }
-
 }
