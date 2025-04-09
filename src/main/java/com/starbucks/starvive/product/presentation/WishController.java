@@ -1,5 +1,6 @@
 package com.starbucks.starvive.product.presentation;
 
+import com.starbucks.starvive.common.domain.BaseResponseEntity;
 import com.starbucks.starvive.product.application.WishService;
 import com.starbucks.starvive.product.dto.in.WishAddRequestDto;
 import com.starbucks.starvive.product.dto.out.WishProductResponseDto;
@@ -11,31 +12,35 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/v1/wish")
+@RequestMapping("/api")
 @RequiredArgsConstructor
 public class WishController {
 
     private final WishService wishService;
 
-    @PostMapping
-    public ResponseEntity<Void> addWish(@RequestBody WishAddRequestDto wishAddRequestDto) {
+    @PostMapping("/wish")
+    public ResponseEntity<BaseResponseEntity<Void>> addWish(@RequestBody WishAddRequestDto wishAddRequestDto) {
         wishService.addWish(wishAddRequestDto);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(BaseResponseEntity.ok());
     }
 
-    @PostMapping("/toggle")
-    public ResponseEntity<WishToggleResponseDto> toggleWishlist(@RequestBody WishAddRequestDto wishAddRequestDto) {
-        return ResponseEntity.ok(wishService.toggle(wishAddRequestDto));
+    @PostMapping("/wish/toggle")
+    public ResponseEntity<BaseResponseEntity<WishToggleResponseDto>> toggleWishlist(
+            @RequestBody WishAddRequestDto wishAddRequestDto
+    ) {
+        WishToggleResponseDto result = wishService.toggle(wishAddRequestDto);
+        return ResponseEntity.ok(BaseResponseEntity.ok(result));
     }
 
-    @GetMapping("/wishList")
-    public ResponseEntity<List<WishProductResponseDto>> getWishlist(@RequestParam UUID userId) {
-        return ResponseEntity.ok(wishService.getList(userId));
+    @GetMapping("/wish/wishList")
+    public ResponseEntity<BaseResponseEntity<List<WishProductResponseDto>>> getWishlist(@RequestParam UUID userId) {
+        List<WishProductResponseDto> result = wishService.getList(userId);
+        return ResponseEntity.ok(BaseResponseEntity.ok(result));
     }
 
-    @DeleteMapping("/{wishId}")
-    public ResponseEntity<Void> deleteWish(@PathVariable UUID wishId) {
+    @DeleteMapping("/wish/{wishId}")
+    public ResponseEntity<BaseResponseEntity<Void>> deleteWish(@PathVariable UUID wishId) {
         wishService.deleteWish(wishId);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(BaseResponseEntity.ok());
     }
 }

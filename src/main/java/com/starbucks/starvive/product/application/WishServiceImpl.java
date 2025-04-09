@@ -20,14 +20,15 @@ public class WishServiceImpl implements WishService {
 
     @Override
     public void addWish(WishAddRequestDto wishAddRequestDto) {
-        Wish wish = Wish.create(wishAddRequestDto.getUserId(), wishAddRequestDto.getProductId());
+        Wish wish = Wish.create(wishAddRequestDto.getUserId(), wishAddRequestDto.getProductId(),wishAddRequestDto.getProductOptionId());
         wishRepository.save(wish);
     }
 
     @Override
-    public WishToggleResponseDto toggle(WishAddRequestDto request) {
-        UUID userId = request.getUserId();
-        UUID productId = request.getProductId();
+    public WishToggleResponseDto toggle(WishAddRequestDto wishAddRequestDto) {
+        UUID userId = wishAddRequestDto.getUserId();
+        UUID productId = wishAddRequestDto.getProductId();
+        UUID productOptionId =wishAddRequestDto.getProductOptionId();
 
         Optional<Wish> existing = wishRepository.findByUserIdAndProductId(userId, productId);
 
@@ -36,7 +37,7 @@ public class WishServiceImpl implements WishService {
             return new WishToggleResponseDto(productId, false);
         }
 
-        Wish wishlist = Wish.create(userId, productId);
+        Wish wishlist = Wish.create(userId, productId,productOptionId);
         wishRepository.save(wishlist);
         return new WishToggleResponseDto(productId, true);
     }

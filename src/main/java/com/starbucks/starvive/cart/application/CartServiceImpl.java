@@ -28,8 +28,8 @@ public class CartServiceImpl implements CartService {
     @Override
     public List<CartItemResponseDto> getCartList(UUID userId) {
         return cartRepository.findCartItemListByUserId(userId).stream()
-                .map(CartItemVo::new)                  // ✅ Projection → VO
-                .map(CartItemVo::toResponseDto)        // ✅ VO → DTO
+                .map(CartItemVo::new)
+                .map(CartItemVo::toResponseDto)
                 .toList();
     }
 

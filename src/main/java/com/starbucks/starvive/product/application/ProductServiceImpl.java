@@ -1,5 +1,7 @@
 package com.starbucks.starvive.product.application;
 
+import com.starbucks.starvive.common.domain.BaseResponseStatus;
+import com.starbucks.starvive.common.exception.BaseException;
 import com.starbucks.starvive.image.domain.ProductImage;
 import com.starbucks.starvive.image.infrastructure.ProductImageRepository;
 import com.starbucks.starvive.product.domain.Product;
@@ -11,6 +13,7 @@ import com.starbucks.starvive.product.dto.out.ProductResponseDto;
 import com.starbucks.starvive.product.infrastructure.ProductOptionRepository;
 import com.starbucks.starvive.product.infrastructure.ProductRepository;
 import com.starbucks.starvive.product.vo.ProductVo;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -18,6 +21,7 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
@@ -26,9 +30,9 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public UUID createProduct(ProductCreateRequestDto productCreateRequestDto) {
-        Product product = productRepository.save(Product.builder()
+               Product product = productRepository.save(Product.builder()
                 .name(productCreateRequestDto.getName())
-                .description(productCreateRequestDto.getDescription())
+               .description(productCreateRequestDto.getDescription())
                 .baseDiscountRate(productCreateRequestDto.getBaseDiscountRate())
                 .productStatus(productCreateRequestDto.getProductStatus())
                 .build());
@@ -37,7 +41,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public UUID createProductOption(ProductOptionCreateRequestDto ProductOptionCreateRequestDto) {
-        ProductOption option = optionRepository.save(ProductOption.builder()
+                ProductOption option = optionRepository.save(ProductOption.builder()
                 .productId(ProductOptionCreateRequestDto.getProductId())
                 .price(ProductOptionCreateRequestDto.getPrice())
                 .stock(ProductOptionCreateRequestDto.getStock())
@@ -50,7 +54,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public UUID createProductImage(ProductImageCreateRequestDto productImageCreateRequestDto) {
-        ProductImage image = imageRepository.save(ProductImage.builder()
+                ProductImage image = imageRepository.save(ProductImage.builder()
                 .productId(productImageCreateRequestDto.getProductId())
                 .imageThumbUrl(productImageCreateRequestDto.getImageThumbUrl())
                 .imageThumbAlt(productImageCreateRequestDto.getImageThumbAlt())
@@ -68,7 +72,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductResponseDto getProduct(UUID productId) {
         Product product = productRepository.findById(productId)
-                .orElseThrow(() -> new RuntimeException("상품을 찾을 수 없습니다."));
+                .orElseThrow(() -> new BaseException(BaseResponseStatus.NO_EXIST_PRODUCT));
         return ProductResponseDto.builder()
                 .productId(product.getProductId())
                 .name(product.getName())
@@ -77,18 +81,18 @@ public class ProductServiceImpl implements ProductService {
                 .productStatus(product.getProductStatus())
                 .build();
     }
-
+    @Transactional
     @Override
     public void updateProduct(UUID productId, ProductCreateRequestDto productCreateRequestDto) {
         Product product = productRepository.findById(productId)
-                .orElseThrow(() -> new RuntimeException("상품을 찾을 수 없습니다."));
-        productRepository.save(Product.builder()
-                .productId(productId)
-                .name(productCreateRequestDto.getName())
-                .description(productCreateRequestDto.getDescription())
-                .baseDiscountRate(productCreateRequestDto.getBaseDiscountRate())
-                .productStatus(productCreateRequestDto.getProductStatus())
-                .build());
+                .orElseThrow(() -> new BaseException(BaseResponseStatus.NO_EXIST_PRODUCT));
+
+        product.update(
+                productCreateRequestDto.getName(),
+                productCreateRequestDto.getDescription(),
+                productCreateRequestDto.getBaseDiscountRate(),
+                productCreateRequestDto.getProductStatus()
+        );
     }
 
     @Override

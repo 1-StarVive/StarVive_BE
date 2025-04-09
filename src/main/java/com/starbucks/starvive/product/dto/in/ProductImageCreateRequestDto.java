@@ -10,6 +10,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ProductImageCreateRequestDto {
+
     private String imageThumbUrl;
     private String imageThumbAlt;
     private UUID productId;

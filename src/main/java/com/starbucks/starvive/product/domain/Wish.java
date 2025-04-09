@@ -29,10 +29,11 @@ public class Wish {
     @Column(nullable = false)
     private UUID productOptionId;
 
-    public static Wish create(UUID userId, UUID productId) {
+    public static Wish create(UUID userId, UUID productId, UUID productOptionId) {
         return Wish.builder()
                 .userId(userId)
                 .productId(productId)
+                .productOptionId(productOptionId)
                 .build();
     }
 }

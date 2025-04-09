@@ -1,4 +1,4 @@
-package com.starbucks.starvive.product.dto.in;
+package com.starbucks.starvive.featuredSection.dto.in;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -8,9 +8,10 @@ import java.util.UUID;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class WishAddRequestDto {
+public class FeaturedSectionProductItemDto {
 
-    private UUID userId;
     private UUID productId;
     private UUID productOptionId;
+    private UUID productImageId;
+
 }

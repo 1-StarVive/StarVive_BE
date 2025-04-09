@@ -35,6 +35,9 @@ public class Cart extends BaseEntity {
     private Boolean checked;
 
     public void increaseQuantity(int value) {
+        if (value <= 0) {
+            throw new IllegalArgumentException("수량은 1 이상이어야 합니다.");
+        }
         this.quantity += value;
     }
 
@@ -46,9 +49,9 @@ public class Cart extends BaseEntity {
     private boolean deleted;
 
 
-         public Cart(UUID userId, UUID productOptionId, int quantity) {
-            this.userId = userId;
-            this.productOptionId = productOptionId;
-            this.quantity = quantity;
-        }
+    public Cart(UUID userId, UUID productOptionId, int quantity) {
+        this.userId = userId;
+        this.productOptionId = productOptionId;
+        this.quantity = quantity;
     }
+}

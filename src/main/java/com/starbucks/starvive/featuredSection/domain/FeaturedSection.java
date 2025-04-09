@@ -27,4 +27,8 @@ public class FeaturedSection {
         this.activated = activated;
     }
 
+    public void update(String name, boolean activated) {
+        this.name = name;
+        this.activated = activated;
+    }
 }
