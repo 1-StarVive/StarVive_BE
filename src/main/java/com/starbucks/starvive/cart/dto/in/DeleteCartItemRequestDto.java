@@ -9,4 +9,5 @@ import java.util.UUID;
 public class DeleteCartItemRequestDto {
 
     private UUID cartId;
+    private UUID userId;
 }

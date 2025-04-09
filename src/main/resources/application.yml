@@ -61,7 +61,7 @@ spring:
 
         provider:
           google: # (기본값 사용 시 생략 가능)
-            user-info-uri: https://www.googleapis.com/oauth2/v3/userinfo 
+            user-info-uri: https://www.googleapis.com/oauth2/v3/userinfo
           kakao:
             authorization-uri: https://kauth.kakao.com/oauth/authorize
             token-uri: https://kauth.kakao.com/oauth/token

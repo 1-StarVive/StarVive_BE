@@ -35,4 +35,12 @@ public record BaseResponseEntity<T>(HttpStatusCode httpStatus, Boolean isSuccess
     public BaseResponseEntity(BaseResponseStatus status) {
         this(status.getHttpStatusCode(), status.isSuccess(), status.getMessage(), status.getCode(), null);
     }
+
+    public static <T> BaseResponseEntity<T> ok(T result) {
+        return new BaseResponseEntity<>(result);
+    }
+
+    public static BaseResponseEntity<Void> ok() {
+        return new BaseResponseEntity<>();
+    }
 }

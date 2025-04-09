@@ -30,4 +30,9 @@ public class Product extends BaseEntity {
         this.name = name;
         this.productStatus = productStatus;
     }
+
+    public void update(String name, ProductStatus status) {
+        this.name = name;
+        this.productStatus = status;
+    }
 }

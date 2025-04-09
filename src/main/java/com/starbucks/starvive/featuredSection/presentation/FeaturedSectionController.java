@@ -1,35 +1,77 @@
 package com.starbucks.starvive.featuredSection.presentation;
 
+import com.starbucks.starvive.common.domain.BaseResponseEntity;
 import com.starbucks.starvive.featuredSection.application.FeaturedSectionService;
+import com.starbucks.starvive.featuredSection.dto.in.FeaturedSectionProductRegisterRequestDto;
 import com.starbucks.starvive.featuredSection.dto.in.FeaturedSectionProductRequestDto;
-import com.starbucks.starvive.featuredSection.dto.out.FeaturedSectionProductResponseDto;
+import com.starbucks.starvive.featuredSection.dto.in.FeaturedSectionCreateRequestDto;
+import com.starbucks.starvive.featuredSection.dto.in.FeaturedSectionUpdateRequestDto;
+import com.starbucks.starvive.featuredSection.dto.out.FeaturedSectionProductGroupResponseDto;
 import com.starbucks.starvive.featuredSection.dto.out.FeaturedSectionResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/v1/featured-Sections")
+@RequestMapping("/api")
 @RequiredArgsConstructor
 public class FeaturedSectionController {
 
-    private final FeaturedSectionService sectionService;
+    private final FeaturedSectionService featuredSectionService;
 
-    // 추천 섹션 리스트 (이름과 ID만 반환)
-    // @GetMapping
-    // public ResponseEntity<List<FeaturedSectionResponseDto>> getSections() {
-    //     return ResponseEntity.ok(sectionService.getOnlySections());
-    // }
+    /**
+     * ✅ 1. 추천 섹션 리스트만 조회
+     * GET /featured-section
+     */
+    @GetMapping("/featured-sections")
+    public ResponseEntity<BaseResponseEntity<List<FeaturedSectionResponseDto>>> getSectionList() {
+        List<FeaturedSectionResponseDto> result = featuredSectionService.getSectionList();
 
-    // //  특정 섹션 ID 배열로 섹션 + 상품 목록 조회
-    // @PostMapping("/products")
-    // public ResponseEntity<List<FeaturedSectionProductResponseDto>> getSectionProducts(
-    //         @RequestBody FeaturedSectionProductRequestDto request
-    // ) {
-    //     return ResponseEntity.ok(
-    //             sectionService.getSectionsByIds(request.getFeaturedSectionsIds())
-    //     );
-    // }
+        return ResponseEntity.ok(new BaseResponseEntity<>(result));
+    }
+    /**
+     * ✅ 2. 추천 섹션 ID 리스트로 섹션별 상품 리스트 조회
+     * POST /featured-section/products
+     */
+    @GetMapping("/featured-section/products")
+    public ResponseEntity<BaseResponseEntity<List<FeaturedSectionProductGroupResponseDto>>> getProductsBySection(
+            @RequestBody FeaturedSectionProductRequestDto featuredSectionProductRequestDto) {
+
+        List<FeaturedSectionProductGroupResponseDto> result =
+                featuredSectionService.getProductsBySections(featuredSectionProductRequestDto.getFeaturedSectionsIds());
+
+        return ResponseEntity.ok(new BaseResponseEntity<>(result));
+    }
+
+    @PostMapping("/featured-section")
+    public ResponseEntity<BaseResponseEntity<UUID>> createSection(@RequestBody FeaturedSectionCreateRequestDto featuredSectionCreateRequestDto
+    ) {
+        UUID featuredSectionId = featuredSectionService.createSection(featuredSectionCreateRequestDto);
+        return ResponseEntity.ok(BaseResponseEntity.ok(featuredSectionId));
+    }
+
+    @PutMapping("/featured-section")
+    public ResponseEntity<BaseResponseEntity<Void>> updateSection(
+            @PathVariable UUID featuredSectionId,
+            @RequestBody FeaturedSectionUpdateRequestDto featuredSectionUpdateRequestDto) {
+        featuredSectionService.updateSection(featuredSectionId, featuredSectionUpdateRequestDto);
+        return ResponseEntity.ok(BaseResponseEntity.ok());
+    }
+
+    @DeleteMapping("/featured-section")
+    public ResponseEntity<BaseResponseEntity<Void>> deleteSection(@PathVariable UUID featuredSectionId) {
+        featuredSectionService.deleteSection(featuredSectionId);
+        return ResponseEntity.ok(BaseResponseEntity.ok());
+    }
+
+    @PostMapping("/featured-section/regist-products")
+    public ResponseEntity<BaseResponseEntity<Void>> registerProductsToSection(
+            @RequestBody FeaturedSectionProductRegisterRequestDto featuredSectionProductRegisterRequestDto
+    ) {
+        featuredSectionService.registerProductsToSection(featuredSectionProductRegisterRequestDto);
+        return ResponseEntity.ok(BaseResponseEntity.ok());
+    }
 }
