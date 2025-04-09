@@ -28,12 +28,16 @@ spring:
   cloud:
     aws:
       credentials:
-        access-key: ${ACCESS_KEY}
-        secret-key: ${SECRET_KEY}
+        # 환경 변수 AWS_ACCESS_KEY_ID가 있으면 사용, 없으면 기본값(로컬용, 비워둠) 사용
+        access-key: ${AWS_ACCESS_KEY_ID:}
+        # 환경 변수 AWS_SECRET_ACCESS_KEY가 있으면 사용, 없으면 기본값(로컬용, 비워둠) 사용
+        secret-key: ${AWS_SECRET_ACCESS_KEY:}
       s3:
-        bucket: ${BUCKET}
+        # 환경 변수 S3_BUCKET_NAME이 있으면 사용, 없으면 기본값 사용
+        bucket: ${S3_BUCKET_NAME:starvive-assets}
       region:
-        static: ${STATIC}
+        # 환경 변수 AWS_REGION이 있으면 사용, 없으면 기본값 사용
+        static: ${AWS_REGION:ap-northeast-2}
       stack:
         auto: false
 
