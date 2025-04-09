@@ -16,25 +16,16 @@ public class TopCategoryResponse {
 
     private String name;
 
-    private String thumbImageUrl;
-
-    private String thumbAlt;
-
     @Builder
-    public TopCategoryResponse(UUID topCategoryId, String name,
-                               String thumbImageUrl, String thumbAlt) {
+    public TopCategoryResponse(UUID topCategoryId, String name) {
         this.topCategoryId = topCategoryId;
         this.name = name;
-        this.thumbImageUrl = thumbImageUrl;
-        this.thumbAlt = thumbAlt;
     }
 
     public static TopCategoryResponse from(TopCategory topCategory) {
         return TopCategoryResponse.builder()
                 .topCategoryId(topCategory.getTopCategoryId())
                 .name(topCategory.getName())
-                .thumbImageUrl(topCategory.getThumbImageUrl())
-                .thumbAlt(topCategory.getThumbAlt())
                 .build();
     }
 }
