@@ -19,28 +19,27 @@ public class WishController {
     private final WishService wishService;
 
     @PostMapping("/wish")
-    public ResponseEntity<BaseResponseEntity<Void>> addWish(@RequestBody WishAddRequestDto wishAddRequestDto) {
+    public BaseResponseEntity<Void> addWish(@RequestBody WishAddRequestDto wishAddRequestDto) {
         wishService.addWish(wishAddRequestDto);
-        return ResponseEntity.ok(BaseResponseEntity.ok());
+        return BaseResponseEntity.ok();
     }
 
     @PostMapping("/wish/toggle")
-    public ResponseEntity<BaseResponseEntity<WishToggleResponseDto>> toggleWishlist(
-            @RequestBody WishAddRequestDto wishAddRequestDto
-    ) {
+    public BaseResponseEntity<WishToggleResponseDto> toggleWishlist(
+            @RequestBody WishAddRequestDto wishAddRequestDto) {
         WishToggleResponseDto result = wishService.toggle(wishAddRequestDto);
-        return ResponseEntity.ok(BaseResponseEntity.ok(result));
+        return BaseResponseEntity.ok(result);
     }
 
     @GetMapping("/wish/wishList")
-    public ResponseEntity<BaseResponseEntity<List<WishProductResponseDto>>> getWishlist(@RequestParam UUID userId) {
+    public BaseResponseEntity<List<WishProductResponseDto>> getWishlist(@RequestParam UUID userId) {
         List<WishProductResponseDto> result = wishService.getList(userId);
-        return ResponseEntity.ok(BaseResponseEntity.ok(result));
+        return BaseResponseEntity.ok(result);
     }
 
     @DeleteMapping("/wish/{wishId}")
-    public ResponseEntity<BaseResponseEntity<Void>> deleteWish(@PathVariable UUID wishId) {
+    public BaseResponseEntity<Void> deleteWish(@PathVariable UUID wishId) {
         wishService.deleteWish(wishId);
-        return ResponseEntity.ok(BaseResponseEntity.ok());
+        return BaseResponseEntity.ok();
     }
 }

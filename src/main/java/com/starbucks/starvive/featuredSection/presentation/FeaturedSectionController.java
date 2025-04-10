@@ -23,55 +23,71 @@ public class FeaturedSectionController {
     private final FeaturedSectionService featuredSectionService;
 
     /**
-     * ✅ 1. 추천 섹션 리스트만 조회
-     * GET /featured-section
+     *  1. 추천 섹션 리스트 조회
+     * GET /api/featured-sections
      */
     @GetMapping("/featured-sections")
-    public ResponseEntity<BaseResponseEntity<List<FeaturedSectionResponseDto>>> getSectionList() {
+    public BaseResponseEntity<List<FeaturedSectionResponseDto>> getSectionList() {
         List<FeaturedSectionResponseDto> result = featuredSectionService.getSectionList();
-
-        return ResponseEntity.ok(new BaseResponseEntity<>(result));
+        return BaseResponseEntity.ok(result);
     }
+
     /**
-     * ✅ 2. 추천 섹션 ID 리스트로 섹션별 상품 리스트 조회
-     * POST /featured-section/products
+     *  2. 추천 섹션 ID 리스트로 섹션별 상품 리스트 조회
+     * GET /api/featured-section/products
      */
     @GetMapping("/featured-section/products")
-    public ResponseEntity<BaseResponseEntity<List<FeaturedSectionProductGroupResponseDto>>> getProductsBySection(
+    public BaseResponseEntity<List<FeaturedSectionProductGroupResponseDto>> getProductsBySection(
             @RequestBody FeaturedSectionProductRequestDto featuredSectionProductRequestDto) {
 
         List<FeaturedSectionProductGroupResponseDto> result =
                 featuredSectionService.getProductsBySections(featuredSectionProductRequestDto.getFeaturedSectionsIds());
 
-        return ResponseEntity.ok(new BaseResponseEntity<>(result));
+        return BaseResponseEntity.ok(result);
     }
 
+    /**
+     *  3. 추천 섹션 등록
+     * POST /api/featured-section
+     */
     @PostMapping("/featured-section")
-    public ResponseEntity<BaseResponseEntity<UUID>> createSection(@RequestBody FeaturedSectionCreateRequestDto featuredSectionCreateRequestDto
-    ) {
-        UUID featuredSectionId = featuredSectionService.createSection(featuredSectionCreateRequestDto);
-        return ResponseEntity.ok(BaseResponseEntity.ok(featuredSectionId));
+    public BaseResponseEntity<UUID> createSection(@RequestBody FeaturedSectionCreateRequestDto featuredSectionCreateRequestDto) {
+        UUID sectionId = featuredSectionService.createSection(featuredSectionCreateRequestDto);
+        return BaseResponseEntity.ok(sectionId);
     }
 
-    @PutMapping("/featured-section")
-    public ResponseEntity<BaseResponseEntity<Void>> updateSection(
+    /**
+     *  4. 추천 섹션 수정
+     * PUT /api/featured-section/{featuredSectionId}
+     */
+    @PutMapping("/featured-section/{featuredSectionId}")
+    public BaseResponseEntity<Void> updateSection(
             @PathVariable UUID featuredSectionId,
             @RequestBody FeaturedSectionUpdateRequestDto featuredSectionUpdateRequestDto) {
+
         featuredSectionService.updateSection(featuredSectionId, featuredSectionUpdateRequestDto);
-        return ResponseEntity.ok(BaseResponseEntity.ok());
+        return BaseResponseEntity.ok();
     }
 
-    @DeleteMapping("/featured-section")
-    public ResponseEntity<BaseResponseEntity<Void>> deleteSection(@PathVariable UUID featuredSectionId) {
+    /**
+     * ✅ 5. 추천 섹션 삭제
+     * DELETE /api/featured-section/{featuredSectionId}
+     */
+    @DeleteMapping("/featured-section/{featuredSectionId}")
+    public BaseResponseEntity<Void> deleteSection(@PathVariable UUID featuredSectionId) {
         featuredSectionService.deleteSection(featuredSectionId);
-        return ResponseEntity.ok(BaseResponseEntity.ok());
+        return BaseResponseEntity.ok();
     }
 
+    /**
+     *  6. 추천 섹션에 상품 등록
+     * POST /api/featured-section/regist-products
+     */
     @PostMapping("/featured-section/regist-products")
-    public ResponseEntity<BaseResponseEntity<Void>> registerProductsToSection(
-            @RequestBody FeaturedSectionProductRegisterRequestDto featuredSectionProductRegisterRequestDto
-    ) {
+    public BaseResponseEntity<Void> registerProductsToSection(
+            @RequestBody FeaturedSectionProductRegisterRequestDto featuredSectionProductRegisterRequestDto) {
+
         featuredSectionService.registerProductsToSection(featuredSectionProductRegisterRequestDto);
-        return ResponseEntity.ok(BaseResponseEntity.ok());
+        return BaseResponseEntity.ok();
     }
 }

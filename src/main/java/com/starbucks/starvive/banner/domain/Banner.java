@@ -2,17 +2,19 @@ package com.starbucks.starvive.banner.domain;
 
 import com.starbucks.starvive.common.domain.BaseEntity;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.UuidGenerator;
-
 import java.time.LocalDate;
 import java.util.UUID;
 
 @Entity
 @Getter
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Banner extends BaseEntity {
 
     @Id
@@ -37,13 +39,18 @@ public class Banner extends BaseEntity {
 
 
     @Builder
-    public Banner(UUID bannerId, String imageBannerUrl,
-                  String imageBannerAlt, String linkUrl,
-                  LocalDate postedAt, Boolean activated) {
-        this.bannerId = bannerId;
+    public Banner(String imageBannerUrl, String imageBannerAlt, String linkUrl, LocalDate postedAt, boolean activated) {
         this.imageBannerUrl = imageBannerUrl;
         this.imageBannerAlt = imageBannerAlt;
         this.linkUrl = linkUrl;
+        this.postedAt = postedAt;
+        this.activated = activated;
+    }
+
+    public void update(String imageUrl, String alt, String link, LocalDate postedAt, boolean activated) {
+        this.imageBannerUrl = imageUrl;
+        this.imageBannerAlt = alt;
+        this.linkUrl = link;
         this.postedAt = postedAt;
         this.activated = activated;
     }
