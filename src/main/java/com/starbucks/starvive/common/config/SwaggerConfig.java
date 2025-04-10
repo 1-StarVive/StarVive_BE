@@ -23,7 +23,7 @@ import org.springframework.context.annotation.Profile;
         scheme = "bearer"
 )
 
-@Profile({"local", "dev"})
+@Profile("!prod")
 @Configuration
 public class SwaggerConfig {
 
@@ -35,5 +35,4 @@ public class SwaggerConfig {
                 .pathsToMatch(paths)
                 .build();
     }
-
 }

@@ -6,6 +6,7 @@ import lombok.*;
 
 import java.util.UUID;
 
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.UuidGenerator;
 
 @Entity
@@ -24,11 +25,16 @@ public class PromotionProduct extends BaseEntity {
     @Column(nullable = false, columnDefinition = "BINARY(16)")
     private UUID promotionId;
 
+    @Column(nullable = false)
+    @ColumnDefault("false")
+    private boolean deleted = false;
+
     @Builder
     public PromotionProduct(UUID promotionProductId, UUID productId,
-                            UUID promotionId) {
+                            UUID promotionId, boolean deleted) {
         this.promotionProductId = promotionProductId;
         this.productId = productId;
         this.promotionId = promotionId;
+        this.deleted = deleted;
     }
 }

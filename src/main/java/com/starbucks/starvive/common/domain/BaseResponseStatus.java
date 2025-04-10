@@ -69,8 +69,11 @@ public enum BaseResponseStatus {
     ALREADY_DELETED_CATEGORY(HttpStatus.BAD_REQUEST, false, 3008, "이미 삭제된 카테고리입니다."),
 
     // Promotion
-    DUPLICATED_PROMOTION(HttpStatus.CONFLICT, false, 3101, "이미 등록된 이벤트입니다."),
-    NO_EXIST_PROMOTION(HttpStatus.NOT_FOUND, false, 3102, "존재하지 않는 이벤트입니다."),
+    DUPLICATED_PROMOTION(HttpStatus.CONFLICT, false, 3101, "이미 등록된 기획전입니다."),
+    NO_EXIST_PROMOTION(HttpStatus.NOT_FOUND, false, 3102, "존재하지 않는 기획전입니다."),
+    PROMOTION_PRODUCT_DELETE_FAIL(HttpStatus.BAD_REQUEST, false, 3103, "기획전에서 상품 삭제에 실패했습니다."),
+    PROMOTION_PRODUCT_UPDATE_FAIL(HttpStatus.BAD_REQUEST, false, 3104, "기획전의 상품 수정에 실패했습니다."),
+
 
     // FeaturedSection
     NO_EXIST_FEATURED_SECTION(HttpStatus.NOT_FOUND,false, 3013,"존재하지 않는 추천 섹셥입니다."),

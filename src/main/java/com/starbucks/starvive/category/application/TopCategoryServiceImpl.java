@@ -20,7 +20,6 @@ import static com.starbucks.starvive.common.domain.BaseResponseStatus.*;
 @RequiredArgsConstructor
 public class TopCategoryServiceImpl implements TopCategoryService {
 
-    private final S3Uploader s3Uploader;
     private final TopCategoryRepository topCategoryRepository;
 
     @Override
@@ -37,6 +36,12 @@ public class TopCategoryServiceImpl implements TopCategoryService {
     @Override
     public List<TopCategoryListResponse> findTopCategories() {
         return topCategoryRepository.findAllByDeletedFalse()
+                .stream().map(TopCategoryListResponse :: from).toList();
+    }
+
+    @Override
+    public List<TopCategoryListResponse> findTopCategoriesId(UUID topCategoryId) {
+        return topCategoryRepository.findByTopCategoryIdAndDeletedFalse(topCategoryId)
                 .stream().map(TopCategoryListResponse :: from).toList();
     }
 
