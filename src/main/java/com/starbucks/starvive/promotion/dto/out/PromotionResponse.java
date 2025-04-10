@@ -1,6 +1,5 @@
 package com.starbucks.starvive.promotion.dto.out;
 
-import com.starbucks.starvive.promotion.domain.Promotion;
 import com.starbucks.starvive.promotion.domain.PromotionStatus;
 import com.starbucks.starvive.promotion.vo.PromotionVo;
 import lombok.Builder;

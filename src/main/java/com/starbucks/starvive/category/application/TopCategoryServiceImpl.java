@@ -2,7 +2,7 @@ package com.starbucks.starvive.category.application;
 
 import com.starbucks.starvive.category.domain.TopCategory;
 import com.starbucks.starvive.category.dto.in.TopCategoryRequest;
-import com.starbucks.starvive.category.dto.out.TopCategoryListResponse;
+import com.starbucks.starvive.category.dto.out.TopCategoryResponse;
 import com.starbucks.starvive.category.infrastructure.TopCategoryRepository;
 import com.starbucks.starvive.common.exception.BaseException;
 import com.starbucks.starvive.common.s3.S3Uploader;
@@ -34,15 +34,15 @@ public class TopCategoryServiceImpl implements TopCategoryService {
     }
 
     @Override
-    public List<TopCategoryListResponse> findTopCategories() {
+    public List<TopCategoryResponse> findTopCategories() {
         return topCategoryRepository.findAllByDeletedFalse()
-                .stream().map(TopCategoryListResponse :: from).toList();
+                .stream().map(TopCategoryResponse :: from).toList();
     }
 
     @Override
-    public List<TopCategoryListResponse> findTopCategoriesId(UUID topCategoryId) {
+    public List<TopCategoryResponse> findTopCategoriesId(UUID topCategoryId) {
         return topCategoryRepository.findByTopCategoryIdAndDeletedFalse(topCategoryId)
-                .stream().map(TopCategoryListResponse :: from).toList();
+                .stream().map(TopCategoryResponse :: from).toList();
     }
 
     @Transactional

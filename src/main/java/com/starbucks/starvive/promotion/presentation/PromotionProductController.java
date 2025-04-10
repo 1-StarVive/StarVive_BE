@@ -45,8 +45,11 @@ public class PromotionProductController {
             tags = {"promotion-product-service"})
     @PutMapping("/{promotionId}")
     public BaseResponseEntity<String> updatePromotionProduct(
-            @PathVariable UUID promotionId
+            @PathVariable UUID promotionId,
+            @RequestBody PromotionWithProductRequest promotionWithProductRequest
     ) {
+        promotionProductService.updatePromotion(promotionWithProductRequest);
+
         return new BaseResponseEntity<>("기획전 상품 수정 완료");
     }
 }

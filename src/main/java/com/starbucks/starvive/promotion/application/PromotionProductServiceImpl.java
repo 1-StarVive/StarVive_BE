@@ -21,6 +21,7 @@ public class PromotionProductServiceImpl implements PromotionProductService {
 
     private final PromotionProductCustomRepository promotionProductCustomRepository;
 
+    @Transactional
     @Override
     public void addPromotionProduct(PromotionWithProductRequest promotionWithProductRequest) {
         UUID promotionId = promotionWithProductRequest.getPromotionId();
@@ -40,5 +41,20 @@ public class PromotionProductServiceImpl implements PromotionProductService {
         return promotionProductCustomRepository.findAllPromotionProducts(promotionId);
     }
 
+    @Transactional
+    @Override
+    public void updatePromotion(PromotionWithProductRequest promotionWithProductRequest) {
 
+        promotionProductRepository.deleteByPromotionId(promotionWithProductRequest.getPromotionId());
+
+        // 2. 새롭게 받은 productIds 기준으로 다시 등록
+        List<PromotionProduct> newProducts = promotionWithProductRequest.getProductIds().stream()
+                .map(productId -> PromotionProduct.builder()
+                        .promotionId(promotionWithProductRequest.getPromotionId())
+                        .productId(productId)
+                        .build())
+                .toList();
+
+        promotionProductRepository.saveAll(newProducts);
+    }
 }

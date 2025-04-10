@@ -1,9 +1,8 @@
 package com.starbucks.starvive.category.presentation;
 
 import com.starbucks.starvive.category.application.TopCategoryService;
-import com.starbucks.starvive.category.dto.in.TopCategoryForm;
 import com.starbucks.starvive.category.dto.in.TopCategoryRequest;
-import com.starbucks.starvive.category.dto.out.TopCategoryListResponse;
+import com.starbucks.starvive.category.dto.out.TopCategoryResponse;
 import com.starbucks.starvive.category.vo.TopCategoryVo;
 import com.starbucks.starvive.common.domain.BaseResponseEntity;
 import io.swagger.v3.oas.annotations.Operation;
@@ -26,11 +25,11 @@ public class TopCategoryController {
             tags = {"top-category-service"})
     @PostMapping(value = "/add")
     public BaseResponseEntity<String> addTopCategory(
-            @ModelAttribute TopCategoryForm topCategoryForm
+            @RequestBody TopCategoryRequest topCategoryRequest
     ) {
 
         TopCategoryVo vo = TopCategoryVo.builder()
-                .name(topCategoryForm.getName())
+                .name(topCategoryRequest.getName())
                 .build();
 
         topCategoryService.addTopCategory(TopCategoryRequest.from(vo));
@@ -41,7 +40,7 @@ public class TopCategoryController {
     @Operation(summary = "상위 카테고리 조회", description = "상위 카테고리를 조회합니다.",
             tags = {"top-category-service"})
     @GetMapping("/all")
-    public List<TopCategoryListResponse> getTopCategories() {
+    public List<TopCategoryResponse> getTopCategories() {
         return topCategoryService.findTopCategories();
     }
 
@@ -49,7 +48,7 @@ public class TopCategoryController {
             description = "상위 카테고리 ID를 통해 하나만 조회합니다.",
             tags = {"top-category-service"})
     @GetMapping("/{topCategoryId}")
-    public List<TopCategoryListResponse> getTopCategory(@PathVariable UUID topCategoryId) {
+    public List<TopCategoryResponse> getTopCategory(@PathVariable UUID topCategoryId) {
         return topCategoryService.findTopCategoriesId(topCategoryId);
     }
 
