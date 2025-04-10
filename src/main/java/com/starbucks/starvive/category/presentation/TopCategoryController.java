@@ -45,6 +45,14 @@ public class TopCategoryController {
         return topCategoryService.findTopCategories();
     }
 
+    @Operation(summary = "상위 카테고리 ID 하나만 조회",
+            description = "상위 카테고리 ID를 통해 하나만 조회합니다.",
+            tags = {"top-category-service"})
+    @GetMapping("/{topCategoryId}")
+    public List<TopCategoryListResponse> getTopCategory(@PathVariable UUID topCategoryId) {
+        return topCategoryService.findTopCategoriesId(topCategoryId);
+    }
+
     @Operation(summary = "상위 카테고리 수정", description = "상위 카테고리를 수정합니다.",
             tags = {"top-category-service"})
     @PutMapping("/{topCategoryId}")

@@ -1,6 +1,7 @@
 package com.starbucks.starvive.promotion.domain;
 
 import com.starbucks.starvive.common.domain.BaseEntity;
+import com.starbucks.starvive.promotion.dto.in.PromotionRequest;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -10,6 +11,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.UuidGenerator;
 
 @Entity
@@ -45,11 +47,15 @@ public class Promotion extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private PromotionStatus promotionStatus;
 
+    @Column(nullable = false)
+    @ColumnDefault("false")
+    private boolean deleted = false;
+
     @Builder
     public Promotion(UUID promotionId, String title, String notice,
                      LocalDate promotionStartAt, LocalDate promotionEndAt,
                      Boolean mainExpose, String promotionDetailContent,
-                     PromotionStatus promotionStatus) {
+                     PromotionStatus promotionStatus, boolean deleted) {
         this.promotionId = promotionId;
         this.title = title;
         this.notice = notice;
@@ -58,5 +64,14 @@ public class Promotion extends BaseEntity {
         this.mainExpose = mainExpose;
         this.promotionDetailContent = promotionDetailContent;
         this.promotionStatus = promotionStatus;
+        this.deleted = deleted;
+    }
+
+    public void update(PromotionRequest promotionRequest) {
+        this.title = promotionRequest.getTitle();
+    }
+
+    public void softDelete() {
+        this.deleted = true;
     }
 }

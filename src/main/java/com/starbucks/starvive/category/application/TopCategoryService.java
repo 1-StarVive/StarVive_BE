@@ -11,6 +11,8 @@ public interface TopCategoryService {
 
     void addTopCategory(TopCategoryRequest topCategoryRequest);
 
+    List<TopCategoryListResponse> findTopCategoriesId(UUID topCategoryId);
+
     List<TopCategoryListResponse> findTopCategories();
 
     void updateTopCategory(UUID topCategoryId, TopCategoryRequest topCategoryRequest);
