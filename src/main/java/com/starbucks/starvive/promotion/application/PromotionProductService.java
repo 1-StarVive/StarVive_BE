@@ -11,4 +11,6 @@ public interface PromotionProductService {
     void addPromotionProduct(PromotionWithProductRequest promotionWithProductRequest);
 
     List<PromotionProductResponse> getPromotionProducts(UUID promotionId);
+
+    void updatePromotion(PromotionWithProductRequest promotionWithProductRequest);
 }

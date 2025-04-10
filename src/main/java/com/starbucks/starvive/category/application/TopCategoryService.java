@@ -1,7 +1,7 @@
 package com.starbucks.starvive.category.application;
 
 import com.starbucks.starvive.category.dto.in.TopCategoryRequest;
-import com.starbucks.starvive.category.dto.out.TopCategoryListResponse;
+import com.starbucks.starvive.category.dto.out.TopCategoryResponse;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -11,9 +11,9 @@ public interface TopCategoryService {
 
     void addTopCategory(TopCategoryRequest topCategoryRequest);
 
-    List<TopCategoryListResponse> findTopCategoriesId(UUID topCategoryId);
+    List<TopCategoryResponse> findTopCategoriesId(UUID topCategoryId);
 
-    List<TopCategoryListResponse> findTopCategories();
+    List<TopCategoryResponse> findTopCategories();
 
     void updateTopCategory(UUID topCategoryId, TopCategoryRequest topCategoryRequest);
 
