@@ -7,56 +7,55 @@ import com.starbucks.starvive.cart.dto.in.UpdateQuantityRequestDto;
 import com.starbucks.starvive.cart.dto.out.*;
 import com.starbucks.starvive.common.domain.BaseResponseEntity;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.UUID;
 
-
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/v1")
 @RequiredArgsConstructor
 public class CartController {
 
     private final CartService cartService;
 
     @PostMapping("/cart")
-    public ResponseEntity<BaseResponseEntity<Void>> addItem(
+    public BaseResponseEntity<Void> addItem(
             @RequestParam UUID userId,
             @RequestBody AddCartItemRequestDto addCartItemRequestDto
     ) {
         cartService.addItem(userId, addCartItemRequestDto);
-        return ResponseEntity.ok(BaseResponseEntity.ok());
+        return BaseResponseEntity.ok();
     }
 
     @GetMapping("/cart")
-    public ResponseEntity<BaseResponseEntity<List<CartItemResponseDto>>> getList(
+    public BaseResponseEntity<List<CartItemResponseDto>> getList(
             @RequestParam UUID userId
     ) {
         List<CartItemResponseDto> result = cartService.getCartList(userId);
-        return ResponseEntity.ok(BaseResponseEntity.ok(result));
+        return BaseResponseEntity.ok(result);
     }
 
     @PatchMapping("/cart/{cartId}")
-    public ResponseEntity<BaseResponseEntity<Void>> updateQuantity(
+    public BaseResponseEntity<Void> updateQuantity(
             @PathVariable UUID cartId,
             @RequestBody UpdateQuantityRequestDto updateQuantityRequestDto
     ) {
         cartService.updateQuantity(updateQuantityRequestDto);
-        return ResponseEntity.ok(BaseResponseEntity.ok());
+        return BaseResponseEntity.ok();
     }
 
+
     @DeleteMapping("/cart/{cartId}")
-    public ResponseEntity<BaseResponseEntity<Void>> deleteItem(@PathVariable UUID cartId) {
+    public BaseResponseEntity<Void> deleteItem(@PathVariable UUID cartId) {
         cartService.deleteItem(cartId);
-        return ResponseEntity.ok(BaseResponseEntity.ok());
+        return BaseResponseEntity.ok();
     }
 
     @DeleteMapping("/cart/products")
-    public ResponseEntity<BaseResponseEntity<Void>> clearCart(
+    public BaseResponseEntity<Void> clearCart(
             @RequestBody DeleteCartItemRequestDto deleteCartItemRequestDto
     ) {
         cartService.clearCart(deleteCartItemRequestDto.getUserId());
-        return ResponseEntity.ok(BaseResponseEntity.ok());
+        return BaseResponseEntity.ok();
     }
 }

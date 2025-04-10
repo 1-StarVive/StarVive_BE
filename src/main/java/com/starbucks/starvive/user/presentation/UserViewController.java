@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class UserViewController {
 
-    @GetMapping("/register")
+    @GetMapping("/api/v1/register")
     public String registerPage() {
         return "register";
     }
