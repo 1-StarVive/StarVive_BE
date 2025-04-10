@@ -29,7 +29,7 @@ public class BannerImageController {
     }
 
     /**
-     * ✅ 2. 다중 이미지 등록
+     * ✅ 2. 다중 이미지 등록vv
      */
     @PostMapping("/multi")
     public BaseResponseEntity<List<UUID>> uploadMultipleBanners(@RequestPart List<MultipartFile> images,
