@@ -118,7 +118,11 @@ public enum BaseResponseStatus {
     S3_FILE_NOT_FOUND(HttpStatus.NOT_FOUND, false, 7004, "S3에서 파일을 찾을 수 없습니다."),
     S3_CONNECTION_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, false, 7005, "S3 연결에 실패했습니다."),
     S3_EMPTY_FILE_NAME(HttpStatus.BAD_REQUEST, false, 7006, "업로드할 파일명이 비어 있습니다."),
-    S3_UPDATE_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, false, 7006, "S3 파일 수정에 실패했습니다.");
+    S3_UPDATE_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, false, 7006, "S3 파일 수정에 실패했습니다."),
+
+    // 배너
+
+    BANNER_NOT_FOUND(HttpStatus.NOT_FOUND, false, 7007, "배너를 찾을 수 없습니다.");
 
     private final HttpStatusCode httpStatusCode;
     private final boolean isSuccess;
