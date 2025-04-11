@@ -13,5 +13,5 @@ public interface TopCategoryRepository extends JpaRepository<TopCategory, UUID> 
 
     List<TopCategory> findAllByDeletedFalse();
 
-    List<TopCategory> findByTopCategoryIdAndDeletedFalse(UUID topCategoryId);
+    Optional<TopCategory> findByTopCategoryIdAndDeletedFalse(UUID topCategoryId);
 }

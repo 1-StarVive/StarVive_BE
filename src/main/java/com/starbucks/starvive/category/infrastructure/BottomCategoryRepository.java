@@ -11,6 +11,8 @@ public interface BottomCategoryRepository extends JpaRepository<BottomCategory, 
 
     Optional<BottomCategory> findByNameAndMiddleCategoryId(String name, UUID middleCategoryId);
 
+    Optional<BottomCategory> findByBottomCategoryId(UUID bottomCategoryId);
+
     List<BottomCategory> findAllByDeletedFalse();
 
     List<BottomCategory> findByMiddleCategoryIdAndDeletedFalse(UUID middleCategoryId);

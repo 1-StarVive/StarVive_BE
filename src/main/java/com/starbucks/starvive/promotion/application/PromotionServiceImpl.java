@@ -21,14 +21,15 @@ public class PromotionServiceImpl implements PromotionService {
 
     private final PromotionRepository promotionRepository;
 
+    // 타이틀 중복 체크 x
+    // 타이틀은 똑같아도 괜찮지만 진행할지 말지 .. ?
     @Override
     public void addPromotion(PromotionRequest promotionRequest) {
         if (promotionRepository.findByTitle(promotionRequest.getTitle()).isPresent()) {
             throw new BaseException(DUPLICATED_PROMOTION);
         }
 
-        Promotion promotion = promotionRequest.toPromotion();
-        promotionRepository.save(promotion);
+        promotionRepository.save(promotionRequest.toPromotion());
     }
 
     @Override
@@ -45,6 +46,7 @@ public class PromotionServiceImpl implements PromotionService {
                 .toList();
     }
 
+    // update 부분 다시 수정 - 2025.04.10 
     @Transactional
     @Override
     public void updatePromotion(UUID promotionId, PromotionRequest promotionRequest) {

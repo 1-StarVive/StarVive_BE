@@ -28,9 +28,7 @@ public class TopCategoryServiceImpl implements TopCategoryService {
         if (topCategoryRepository.findByNameAndDeletedFalse(topCategoryRequest.getName()).isPresent()) {
             throw new BaseException(DUPLICATED_OPTION);
         }
-
-        TopCategory category = topCategoryRequest.toEntity();
-        topCategoryRepository.save(category);
+        topCategoryRepository.save(topCategoryRequest.toEntity());
     }
 
     @Override
@@ -40,18 +38,20 @@ public class TopCategoryServiceImpl implements TopCategoryService {
     }
 
     @Override
-    public List<TopCategoryResponse> findTopCategoriesId(UUID topCategoryId) {
-        return topCategoryRepository.findByTopCategoryIdAndDeletedFalse(topCategoryId)
-                .stream().map(TopCategoryResponse :: from).toList();
+    public TopCategoryResponse findTopCategoriesId(UUID topCategoryId) {
+        TopCategory topCategory = topCategoryRepository.findByTopCategoryIdAndDeletedFalse(topCategoryId)
+                .orElseThrow(() -> new BaseException(NO_EXIST_CATEGORY));
+        return TopCategoryResponse.from(topCategory);
     }
+
 
     @Transactional
     @Override
-    public void updateTopCategory(UUID topCategoryId, TopCategoryRequest topCategoryRequest) {
-        TopCategory topCategory = topCategoryRepository.findById(topCategoryId)
+    public void updateTopCategory(TopCategoryRequest topCategoryRequest) {
+        TopCategory topCategory = topCategoryRepository.findById(topCategoryRequest.getTopCategoryId())
                 .orElseThrow(() -> new BaseException(NO_EXIST_CATEGORY));
 
-        topCategory.update(topCategoryRequest);
+        topCategory.updateName(topCategoryRequest);
     }
 
     @Transactional

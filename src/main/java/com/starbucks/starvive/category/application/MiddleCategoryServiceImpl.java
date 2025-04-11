@@ -29,8 +29,14 @@ public class MiddleCategoryServiceImpl implements MiddleCategoryService {
             throw new BaseException(DUPLICATED_CATEGORY);
         }
 
-        MiddleCategory middleCategory = middleCategoryRequest.toEntity();
-        middleCategoryRepository.save(middleCategory);
+        middleCategoryRepository.save(middleCategoryRequest.toEntity());
+    }
+
+    @Override
+    public MiddleCategoryResponse findMiddleCategoryById(UUID middleCategoryId) {
+        MiddleCategory middleCategory = middleCategoryRepository.findByMiddleCategoryId(middleCategoryId)
+                .orElseThrow(() -> new BaseException(NO_EXIST_CATEGORY));
+        return MiddleCategoryResponse.from(middleCategory);
     }
 
     @Override
@@ -47,8 +53,8 @@ public class MiddleCategoryServiceImpl implements MiddleCategoryService {
 
     @Transactional
     @Override
-    public void updateMiddleCategory(UUID middleCategoryId, MiddleCategoryRequest middleCategoryRequest) {
-        MiddleCategory middleCategory = middleCategoryRepository.findById(middleCategoryId)
+    public void updateMiddleCategory(MiddleCategoryRequest middleCategoryRequest) {
+        MiddleCategory middleCategory = middleCategoryRepository.findById(middleCategoryRequest.getMiddleCategoryId())
                 .orElseThrow(() -> new BaseException(NO_EXIST_CATEGORY));
 
         middleCategory.updateMiddleCategory(middleCategoryRequest);

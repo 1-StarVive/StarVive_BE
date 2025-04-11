@@ -3,7 +3,7 @@ package com.starbucks.starvive.category.presentation;
 import com.starbucks.starvive.category.application.BottomCategoryService;
 import com.starbucks.starvive.category.dto.in.BottomCategoryRequest;
 import com.starbucks.starvive.category.dto.out.BottomCategoryResponse;
-import com.starbucks.starvive.common.domain.BaseResponseEntity;
+import com.starbucks.starvive.category.vo.BottomCategoryRequestVo;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.UUID;
 
-@RequestMapping("/api/v1/bottomCategories")
+@RequestMapping("/api/v1/bottom-categories")
 @RestController
 @RequiredArgsConstructor
 public class BottomCategoryController {
@@ -22,12 +22,20 @@ public class BottomCategoryController {
             description = "중간 카테고리 ID를 기반으로 하위 카테고리를 등록합니다.",
             tags = {"bottom-category-service"})
     @PostMapping("/add")
-    public BaseResponseEntity<String> addBottomCategory(
-            @RequestBody BottomCategoryRequest bottomCategoryRequest
+    public void addBottomCategory(
+            @RequestBody BottomCategoryRequestVo bottomCategoryRequestVo
             ) {
-        bottomCategoryService.addBottomCategory(bottomCategoryRequest);
+        bottomCategoryService.addBottomCategory(BottomCategoryRequest.from(bottomCategoryRequestVo));
+    }
 
-        return new BaseResponseEntity<>("하위 카테고리 등록 완료");
+    @Operation(summary = "하위 카테고리 ID 조회",
+            description = "하위 카테고리 ID 조회합니다.",
+            tags = {"bottom-category-service"})
+    @GetMapping("/{bottomCategoryId}")
+    public BottomCategoryResponse getBottomCategory (
+            @PathVariable UUID bottomCategoryId
+    ) {
+        return bottomCategoryService.findBottomCategoryById(bottomCategoryId);
     }
 
     @Operation(summary = "중간 카테고리 기준 하위 카테고리 전체 조회",
@@ -41,8 +49,8 @@ public class BottomCategoryController {
     @Operation(summary = "중간 카테고리 기준 하위 카테고리 조회",
             description = "중간 카테고리 ID를 기반으로 하위 카테고리(필터)를 조회합니다.",
             tags = {"bottom-category-service"})
-    @GetMapping("/{middleCategoryId}")
-    public List<BottomCategoryResponse> getBottomCategories(@PathVariable UUID middleCategoryId) {
+    @GetMapping
+    public List<BottomCategoryResponse> getBottomCategories(@RequestParam("middleId") UUID middleCategoryId) {
         return bottomCategoryService.findBottomCategories(middleCategoryId);
     }
 
@@ -50,22 +58,19 @@ public class BottomCategoryController {
             description = "중간 카테고리 ID를 기반으로 하위 카테고리를 수정합니다.",
             tags = {"bottom-category-service"})
     @PutMapping("/{bottomCategoryId}")
-    public BaseResponseEntity<String> updateBottomCategory(
-            @PathVariable UUID bottomCategoryId,
-            @RequestBody BottomCategoryRequest bottomCategoryRequest
+    public void updateBottomCategory(
+            @RequestBody BottomCategoryRequestVo bottomCategoryRequestVo
     ) {
-        bottomCategoryService.updateBottomCategory(bottomCategoryId, bottomCategoryRequest);
-        return new BaseResponseEntity<>("하위 카테고리 수정 완료");
+        bottomCategoryService.updateBottomCategory(BottomCategoryRequest.from(bottomCategoryRequestVo) );
     }
 
     @Operation(summary = "중간 카테고리 기준 하위 카테고리 삭제",
             description = "중간 카테고리 ID를 기반으로 하위 카테고리를 삭제합니다.",
             tags = {"bottom-category-service"})
     @DeleteMapping("/{bottomCategoryId}")
-    public BaseResponseEntity<String> deleteBottomCategory(
+    public void deleteBottomCategory(
             @PathVariable UUID bottomCategoryId
     ) {
         bottomCategoryService.deleteBottomCategory(bottomCategoryId);
-        return new BaseResponseEntity<>("하위 카테고리 삭제 완료");
     }
 }

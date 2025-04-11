@@ -11,11 +11,13 @@ public interface MiddleCategoryService {
 
     void addMiddleCategory(MiddleCategoryRequest middleCategoryRequest);
 
+    MiddleCategoryResponse findMiddleCategoryById(UUID middleCategoryId);
+
     List<MiddleCategoryResponse> findMiddleCategories(UUID topCategoryId);
 
     List<MiddleCategoryResponse> findMiddleCategories();
 
-    void updateMiddleCategory(UUID middleCategoryId, MiddleCategoryRequest middleCategoryRequest);
+    void updateMiddleCategory(MiddleCategoryRequest middleCategoryRequest);
 
     void deleteMiddleCategory(UUID middleCategoryId);
 }

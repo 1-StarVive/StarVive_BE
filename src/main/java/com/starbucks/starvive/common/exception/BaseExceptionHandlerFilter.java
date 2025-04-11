@@ -1,8 +1,8 @@
 package com.starbucks.starvive.common.exception;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.starbucks.starvive.common.domain.BaseResponseEntity;
 import com.starbucks.starvive.common.domain.BaseResponseStatus;
+import com.starbucks.starvive.common.domain.ErrorResponse;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -38,7 +38,7 @@ public class BaseExceptionHandlerFilter extends OncePerRequestFilter {
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.setCharacterEncoding("UTF-8");
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-        BaseResponseEntity baseResponse = new BaseResponseEntity(be.getStatus());
+        ErrorResponse baseResponse = new ErrorResponse(be.getStatus());
         try {
             response.getWriter().write(objectMapper.writeValueAsString(baseResponse));
         } catch (IOException e) {
