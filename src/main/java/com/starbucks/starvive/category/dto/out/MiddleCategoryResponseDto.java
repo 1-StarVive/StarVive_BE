@@ -9,7 +9,7 @@ import java.util.UUID;
 
 @Getter
 @NoArgsConstructor
-public class MiddleCategoryResponse {
+public class MiddleCategoryResponseDto {
 
     private UUID middleCategoryId;
 
@@ -18,14 +18,14 @@ public class MiddleCategoryResponse {
     private UUID topCategoryId;
 
     @Builder
-    public MiddleCategoryResponse(UUID middleCategoryId, String name, UUID topCategoryId) {
+    public MiddleCategoryResponseDto(UUID middleCategoryId, String name, UUID topCategoryId) {
         this.middleCategoryId = middleCategoryId;
         this.name = name;
         this.topCategoryId = topCategoryId;
     }
 
-    public static MiddleCategoryResponse from(MiddleCategory middleCategory) {
-        return MiddleCategoryResponse.builder()
+    public static MiddleCategoryResponseDto from(MiddleCategory middleCategory) {
+        return MiddleCategoryResponseDto.builder()
                 .middleCategoryId(middleCategory.getMiddleCategoryId())
                 .name(middleCategory.getName())
                 .topCategoryId(middleCategory.getTopCategoryId())

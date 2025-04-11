@@ -4,7 +4,7 @@ import com.starbucks.starvive.category.domain.MiddleCategory;
 import com.starbucks.starvive.category.dto.in.DeleteMiddleCategoryRequestDto;
 import com.starbucks.starvive.category.dto.in.MiddleCategoryRequestDto;
 import com.starbucks.starvive.category.dto.in.UpdateMiddleCategoryRequestDto;
-import com.starbucks.starvive.category.dto.out.MiddleCategoryResponse;
+import com.starbucks.starvive.category.dto.out.MiddleCategoryResponseDto;
 import com.starbucks.starvive.category.infrastructure.MiddleCategoryRepository;
 import com.starbucks.starvive.common.exception.BaseException;
 import jakarta.transaction.Transactional;
@@ -35,16 +35,16 @@ public class MiddleCategoryServiceImpl implements MiddleCategoryService {
     }
 
     @Override
-    public MiddleCategoryResponse findMiddleCategoryById(UUID middleCategoryId) {
+    public MiddleCategoryResponseDto findMiddleCategoryById(UUID middleCategoryId) {
         MiddleCategory middleCategory = middleCategoryRepository.findByDeletedFalseAndMiddleCategoryId(middleCategoryId)
                 .orElseThrow(() -> new BaseException(NO_EXIST_CATEGORY));
-        return MiddleCategoryResponse.from(middleCategory);
+        return MiddleCategoryResponseDto.from(middleCategory);
     }
 
     @Override
-    public List<MiddleCategoryResponse> findMiddleCategories() {
+    public List<MiddleCategoryResponseDto> findMiddleCategories() {
         return middleCategoryRepository.findAllByDeletedFalse()
-                .stream().map(MiddleCategoryResponse::from).toList();
+                .stream().map(MiddleCategoryResponseDto::from).toList();
     }
 
     @Transactional

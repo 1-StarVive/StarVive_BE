@@ -1,10 +1,10 @@
 package com.starbucks.starvive.category.presentation;
 
 import com.starbucks.starvive.category.application.BottomCategoryService;
-import com.starbucks.starvive.category.dto.in.BottomCategoryRequest;
+import com.starbucks.starvive.category.dto.in.BottomCategoryRequestDto;
 import com.starbucks.starvive.category.dto.in.DeleteBottomCategoryRequestDto;
 import com.starbucks.starvive.category.dto.in.UpdateBottomCategoryRequestDto;
-import com.starbucks.starvive.category.dto.out.BottomCategoryResponse;
+import com.starbucks.starvive.category.dto.out.BottomCategoryResponseDto;
 import com.starbucks.starvive.category.vo.BottomCategoryRequestVo;
 import com.starbucks.starvive.category.vo.DeleteBottomCategoryRequestVo;
 import com.starbucks.starvive.category.vo.UpdateBottomCategoryRequestVo;
@@ -29,14 +29,14 @@ public class BottomCategoryController {
     public void addBottomCategory(
             @RequestBody BottomCategoryRequestVo bottomCategoryRequestVo
             ) {
-        bottomCategoryService.addBottomCategory(BottomCategoryRequest.from(bottomCategoryRequestVo));
+        bottomCategoryService.addBottomCategory(BottomCategoryRequestDto.from(bottomCategoryRequestVo));
     }
 
     @Operation(summary = "중간 카테고리 기준 하위 카테고리 전체 조회",
             description = "중간 카테고리 ID를 기반으로 하위 카테고리를 전체 조회합니다.",
             tags = {"bottom-category-service"})
     @GetMapping("/all")
-    public List<BottomCategoryResponse> getAllBottomCategories() {
+    public List<BottomCategoryResponseDto> getAllBottomCategories() {
         return bottomCategoryService.findBottomCategories();
     }
 
@@ -44,7 +44,7 @@ public class BottomCategoryController {
             description = "중간 카테고리 ID를 기반으로 하위 카테고리(필터)를 조회합니다.",
             tags = {"bottom-category-service"})
     @GetMapping
-    public List<BottomCategoryResponse> getBottomCategories(@RequestParam("middleId") UUID middleCategoryId) {
+    public List<BottomCategoryResponseDto> getBottomCategories(@RequestParam("middleId") UUID middleCategoryId) {
         return bottomCategoryService.findBottomCategories(middleCategoryId);
     }
 

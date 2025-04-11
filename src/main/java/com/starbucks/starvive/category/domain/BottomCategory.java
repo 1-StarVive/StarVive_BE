@@ -1,6 +1,5 @@
 package com.starbucks.starvive.category.domain;
 
-import com.starbucks.starvive.category.dto.in.BottomCategoryRequest;
 import com.starbucks.starvive.category.dto.in.UpdateBottomCategoryRequestDto;
 import com.starbucks.starvive.common.domain.BaseEntity;
 import jakarta.persistence.Column;

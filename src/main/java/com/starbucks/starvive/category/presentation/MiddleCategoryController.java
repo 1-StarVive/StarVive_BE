@@ -4,7 +4,7 @@ import com.starbucks.starvive.category.application.MiddleCategoryService;
 import com.starbucks.starvive.category.dto.in.DeleteMiddleCategoryRequestDto;
 import com.starbucks.starvive.category.dto.in.MiddleCategoryRequestDto;
 import com.starbucks.starvive.category.dto.in.UpdateMiddleCategoryRequestDto;
-import com.starbucks.starvive.category.dto.out.MiddleCategoryResponse;
+import com.starbucks.starvive.category.dto.out.MiddleCategoryResponseDto;
 import com.starbucks.starvive.category.vo.DeleteTopCategoryRequestVo;
 import com.starbucks.starvive.category.vo.MiddleCategoryRequestVo;
 import com.starbucks.starvive.category.vo.UpdateMiddleCategoryRequestVo;
@@ -36,7 +36,7 @@ public class MiddleCategoryController {
             description = "상위 카테고리 ID를 기반으로 중간 카테고리(필터)를 전체 조회합니다.",
             tags = {"middle-category-service"})
     @GetMapping("/all")
-    public List<MiddleCategoryResponse> getAllMiddleCategories() {
+    public List<MiddleCategoryResponseDto> getAllMiddleCategories() {
         return middleCategoryService.findMiddleCategories();
     }
 
@@ -44,7 +44,7 @@ public class MiddleCategoryController {
             description = "중간 카테고리 ID를 통해 조회합니다.",
             tags = {"middle-category-service"})
     @GetMapping
-    public MiddleCategoryResponse getMiddleCategoryById(@RequestParam("middleId") UUID middleCategoryId) {
+    public MiddleCategoryResponseDto getMiddleCategoryById(@RequestParam("middleId") UUID middleCategoryId) {
         return middleCategoryService.findMiddleCategoryById(middleCategoryId);
     }
 

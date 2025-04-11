@@ -10,7 +10,7 @@ import java.util.UUID;
 
 @Getter
 @NoArgsConstructor
-public class BottomCategoryRequest {
+public class BottomCategoryRequestDto {
 
     private UUID bottomCategoryId;
     private String name;
@@ -18,7 +18,7 @@ public class BottomCategoryRequest {
     private UUID middleCategoryId;
 
     @Builder
-    public BottomCategoryRequest(UUID bottomCategoryId, String name, UUID middleCategoryId) {
+    public BottomCategoryRequestDto(UUID bottomCategoryId, String name, UUID middleCategoryId) {
         this.bottomCategoryId = bottomCategoryId;
         this.name = name;
         this.middleCategoryId = middleCategoryId;
@@ -31,8 +31,8 @@ public class BottomCategoryRequest {
                 .build();
     }
 
-    public static BottomCategoryRequest from(BottomCategoryRequestVo bottomCategoryVo) {
-        return BottomCategoryRequest.builder()
+    public static BottomCategoryRequestDto from(BottomCategoryRequestVo bottomCategoryVo) {
+        return BottomCategoryRequestDto.builder()
                 .bottomCategoryId(bottomCategoryVo.getBottomCategoryId())
                 .name(bottomCategoryVo.getName())
                 .middleCategoryId(bottomCategoryVo.getMiddleCategoryId())
