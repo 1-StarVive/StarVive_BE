@@ -2,7 +2,7 @@ package com.starbucks.starvive.category.application;
 
 import com.starbucks.starvive.category.domain.TopCategory;
 import com.starbucks.starvive.category.dto.in.DeleteTopCategoryRequestDto;
-import com.starbucks.starvive.category.dto.in.TopCategoryRequest;
+import com.starbucks.starvive.category.dto.in.TopCategoryRequestDto;
 import com.starbucks.starvive.category.dto.in.UpdateTopCategoryRequestDto;
 import com.starbucks.starvive.category.dto.out.TopCategoryResponseDto;
 import com.starbucks.starvive.category.infrastructure.TopCategoryRepository;
@@ -24,7 +24,7 @@ public class TopCategoryServiceImpl implements TopCategoryService {
 
     @Override
     @Transactional
-    public void addTopCategory(TopCategoryRequest topCategoryRequest) {
+    public void addTopCategory(TopCategoryRequestDto topCategoryRequest) {
         if (topCategoryRepository.findByNameAndDeletedFalse(topCategoryRequest.getName()).isPresent()) {
             throw new BaseException(DUPLICATED_OPTION);
         }
