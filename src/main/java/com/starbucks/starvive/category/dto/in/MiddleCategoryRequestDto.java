@@ -10,7 +10,7 @@ import java.util.UUID;
 
 @Getter
 @NoArgsConstructor
-public class MiddleCategoryRequest {
+public class MiddleCategoryRequestDto {
 
     private UUID middleCategoryId;
 
@@ -19,7 +19,7 @@ public class MiddleCategoryRequest {
     private UUID topCategoryId;
 
     @Builder
-    public MiddleCategoryRequest(UUID middleCategoryId, String name, UUID topCategoryId) {
+    public MiddleCategoryRequestDto(UUID middleCategoryId, String name, UUID topCategoryId) {
         this.middleCategoryId = middleCategoryId;
         this.name = name;
         this.topCategoryId = topCategoryId;
@@ -32,8 +32,8 @@ public class MiddleCategoryRequest {
                 .build();
     }
 
-    public static MiddleCategoryRequest fromEntity(MiddleCategoryRequestVo middleCategoryVo) {
-        return MiddleCategoryRequest.builder()
+    public static MiddleCategoryRequestDto fromEntity(MiddleCategoryRequestVo middleCategoryVo) {
+        return MiddleCategoryRequestDto.builder()
                 .middleCategoryId(middleCategoryVo.getMiddleCategoryId())
                 .name(middleCategoryVo.getName())
                 .topCategoryId(middleCategoryVo.getTopCategoryId())

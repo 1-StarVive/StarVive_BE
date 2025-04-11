@@ -51,7 +51,7 @@ public class TopCategoryServiceImpl implements TopCategoryService {
         TopCategory topCategory = topCategoryRepository.findById(updateTopCategoryRequestDto.getTopCategoryId())
                 .orElseThrow(() -> new BaseException(NO_EXIST_CATEGORY));
 
-        topCategory.updateName(updateTopCategoryRequestDto);
+        topCategory.update(updateTopCategoryRequestDto);
     }
 
     @Transactional

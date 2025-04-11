@@ -1,9 +1,13 @@
 package com.starbucks.starvive.category.presentation;
 
 import com.starbucks.starvive.category.application.MiddleCategoryService;
-import com.starbucks.starvive.category.dto.in.MiddleCategoryRequest;
+import com.starbucks.starvive.category.dto.in.DeleteMiddleCategoryRequestDto;
+import com.starbucks.starvive.category.dto.in.MiddleCategoryRequestDto;
+import com.starbucks.starvive.category.dto.in.UpdateMiddleCategoryRequestDto;
 import com.starbucks.starvive.category.dto.out.MiddleCategoryResponse;
+import com.starbucks.starvive.category.vo.DeleteTopCategoryRequestVo;
 import com.starbucks.starvive.category.vo.MiddleCategoryRequestVo;
+import com.starbucks.starvive.category.vo.UpdateMiddleCategoryRequestVo;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -25,16 +29,8 @@ public class MiddleCategoryController {
     public void addMiddleCategory(
             @RequestBody MiddleCategoryRequestVo middleCategoryVo
     ) {
-        middleCategoryService.addMiddleCategory(MiddleCategoryRequest.fromEntity(middleCategoryVo));
+        middleCategoryService.addMiddleCategory(MiddleCategoryRequestDto.fromEntity(middleCategoryVo));
     }
-
-//    @Operation(summary = "상위 카테고리 기준 중간 카테고리 조회",
-//            description = "상위 카테고리 ID를 기반으로 중간 카테고리(필터)를 조회합니다.",
-//            tags = {"middle-category-service"})
-//    @GetMapping
-//    public List<MiddleCategoryResponse> getMiddleCategories(@RequestParam("topId") UUID topCategoryId) {
-//        return middleCategoryService.findMiddleCategories(topCategoryId);
-//    }
 
     @Operation(summary = "상위 카테고리 기준 중간 카테고리 전체 조회",
             description = "상위 카테고리 ID를 기반으로 중간 카테고리(필터)를 전체 조회합니다.",
@@ -55,20 +51,20 @@ public class MiddleCategoryController {
     @Operation(summary = "상위 카테고리 기준 중간 카테고리 수정",
             description = "상위 카테고리 ID를 기반으로 중간 카테고리(필터)를 수정합니다.",
             tags = {"middle-category-service"})
-    @PutMapping("/{middleCategoryId}")
+    @PutMapping
     public void updateMiddleCategory(
-            @RequestBody MiddleCategoryRequestVo middleCategoryRequestVo
+            @RequestBody UpdateMiddleCategoryRequestVo updateMiddleCategoryRequestVo
     ) {
-        middleCategoryService.updateMiddleCategory(MiddleCategoryRequest.fromEntity(middleCategoryRequestVo));
+        middleCategoryService.updateMiddleCategory(UpdateMiddleCategoryRequestDto.fromEntity(updateMiddleCategoryRequestVo));
     }
 
     @Operation(summary = "상위 카테고리 기준 중간 카테고리 삭제",
             description = "상위 카테고리 ID를 기반으로 중간 카테고리(필터)를 삭제합니다.",
             tags = {"middle-category-service"})
-    @DeleteMapping("/{middleCategoryId}")
+    @DeleteMapping
     public void deleteMiddleCategory(
-            @PathVariable UUID middleCategoryId
-    ) {
-        middleCategoryService.deleteMiddleCategory(middleCategoryId);
+            @RequestBody DeleteTopCategoryRequestVo deleteTopCategoryRequestVo
+            ) {
+        middleCategoryService.deleteMiddleCategory(DeleteMiddleCategoryRequestDto.fromEntity(deleteTopCategoryRequestVo));
     }
 }

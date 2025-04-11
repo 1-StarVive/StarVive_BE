@@ -8,18 +8,18 @@ import java.util.UUID;
 
 @Getter
 @NoArgsConstructor
-public class DeleteTopCategoryRequestVo {
+public class UpdateMiddleCategoryRequestVo {
 
     private UUID middleCategoryId;
 
-    private UUID topCategoryId;
-
     private String name;
 
+    private UUID topCategoryId;
+
     @Builder
-    public DeleteTopCategoryRequestVo(UUID middleCategoryId, UUID topCategoryId, String name) {
+    public UpdateMiddleCategoryRequestVo(UUID middleCategoryId, String name, UUID topCategoryId) {
         this.middleCategoryId = middleCategoryId;
-        this.topCategoryId = topCategoryId;
         this.name = name;
+        this.topCategoryId = topCategoryId;
     }
 }

@@ -39,7 +39,7 @@ public class TopCategory extends BaseEntity {
         this.deleted = deleted;
     }
 
-    public void updateName(UpdateTopCategoryRequestDto updateTopCategoryRequestDto) {
+    public void update(UpdateTopCategoryRequestDto updateTopCategoryRequestDto) {
         this.name = updateTopCategoryRequestDto.getName();
     }
 

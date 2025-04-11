@@ -1,7 +1,9 @@
 package com.starbucks.starvive.category.application;
 
 import com.starbucks.starvive.category.domain.MiddleCategory;
-import com.starbucks.starvive.category.dto.in.MiddleCategoryRequest;
+import com.starbucks.starvive.category.dto.in.DeleteMiddleCategoryRequestDto;
+import com.starbucks.starvive.category.dto.in.MiddleCategoryRequestDto;
+import com.starbucks.starvive.category.dto.in.UpdateMiddleCategoryRequestDto;
 import com.starbucks.starvive.category.dto.out.MiddleCategoryResponse;
 import com.starbucks.starvive.category.infrastructure.MiddleCategoryRepository;
 import com.starbucks.starvive.common.exception.BaseException;
@@ -22,7 +24,7 @@ public class MiddleCategoryServiceImpl implements MiddleCategoryService {
 
     @Transactional
     @Override
-    public void addMiddleCategory(MiddleCategoryRequest middleCategoryRequest) {
+    public void addMiddleCategory(MiddleCategoryRequestDto middleCategoryRequest) {
         if(middleCategoryRepository
                 .findByNameAndTopCategoryId(middleCategoryRequest.getName(), middleCategoryRequest.getTopCategoryId())
                 .isPresent()) {
@@ -34,16 +36,10 @@ public class MiddleCategoryServiceImpl implements MiddleCategoryService {
 
     @Override
     public MiddleCategoryResponse findMiddleCategoryById(UUID middleCategoryId) {
-        MiddleCategory middleCategory = middleCategoryRepository.findByMiddleCategoryId(middleCategoryId)
+        MiddleCategory middleCategory = middleCategoryRepository.findByDeletedFalseAndMiddleCategoryId(middleCategoryId)
                 .orElseThrow(() -> new BaseException(NO_EXIST_CATEGORY));
         return MiddleCategoryResponse.from(middleCategory);
     }
-
-//    @Override
-//    public List<MiddleCategoryResponse> findMiddleCategories(UUID topCategoryId) {
-//        return middleCategoryRepository.findAllByTopCategoryIdAndDeletedFalse(topCategoryId)
-//                .stream().map(MiddleCategoryResponse::from).toList();
-//    }
 
     @Override
     public List<MiddleCategoryResponse> findMiddleCategories() {
@@ -53,17 +49,17 @@ public class MiddleCategoryServiceImpl implements MiddleCategoryService {
 
     @Transactional
     @Override
-    public void updateMiddleCategory(MiddleCategoryRequest middleCategoryRequest) {
-        MiddleCategory middleCategory = middleCategoryRepository.findById(middleCategoryRequest.getMiddleCategoryId())
+    public void updateMiddleCategory(UpdateMiddleCategoryRequestDto updateMiddleCategoryRequestDto) {
+        MiddleCategory middleCategory = middleCategoryRepository.findById(updateMiddleCategoryRequestDto.getMiddleCategoryId())
                 .orElseThrow(() -> new BaseException(NO_EXIST_CATEGORY));
 
-        middleCategory.updateMiddleCategory(middleCategoryRequest);
+        middleCategory.update(updateMiddleCategoryRequestDto);
     }
 
     @Transactional
     @Override
-    public void deleteMiddleCategory(UUID middleCategoryId) {
-        MiddleCategory middleCategory = middleCategoryRepository.findById(middleCategoryId)
+    public void deleteMiddleCategory(DeleteMiddleCategoryRequestDto deleteMiddleCategoryRequestDto) {
+        MiddleCategory middleCategory = middleCategoryRepository.findById(deleteMiddleCategoryRequestDto.getMiddleCategoryId())
                 .orElseThrow(() -> new BaseException(ALREADY_DELETED_CATEGORY));
 
         middleCategory.softDelete();

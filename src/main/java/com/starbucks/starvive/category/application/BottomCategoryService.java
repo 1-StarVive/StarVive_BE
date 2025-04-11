@@ -1,6 +1,8 @@
 package com.starbucks.starvive.category.application;
 
 import com.starbucks.starvive.category.dto.in.BottomCategoryRequest;
+import com.starbucks.starvive.category.dto.in.DeleteBottomCategoryRequestDto;
+import com.starbucks.starvive.category.dto.in.UpdateBottomCategoryRequestDto;
 import com.starbucks.starvive.category.dto.out.BottomCategoryResponse;
 import java.util.List;
 import java.util.UUID;
@@ -9,13 +11,11 @@ public interface BottomCategoryService {
 
     void addBottomCategory(BottomCategoryRequest bottomCategoryRequest);
 
-    // BottomCategoryResponse findBottomCategoryById(UUID bottomCategoryId);
-
     List<BottomCategoryResponse> findBottomCategories(UUID middleCategoryId);
 
     List<BottomCategoryResponse> findBottomCategories();
 
-    void updateBottomCategory(BottomCategoryRequest bottomCategoryRequest);
+    void updateBottomCategory(UpdateBottomCategoryRequestDto updateBottomCategoryRequestDto);
 
-    void deleteBottomCategory(BottomCategoryRequest bottomCategoryRequest);
+    void deleteBottomCategory(DeleteBottomCategoryRequestDto deleteBottomCategoryRequestDto);
 }

@@ -2,6 +2,8 @@ package com.starbucks.starvive.category.application;
 
 import com.starbucks.starvive.category.domain.BottomCategory;
 import com.starbucks.starvive.category.dto.in.BottomCategoryRequest;
+import com.starbucks.starvive.category.dto.in.DeleteBottomCategoryRequestDto;
+import com.starbucks.starvive.category.dto.in.UpdateBottomCategoryRequestDto;
 import com.starbucks.starvive.category.dto.out.BottomCategoryResponse;
 import com.starbucks.starvive.category.infrastructure.BottomCategoryRepository;
 import com.starbucks.starvive.common.exception.BaseException;
@@ -32,14 +34,6 @@ public class BottomCategoryServiceImpl implements BottomCategoryService {
         bottomCategoryRepository.save(bottomCategoryRequest.toCategory());
     }
 
-//    @Override
-//    public BottomCategoryResponse findBottomCategoryById(UUID bottomCategoryId) {
-//        BottomCategory bottomCategory = bottomCategoryRepository.findByBottomCategoryId(bottomCategoryId)
-//                .orElseThrow(() -> new BaseException(NO_EXIST_CATEGORY));
-//
-//        return BottomCategoryResponse.from(bottomCategory);
-//    }
-
     @Override
     public List<BottomCategoryResponse> findBottomCategories(UUID middleCategoryId) {
         return bottomCategoryRepository.findByMiddleCategoryIdAndDeletedFalse(middleCategoryId)
@@ -54,17 +48,17 @@ public class BottomCategoryServiceImpl implements BottomCategoryService {
 
     @Transactional
     @Override
-    public void updateBottomCategory(BottomCategoryRequest bottomCategoryRequest) {
-        BottomCategory bottomCategory = bottomCategoryRepository.findById(bottomCategoryRequest.getBottomCategoryId())
+    public void updateBottomCategory(UpdateBottomCategoryRequestDto updateBottomCategoryRequestDto) {
+        BottomCategory bottomCategory = bottomCategoryRepository.findById(updateBottomCategoryRequestDto.getBottomCategoryId())
                 .orElseThrow(() -> new BaseException(NO_EXIST_CATEGORY));
 
-        bottomCategory.updateBottomCategoryId(bottomCategoryRequest);
+        bottomCategory.update(updateBottomCategoryRequestDto);
     }
 
     @Transactional
     @Override
-    public void deleteBottomCategory(BottomCategoryRequest bottomCategoryRequest) {
-        BottomCategory bottomCategory = bottomCategoryRepository.findById(bottomCategoryRequest.getBottomCategoryId())
+    public void deleteBottomCategory(DeleteBottomCategoryRequestDto deleteBottomCategoryRequestDto) {
+        BottomCategory bottomCategory = bottomCategoryRepository.findById(deleteBottomCategoryRequestDto.getBottomCategoryId())
                 .orElseThrow(() -> new BaseException(ALREADY_DELETED_CATEGORY));
 
         bottomCategory.softDelete();

@@ -2,8 +2,12 @@ package com.starbucks.starvive.category.presentation;
 
 import com.starbucks.starvive.category.application.BottomCategoryService;
 import com.starbucks.starvive.category.dto.in.BottomCategoryRequest;
+import com.starbucks.starvive.category.dto.in.DeleteBottomCategoryRequestDto;
+import com.starbucks.starvive.category.dto.in.UpdateBottomCategoryRequestDto;
 import com.starbucks.starvive.category.dto.out.BottomCategoryResponse;
 import com.starbucks.starvive.category.vo.BottomCategoryRequestVo;
+import com.starbucks.starvive.category.vo.DeleteBottomCategoryRequestVo;
+import com.starbucks.starvive.category.vo.UpdateBottomCategoryRequestVo;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -28,16 +32,6 @@ public class BottomCategoryController {
         bottomCategoryService.addBottomCategory(BottomCategoryRequest.from(bottomCategoryRequestVo));
     }
 
-//    @Operation(summary = "하위 카테고리 ID 조회",
-//            description = "하위 카테고리 ID 조회합니다.",
-//            tags = {"bottom-category-service"})
-//    @GetMapping("/{bottomCategoryId}")
-//    public BottomCategoryResponse getBottomCategory (
-//            @PathVariable UUID bottomCategoryId
-//    ) {
-//        return bottomCategoryService.findBottomCategoryById(bottomCategoryId);
-//    }
-
     @Operation(summary = "중간 카테고리 기준 하위 카테고리 전체 조회",
             description = "중간 카테고리 ID를 기반으로 하위 카테고리를 전체 조회합니다.",
             tags = {"bottom-category-service"})
@@ -59,9 +53,9 @@ public class BottomCategoryController {
             tags = {"bottom-category-service"})
     @PutMapping
     public void updateBottomCategory(
-            @RequestBody BottomCategoryRequestVo bottomCategoryRequestVo
-    ) {
-        bottomCategoryService.updateBottomCategory(BottomCategoryRequest.from(bottomCategoryRequestVo) );
+            @RequestBody UpdateBottomCategoryRequestVo updateBottomCategoryRequestVo
+            ) {
+        bottomCategoryService.updateBottomCategory(UpdateBottomCategoryRequestDto.from(updateBottomCategoryRequestVo));
     }
 
     @Operation(summary = "중간 카테고리 기준 하위 카테고리 삭제",
@@ -69,8 +63,8 @@ public class BottomCategoryController {
             tags = {"bottom-category-service"})
     @DeleteMapping
     public void deleteBottomCategory(
-            @PathVariable  BottomCategoryRequestVo bottomCategoryRequestVo
+            @RequestBody DeleteBottomCategoryRequestVo deleteBottomCategoryRequestVo
     ) {
-        bottomCategoryService.deleteBottomCategory(BottomCategoryRequest.from(bottomCategoryRequestVo));
+       bottomCategoryService.deleteBottomCategory(DeleteBottomCategoryRequestDto.from(deleteBottomCategoryRequestVo));
     }
 }
