@@ -32,13 +32,13 @@ public class BottomCategoryServiceImpl implements BottomCategoryService {
         bottomCategoryRepository.save(bottomCategoryRequest.toCategory());
     }
 
-    @Override
-    public BottomCategoryResponse findBottomCategoryById(UUID bottomCategoryId) {
-        BottomCategory bottomCategory = bottomCategoryRepository.findByBottomCategoryId(bottomCategoryId)
-                .orElseThrow(() -> new BaseException(NO_EXIST_CATEGORY));
-
-        return BottomCategoryResponse.from(bottomCategory);
-    }
+//    @Override
+//    public BottomCategoryResponse findBottomCategoryById(UUID bottomCategoryId) {
+//        BottomCategory bottomCategory = bottomCategoryRepository.findByBottomCategoryId(bottomCategoryId)
+//                .orElseThrow(() -> new BaseException(NO_EXIST_CATEGORY));
+//
+//        return BottomCategoryResponse.from(bottomCategory);
+//    }
 
     @Override
     public List<BottomCategoryResponse> findBottomCategories(UUID middleCategoryId) {
@@ -63,8 +63,8 @@ public class BottomCategoryServiceImpl implements BottomCategoryService {
 
     @Transactional
     @Override
-    public void deleteBottomCategory(UUID bottomCategoryId) {
-        BottomCategory bottomCategory = bottomCategoryRepository.findById(bottomCategoryId)
+    public void deleteBottomCategory(BottomCategoryRequest bottomCategoryRequest) {
+        BottomCategory bottomCategory = bottomCategoryRepository.findById(bottomCategoryRequest.getBottomCategoryId())
                 .orElseThrow(() -> new BaseException(ALREADY_DELETED_CATEGORY));
 
         bottomCategory.softDelete();

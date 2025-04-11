@@ -16,5 +16,5 @@ public interface MiddleCategoryRepository extends JpaRepository<MiddleCategory, 
 
     List<MiddleCategory> findAllByDeletedFalse();
 
-    List<MiddleCategory> findAllByTopCategoryIdAndDeletedFalse(UUID topCategoryId);
+    // List<MiddleCategory> findAllByTopCategoryIdAndDeletedFalse(UUID topCategoryId);
 }

@@ -1,6 +1,7 @@
 package com.starbucks.starvive.category.domain;
 
 import com.starbucks.starvive.category.dto.in.TopCategoryRequest;
+import com.starbucks.starvive.category.dto.in.UpdateTopCategoryRequestDto;
 import com.starbucks.starvive.common.domain.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -39,8 +40,8 @@ public class TopCategory extends BaseEntity {
         this.deleted = deleted;
     }
 
-    public void updateName(TopCategoryRequest topCategoryRequest) {
-        this.name = topCategoryRequest.getName();
+    public void updateName(UpdateTopCategoryRequestDto updateTopCategoryRequestDto) {
+        this.name = updateTopCategoryRequestDto.getName();
     }
 
     public void softDelete() {

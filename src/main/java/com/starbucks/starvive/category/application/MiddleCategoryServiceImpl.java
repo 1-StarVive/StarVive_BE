@@ -39,11 +39,11 @@ public class MiddleCategoryServiceImpl implements MiddleCategoryService {
         return MiddleCategoryResponse.from(middleCategory);
     }
 
-    @Override
-    public List<MiddleCategoryResponse> findMiddleCategories(UUID topCategoryId) {
-        return middleCategoryRepository.findAllByTopCategoryIdAndDeletedFalse(topCategoryId)
-                .stream().map(MiddleCategoryResponse::from).toList();
-    }
+//    @Override
+//    public List<MiddleCategoryResponse> findMiddleCategories(UUID topCategoryId) {
+//        return middleCategoryRepository.findAllByTopCategoryIdAndDeletedFalse(topCategoryId)
+//                .stream().map(MiddleCategoryResponse::from).toList();
+//    }
 
     @Override
     public List<MiddleCategoryResponse> findMiddleCategories() {

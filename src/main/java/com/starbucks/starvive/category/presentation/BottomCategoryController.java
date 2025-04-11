@@ -28,15 +28,15 @@ public class BottomCategoryController {
         bottomCategoryService.addBottomCategory(BottomCategoryRequest.from(bottomCategoryRequestVo));
     }
 
-    @Operation(summary = "하위 카테고리 ID 조회",
-            description = "하위 카테고리 ID 조회합니다.",
-            tags = {"bottom-category-service"})
-    @GetMapping("/{bottomCategoryId}")
-    public BottomCategoryResponse getBottomCategory (
-            @PathVariable UUID bottomCategoryId
-    ) {
-        return bottomCategoryService.findBottomCategoryById(bottomCategoryId);
-    }
+//    @Operation(summary = "하위 카테고리 ID 조회",
+//            description = "하위 카테고리 ID 조회합니다.",
+//            tags = {"bottom-category-service"})
+//    @GetMapping("/{bottomCategoryId}")
+//    public BottomCategoryResponse getBottomCategory (
+//            @PathVariable UUID bottomCategoryId
+//    ) {
+//        return bottomCategoryService.findBottomCategoryById(bottomCategoryId);
+//    }
 
     @Operation(summary = "중간 카테고리 기준 하위 카테고리 전체 조회",
             description = "중간 카테고리 ID를 기반으로 하위 카테고리를 전체 조회합니다.",
@@ -57,7 +57,7 @@ public class BottomCategoryController {
     @Operation(summary = "중간 카테고리 기준 하위 카테고리 수정",
             description = "중간 카테고리 ID를 기반으로 하위 카테고리를 수정합니다.",
             tags = {"bottom-category-service"})
-    @PutMapping("/{bottomCategoryId}")
+    @PutMapping
     public void updateBottomCategory(
             @RequestBody BottomCategoryRequestVo bottomCategoryRequestVo
     ) {
@@ -67,10 +67,10 @@ public class BottomCategoryController {
     @Operation(summary = "중간 카테고리 기준 하위 카테고리 삭제",
             description = "중간 카테고리 ID를 기반으로 하위 카테고리를 삭제합니다.",
             tags = {"bottom-category-service"})
-    @DeleteMapping("/{bottomCategoryId}")
+    @DeleteMapping
     public void deleteBottomCategory(
-            @PathVariable UUID bottomCategoryId
+            @PathVariable  BottomCategoryRequestVo bottomCategoryRequestVo
     ) {
-        bottomCategoryService.deleteBottomCategory(bottomCategoryId);
+        bottomCategoryService.deleteBottomCategory(BottomCategoryRequest.from(bottomCategoryRequestVo));
     }
 }

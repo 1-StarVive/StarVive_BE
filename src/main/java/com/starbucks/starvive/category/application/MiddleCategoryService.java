@@ -13,7 +13,7 @@ public interface MiddleCategoryService {
 
     MiddleCategoryResponse findMiddleCategoryById(UUID middleCategoryId);
 
-    List<MiddleCategoryResponse> findMiddleCategories(UUID topCategoryId);
+    // List<MiddleCategoryResponse> findMiddleCategories(UUID topCategoryId);
 
     List<MiddleCategoryResponse> findMiddleCategories();
 

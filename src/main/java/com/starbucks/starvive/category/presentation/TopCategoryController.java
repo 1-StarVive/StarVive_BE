@@ -1,15 +1,16 @@
 package com.starbucks.starvive.category.presentation;
 
 import com.starbucks.starvive.category.application.TopCategoryService;
-import com.starbucks.starvive.category.domain.TopCategory;
+import com.starbucks.starvive.category.dto.in.DeleteTopCategoryRequestDto;
 import com.starbucks.starvive.category.dto.in.TopCategoryRequest;
-import com.starbucks.starvive.category.dto.out.TopCategoryResponse;
+import com.starbucks.starvive.category.dto.in.UpdateTopCategoryRequestDto;
+import com.starbucks.starvive.category.dto.out.TopCategoryResponseDto;
+import com.starbucks.starvive.category.vo.DeleteTopCategoryRequestVo;
 import com.starbucks.starvive.category.vo.TopCategoryRequestVo;
+import com.starbucks.starvive.category.vo.UpdateTopCategoryRequestVo;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -26,6 +27,9 @@ public class TopCategoryController {
             tags = {"top-category-service"})
     @PostMapping(value = "/add")
         public void addTopCategory(
+
+            // Controller 단에서는 vo로 받기 (res, req 구분해서 알아서 잘 ..)
+            // TopCategoryRequestVo -> TopCategoryCreateRequestVo 클래스명 쪼개서 나누기
             @RequestBody TopCategoryRequestVo topCategoryRequestVo
     ) {
 
@@ -36,15 +40,17 @@ public class TopCategoryController {
     @Operation(summary = "상위 카테고리 조회", description = "상위 카테고리를 조회합니다.",
             tags = {"top-category-service"})
     @GetMapping("/all")
-    public List<TopCategoryResponse> getTopCategories() {
+    public List<TopCategoryResponseDto> getTopCategories() {
         return topCategoryService.findTopCategories();
     }
 
     @Operation(summary = "상위 카테고리 ID 하나만 조회",
             description = "상위 카테고리 ID를 통해 하나만 조회합니다.",
             tags = {"top-category-service"})
-    @GetMapping("/{topCategoryId}")
-    public TopCategoryResponse getTopCategory(@PathVariable UUID topCategoryId) {
+    @GetMapping
+    public TopCategoryResponseDto getTopCategory(
+            // 주소 처럼 받지 말고 @RequestParam 이런 형태로 받기 -> /api/v1/top-categories?topId=topCategoryIdUUID)
+            @RequestParam("topId") UUID topCategoryId) {
         return topCategoryService.findTopCategoriesId(topCategoryId);
     }
 
@@ -52,17 +58,19 @@ public class TopCategoryController {
             tags = {"top-category-service"})
     @PutMapping
     public void updateTopCategory(
-            @RequestBody TopCategoryRequestVo topCategoryRequestVo
+            // TopCategoryRequestVo -> UpdateTopCategoryRequestVo 클래스명 쪼개서 나누기
+            @RequestBody UpdateTopCategoryRequestVo updateTopCategoryRequestVo
     ) {
-        topCategoryService.updateTopCategory(TopCategoryRequest.from(topCategoryRequestVo));
+        topCategoryService.updateTopCategory(UpdateTopCategoryRequestDto.from(updateTopCategoryRequestVo));
     }
 
     @Operation(summary = "상위 카테고리 삭제", description = "상위 카테고리를 삭제합니다.",
             tags = {"top-category-service"})
-    @DeleteMapping("/{topCategoryId}")
+    @DeleteMapping
     public void deleteTopCategory(
-            @PathVariable UUID topCategoryId
+            // TopCategoryRequestVo -> DeleteTopCategoryRequestVo 클래스명 쪼개서 나누기
+            @RequestBody DeleteTopCategoryRequestVo deleteTopCategoryRequestVo
     ) {
-        topCategoryService.deleteTopCategory(topCategoryId);
+        topCategoryService.deleteTopCategory(DeleteTopCategoryRequestDto.from(deleteTopCategoryRequestVo));
     }
 }

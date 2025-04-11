@@ -10,20 +10,22 @@ import java.util.UUID;
 
 @Getter
 @NoArgsConstructor
-public class TopCategoryResponse {
+// TopCategoryResponse -> TopCategoryResponseDto 이렇게 Dto 붙여주세요 !
+public class TopCategoryResponseDto {
 
     private UUID topCategoryId;
 
     private String name;
 
+    // @Builder -> 생성자 선언 후 @AllArgsConstructor 빼기
     @Builder
-    public TopCategoryResponse(UUID topCategoryId, String name) {
+    public TopCategoryResponseDto(UUID topCategoryId, String name) {
         this.topCategoryId = topCategoryId;
         this.name = name;
     }
 
-    public static TopCategoryResponse from(TopCategory topCategory) {
-        return TopCategoryResponse.builder()
+    public static TopCategoryResponseDto from(TopCategory topCategory) {
+        return TopCategoryResponseDto.builder()
                 .topCategoryId(topCategory.getTopCategoryId())
                 .name(topCategory.getName())
                 .build();

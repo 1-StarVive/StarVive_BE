@@ -9,7 +9,7 @@ public interface BottomCategoryService {
 
     void addBottomCategory(BottomCategoryRequest bottomCategoryRequest);
 
-    BottomCategoryResponse findBottomCategoryById(UUID bottomCategoryId);
+    // BottomCategoryResponse findBottomCategoryById(UUID bottomCategoryId);
 
     List<BottomCategoryResponse> findBottomCategories(UUID middleCategoryId);
 
@@ -17,5 +17,5 @@ public interface BottomCategoryService {
 
     void updateBottomCategory(BottomCategoryRequest bottomCategoryRequest);
 
-    void deleteBottomCategory(UUID bottomCategoryId);
+    void deleteBottomCategory(BottomCategoryRequest bottomCategoryRequest);
 }
