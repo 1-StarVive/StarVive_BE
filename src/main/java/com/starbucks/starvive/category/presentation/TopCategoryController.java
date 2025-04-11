@@ -2,7 +2,7 @@ package com.starbucks.starvive.category.presentation;
 
 import com.starbucks.starvive.category.application.TopCategoryService;
 import com.starbucks.starvive.category.dto.in.DeleteTopCategoryRequestDto;
-import com.starbucks.starvive.category.dto.in.TopCategoryRequest;
+import com.starbucks.starvive.category.dto.in.TopCategoryRequestDto;
 import com.starbucks.starvive.category.dto.in.UpdateTopCategoryRequestDto;
 import com.starbucks.starvive.category.dto.out.TopCategoryResponseDto;
 import com.starbucks.starvive.category.vo.DeleteTopCategoryRequestVo;
@@ -33,7 +33,7 @@ public class TopCategoryController {
             @RequestBody TopCategoryRequestVo topCategoryRequestVo
     ) {
 
-        TopCategoryRequest requestDto = TopCategoryRequest.from(topCategoryRequestVo);
+        TopCategoryRequestDto requestDto = TopCategoryRequestDto.from(topCategoryRequestVo);
         topCategoryService.addTopCategory(requestDto);
     }
 

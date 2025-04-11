@@ -1,7 +1,7 @@
 package com.starbucks.starvive.category.application;
 
 import com.starbucks.starvive.category.dto.in.DeleteTopCategoryRequestDto;
-import com.starbucks.starvive.category.dto.in.TopCategoryRequest;
+import com.starbucks.starvive.category.dto.in.TopCategoryRequestDto;
 import com.starbucks.starvive.category.dto.in.UpdateTopCategoryRequestDto;
 import com.starbucks.starvive.category.dto.out.TopCategoryResponseDto;
 
@@ -10,7 +10,7 @@ import java.util.UUID;
 
 public interface TopCategoryService {
 
-    void addTopCategory(TopCategoryRequest topCategoryRequest);
+    void addTopCategory(TopCategoryRequestDto topCategoryRequest);
 
     TopCategoryResponseDto findTopCategoriesId(UUID topCategoryId);
 
