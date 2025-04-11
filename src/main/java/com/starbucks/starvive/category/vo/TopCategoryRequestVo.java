@@ -4,14 +4,19 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.UUID;
+
 @Getter
 @NoArgsConstructor
-public class TopCategoryVo {
+public class TopCategoryRequestVo {
+
+    private UUID topCategoryId;
 
     private String name;
 
     @Builder
-    public TopCategoryVo(String name) {
+    public TopCategoryRequestVo(UUID topCategoryId, String name) {
+        this.topCategoryId = topCategoryId;
         this.name = name;
     }
 }

@@ -9,11 +9,13 @@ public interface BottomCategoryService {
 
     void addBottomCategory(BottomCategoryRequest bottomCategoryRequest);
 
+    BottomCategoryResponse findBottomCategoryById(UUID bottomCategoryId);
+
     List<BottomCategoryResponse> findBottomCategories(UUID middleCategoryId);
 
     List<BottomCategoryResponse> findBottomCategories();
 
-    void updateBottomCategory(UUID bottomCategoryId, BottomCategoryRequest bottomCategoryRequest);
+    void updateBottomCategory(BottomCategoryRequest bottomCategoryRequest);
 
     void deleteBottomCategory(UUID bottomCategoryId);
 }

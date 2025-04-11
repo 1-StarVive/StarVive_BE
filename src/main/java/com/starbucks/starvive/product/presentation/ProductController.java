@@ -1,16 +1,15 @@
 package com.starbucks.starvive.product.presentation;
 
-import com.starbucks.starvive.common.domain.BaseResponseEntity;
 import com.starbucks.starvive.product.application.ProductService;
+
 import com.starbucks.starvive.product.dto.in.ProductCreateRequestDto;
 import com.starbucks.starvive.product.dto.in.ProductImageCreateRequestDto;
 import com.starbucks.starvive.product.dto.in.ProductOptionCreateRequestDto;
 import com.starbucks.starvive.product.dto.out.ProductDetailResponseDto;
 import com.starbucks.starvive.product.dto.out.ProductResponseDto;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import java.util.List;
-import java.util.UUID;
 
 @RequestMapping("/api/v1")
 @RestController
@@ -18,7 +17,6 @@ import java.util.UUID;
 public class ProductController {
 
     private final ProductService productService;
-
 
     @PostMapping("/product")
     public BaseResponseEntity<UUID> createProduct(

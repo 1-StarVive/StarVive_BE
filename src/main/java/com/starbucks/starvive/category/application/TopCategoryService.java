@@ -11,11 +11,11 @@ public interface TopCategoryService {
 
     void addTopCategory(TopCategoryRequest topCategoryRequest);
 
-    List<TopCategoryResponse> findTopCategoriesId(UUID topCategoryId);
+    TopCategoryResponse findTopCategoriesId(UUID topCategoryId);
 
     List<TopCategoryResponse> findTopCategories();
 
-    void updateTopCategory(UUID topCategoryId, TopCategoryRequest topCategoryRequest);
+    void updateTopCategory(TopCategoryRequest topCategoryRequest);
 
     void deleteTopCategory(UUID topCategoryId);
 }

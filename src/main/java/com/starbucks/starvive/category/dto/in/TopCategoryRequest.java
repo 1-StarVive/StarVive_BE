@@ -1,19 +1,27 @@
 package com.starbucks.starvive.category.dto.in;
 
 import com.starbucks.starvive.category.domain.TopCategory;
-import com.starbucks.starvive.category.vo.TopCategoryVo;
+import com.starbucks.starvive.category.vo.TopCategoryRequestVo;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.UUID;
+
 @Getter
-@Builder
 @NoArgsConstructor
-@AllArgsConstructor
 public class TopCategoryRequest {
 
+    private UUID topCategoryId;
+
     private String name;
+
+    @Builder
+    public TopCategoryRequest(UUID topCategoryId, String name) {
+        this.topCategoryId = topCategoryId;
+        this.name = name;
+    }
 
     public TopCategory toEntity() {
         return TopCategory.builder()
@@ -21,8 +29,9 @@ public class TopCategoryRequest {
                 .build();
     }
 
-    public static TopCategoryRequest from(TopCategoryVo topCategoryVo) {
+    public static TopCategoryRequest from(TopCategoryRequestVo topCategoryVo) {
         return TopCategoryRequest.builder()
+                .topCategoryId(topCategoryVo.getTopCategoryId())
                 .name(topCategoryVo.getName())
                 .build();
     }

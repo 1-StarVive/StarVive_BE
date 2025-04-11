@@ -29,8 +29,15 @@ public class BottomCategoryServiceImpl implements BottomCategoryService {
             throw new BaseException(DUPLICATED_CATEGORY);
         }
 
-        BottomCategory bottomCategory = bottomCategoryRequest.toCategory();
-        bottomCategoryRepository.save(bottomCategory);
+        bottomCategoryRepository.save(bottomCategoryRequest.toCategory());
+    }
+
+    @Override
+    public BottomCategoryResponse findBottomCategoryById(UUID bottomCategoryId) {
+        BottomCategory bottomCategory = bottomCategoryRepository.findByBottomCategoryId(bottomCategoryId)
+                .orElseThrow(() -> new BaseException(NO_EXIST_CATEGORY));
+
+        return BottomCategoryResponse.from(bottomCategory);
     }
 
     @Override
@@ -47,8 +54,8 @@ public class BottomCategoryServiceImpl implements BottomCategoryService {
 
     @Transactional
     @Override
-    public void updateBottomCategory(UUID bottomCategoryId, BottomCategoryRequest bottomCategoryRequest) {
-        BottomCategory bottomCategory = bottomCategoryRepository.findById(bottomCategoryId)
+    public void updateBottomCategory(BottomCategoryRequest bottomCategoryRequest) {
+        BottomCategory bottomCategory = bottomCategoryRepository.findById(bottomCategoryRequest.getBottomCategoryId())
                 .orElseThrow(() -> new BaseException(NO_EXIST_CATEGORY));
 
         bottomCategory.updateBottomCategoryId(bottomCategoryRequest);
