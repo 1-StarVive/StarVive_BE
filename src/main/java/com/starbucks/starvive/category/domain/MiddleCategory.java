@@ -1,6 +1,6 @@
 package com.starbucks.starvive.category.domain;
 
-import com.starbucks.starvive.category.dto.in.MiddleCategoryRequest;
+import com.starbucks.starvive.category.dto.in.UpdateMiddleCategoryRequestDto;
 import com.starbucks.starvive.common.domain.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -42,9 +42,8 @@ public class MiddleCategory extends BaseEntity {
         this.deleted = deleted;
     }
 
-    public void updateMiddleCategory(MiddleCategoryRequest middleCategoryRequest) {
-        this.name = middleCategoryRequest.getName();
-        this.topCategoryId = middleCategoryRequest.getTopCategoryId();
+    public void update(UpdateMiddleCategoryRequestDto updateMiddleCategoryRequestDto) {
+        this.name = updateMiddleCategoryRequestDto.getName();
     }
 
     public void softDelete() {

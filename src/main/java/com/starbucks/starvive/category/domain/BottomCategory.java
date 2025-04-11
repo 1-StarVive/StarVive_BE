@@ -1,6 +1,7 @@
 package com.starbucks.starvive.category.domain;
 
 import com.starbucks.starvive.category.dto.in.BottomCategoryRequest;
+import com.starbucks.starvive.category.dto.in.UpdateBottomCategoryRequestDto;
 import com.starbucks.starvive.common.domain.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -43,9 +44,8 @@ public class BottomCategory extends BaseEntity {
         this.deleted = deleted;
     }
 
-    public void updateBottomCategoryId(BottomCategoryRequest bottomCategoryRequest) {
-        this.name = bottomCategoryRequest.getName();
-        this.middleCategoryId = bottomCategoryRequest.getMiddleCategoryId();
+    public void update(UpdateBottomCategoryRequestDto updateBottomCategoryRequestDto) {
+        this.name = updateBottomCategoryRequestDto.getName();
     }
 
     public void softDelete() {
