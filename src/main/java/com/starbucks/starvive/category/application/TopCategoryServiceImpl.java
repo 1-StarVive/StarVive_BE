@@ -2,14 +2,18 @@ package com.starbucks.starvive.category.application;
 
 import com.starbucks.starvive.category.domain.TopCategory;
 import com.starbucks.starvive.category.dto.in.DeleteTopCategoryRequestDto;
+import com.starbucks.starvive.category.dto.in.RegisterTopCategoryRequestDto;
 import com.starbucks.starvive.category.dto.in.TopCategoryRequestDto;
 import com.starbucks.starvive.category.dto.in.UpdateTopCategoryRequestDto;
 import com.starbucks.starvive.category.dto.out.TopCategoryResponseDto;
 import com.starbucks.starvive.category.infrastructure.TopCategoryRepository;
+import com.starbucks.starvive.category.vo.RegisterTopCategoryRequestVo;
 import com.starbucks.starvive.common.exception.BaseException;
+import com.starbucks.starvive.common.s3.S3Uploader;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.UUID;
@@ -20,15 +24,21 @@ import static com.starbucks.starvive.common.domain.BaseResponseStatus.*;
 @RequiredArgsConstructor
 public class TopCategoryServiceImpl implements TopCategoryService {
 
+    private final S3Uploader s3Uploader;
     private final TopCategoryRepository topCategoryRepository;
 
     @Override
     @Transactional
-    public void addTopCategory(TopCategoryRequestDto topCategoryRequest) {
-        if (topCategoryRepository.findByNameAndDeletedFalse(topCategoryRequest.getName()).isPresent()) {
+    public void addTopCategory(RegisterTopCategoryRequestVo registerTopCategoryRequestVo, MultipartFile multipartFile) {
+        if (topCategoryRepository.findByNameAndDeletedFalse(registerTopCategoryRequestVo.getName()).isPresent()) {
             throw new BaseException(DUPLICATED_OPTION);
         }
-        topCategoryRepository.save(topCategoryRequest.toEntity());
+
+        String imageUrl = s3Uploader.upload(multipartFile, "top-categories");
+
+        RegisterTopCategoryRequestDto registerTopCategoryRequestDto = RegisterTopCategoryRequestDto.of(registerTopCategoryRequestVo, imageUrl);
+
+        topCategoryRepository.save(registerTopCategoryRequestDto.toTopCategory());
     }
 
     @Override
