@@ -9,7 +9,7 @@ import java.util.UUID;
 
 @Getter
 @NoArgsConstructor
-public class PromotionTitleResponse {
+public class ListPromotionResponseDto {
 
     private UUID promotionId;
 
@@ -18,15 +18,15 @@ public class PromotionTitleResponse {
     private String promotionDetailContent;
 
     @Builder
-    public PromotionTitleResponse(UUID promotionId, String title,
-                                  String promotionDetailContent) {
+    public ListPromotionResponseDto(UUID promotionId, String title,
+                                    String promotionDetailContent) {
         this.promotionId = promotionId;
         this.title = title;
         this.promotionDetailContent = promotionDetailContent;
     }
 
-    public static PromotionTitleResponse from(Promotion promotion) {
-        return PromotionTitleResponse.builder()
+    public static ListPromotionResponseDto from(Promotion promotion) {
+        return ListPromotionResponseDto.builder()
                 .promotionId(promotion.getPromotionId())
                 .title(promotion.getTitle())
                 .promotionDetailContent(promotion.getPromotionDetailContent())
