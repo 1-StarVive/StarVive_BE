@@ -15,8 +15,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/banners")
 public class BannerImageController {
-
-    private final BannerImageService bannerImageService;
+    //private final BannerImageService bannerImageService;
 //    /**
 //     * ✅ 1. 단일 이미지 등록
 //     */
