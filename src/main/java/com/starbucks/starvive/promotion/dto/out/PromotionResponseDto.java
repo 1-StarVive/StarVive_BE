@@ -10,7 +10,7 @@ import java.time.LocalDate;
 
 @Getter
 @NoArgsConstructor
-public class PromotionResponse {
+public class PromotionResponseDto {
 
     private String title;
 
@@ -27,9 +27,9 @@ public class PromotionResponse {
     private PromotionStatus promotionStatus;
 
     @Builder
-    public PromotionResponse(String title, String notice, LocalDate promotionStartAt,
-                             LocalDate promotionEndAt, Boolean mainExpose,
-                             String promotionDetailContent, PromotionStatus promotionStatus) {
+    public PromotionResponseDto(String title, String notice, LocalDate promotionStartAt,
+                                LocalDate promotionEndAt, Boolean mainExpose,
+                                String promotionDetailContent, PromotionStatus promotionStatus) {
         this.title = title;
         this.notice = notice;
         this.promotionStartAt = promotionStartAt;
@@ -39,8 +39,8 @@ public class PromotionResponse {
         this.promotionStatus = promotionStatus;
     }
 
-    public static PromotionResponse from(PromotionVo promotionVo) {
-        return PromotionResponse.builder()
+    public static PromotionResponseDto from(PromotionVo promotionVo) {
+        return PromotionResponseDto.builder()
                 .title(promotionVo.getTitle())
                 .notice(promotionVo.getNotice())
                 .promotionStartAt(promotionVo.getPromotionStartAt())

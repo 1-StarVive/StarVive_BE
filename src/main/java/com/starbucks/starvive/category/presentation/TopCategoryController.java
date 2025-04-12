@@ -2,19 +2,14 @@ package com.starbucks.starvive.category.presentation;
 
 import com.starbucks.starvive.category.application.TopCategoryService;
 import com.starbucks.starvive.category.dto.in.DeleteTopCategoryRequestDto;
-import com.starbucks.starvive.category.dto.in.RegisterTopCategoryRequestDto;
-import com.starbucks.starvive.category.dto.in.TopCategoryRequestDto;
 import com.starbucks.starvive.category.dto.in.UpdateTopCategoryRequestDto;
 import com.starbucks.starvive.category.dto.out.TopCategoryResponseDto;
 import com.starbucks.starvive.category.vo.DeleteTopCategoryRequestVo;
 import com.starbucks.starvive.category.vo.RegisterTopCategoryRequestVo;
-import com.starbucks.starvive.category.vo.TopCategoryRequestVo;
 import com.starbucks.starvive.category.vo.UpdateTopCategoryRequestVo;
-import com.starbucks.starvive.common.s3.S3Uploader;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 

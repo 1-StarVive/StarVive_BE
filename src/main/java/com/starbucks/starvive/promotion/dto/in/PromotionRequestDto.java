@@ -9,7 +9,7 @@ import java.time.LocalDate;
 
 @Getter
 @Builder
-public class PromotionRequest {
+public class PromotionRequestDto {
 
     private String title;
 
