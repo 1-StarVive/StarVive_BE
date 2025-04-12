@@ -2,16 +2,21 @@ package com.starbucks.starvive.category.presentation;
 
 import com.starbucks.starvive.category.application.TopCategoryService;
 import com.starbucks.starvive.category.dto.in.DeleteTopCategoryRequestDto;
+import com.starbucks.starvive.category.dto.in.RegisterTopCategoryRequestDto;
 import com.starbucks.starvive.category.dto.in.TopCategoryRequestDto;
 import com.starbucks.starvive.category.dto.in.UpdateTopCategoryRequestDto;
 import com.starbucks.starvive.category.dto.out.TopCategoryResponseDto;
 import com.starbucks.starvive.category.vo.DeleteTopCategoryRequestVo;
+import com.starbucks.starvive.category.vo.RegisterTopCategoryRequestVo;
 import com.starbucks.starvive.category.vo.TopCategoryRequestVo;
 import com.starbucks.starvive.category.vo.UpdateTopCategoryRequestVo;
+import com.starbucks.starvive.common.s3.S3Uploader;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.UUID;
@@ -30,12 +35,13 @@ public class TopCategoryController {
 
             // Controller 단에서는 vo로 받기 (res, req 구분해서 알아서 잘 ..)
             // TopCategoryRequestVo -> TopCategoryCreateRequestVo 클래스명 쪼개서 나누기
-            @RequestBody TopCategoryRequestVo topCategoryRequestVo
-    ) {
+            @RequestPart("request") RegisterTopCategoryRequestVo registerTopCategoryRequestVo,
+            @RequestPart("files") MultipartFile multipartFile
+            ) {
 
-        TopCategoryRequestDto requestDto = TopCategoryRequestDto.from(topCategoryRequestVo);
-        topCategoryService.addTopCategory(requestDto);
+        topCategoryService.addTopCategory(registerTopCategoryRequestVo, multipartFile);
     }
+
 
     @Operation(summary = "상위 카테고리 조회", description = "상위 카테고리를 조회합니다.",
             tags = {"top-category-service"})
