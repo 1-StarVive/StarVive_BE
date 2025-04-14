@@ -1,0 +1,12 @@
+package com.starbucks.starvive.product.vo;
+
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import java.util.UUID;
+
+@Getter
+@NoArgsConstructor
+public class ToggleWishRequestVo {
+    private UUID userId;
+    private UUID productOptionId;
+}

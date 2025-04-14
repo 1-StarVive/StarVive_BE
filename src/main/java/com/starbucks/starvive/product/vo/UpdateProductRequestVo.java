@@ -1,18 +1,18 @@
-package com.starbucks.starvive.product.dto.in;
+package com.starbucks.starvive.product.vo;
 
 import com.starbucks.starvive.product.domain.ProductStatus;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.UUID;
+
 @Getter
 @NoArgsConstructor
-@AllArgsConstructor
-public class ProductCreateRequestDto {
+public class UpdateProductRequestVo {
 
+    private UUID productId;
     private String name;
-    private String description;
-    private int baseDiscountRate;
+    private int discountRate;
     private ProductStatus productStatus;
 
 }

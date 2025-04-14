@@ -12,7 +12,13 @@ import org.springframework.context.annotation.Configuration;
 public class S3Config {
 
     // application.yml의 cloud.aws.region.static 또는 환경 변수 AWS_REGION 사용
-    @Value("${cloud.aws.region.static:${AWS_REGION:ap-northeast-2}}") 
+    @Value("${spring.cloud.aws.credentials.access-key}")
+    private String accessKey;
+
+    @Value("${spring.cloud.aws.credentials.secret-key}")
+    private String secretKey;
+
+    @Value("${spring.cloud.aws.region.static}")
     private String region;
 
     @Bean

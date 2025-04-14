@@ -10,7 +10,6 @@ import com.starbucks.starvive.category.vo.TopCategoryRequestVo;
 import com.starbucks.starvive.category.vo.UpdateTopCategoryRequestVo;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

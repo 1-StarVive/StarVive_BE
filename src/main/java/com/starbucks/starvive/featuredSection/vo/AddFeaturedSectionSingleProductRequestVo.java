@@ -1,15 +1,14 @@
-package com.starbucks.starvive.featuredSection.dto.in;
+package com.starbucks.starvive.featuredSection.vo;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import java.util.UUID;
 
 @Getter
 @NoArgsConstructor
-@AllArgsConstructor
-public class FeaturedSectionProductItemDto {
+public class AddFeaturedSectionSingleProductRequestVo {
 
+    private UUID featuredSectionId;
     private UUID productId;
     private UUID productOptionId;
     private UUID productImageId;

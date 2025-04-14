@@ -1,6 +1,5 @@
 package com.starbucks.starvive.cart.dto.out;
 
-import com.starbucks.starvive.cart.domain.Cart;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import java.util.UUID;

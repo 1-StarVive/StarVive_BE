@@ -1,90 +1,88 @@
 package com.starbucks.starvive.featuredSection.application;
 
-import com.starbucks.starvive.common.domain.BaseResponseStatus;
 import com.starbucks.starvive.common.exception.BaseException;
 import com.starbucks.starvive.featuredSection.domain.FeaturedSection;
 import com.starbucks.starvive.featuredSection.domain.FeaturedSectionProduct;
-import com.starbucks.starvive.featuredSection.dto.in.FeaturedSectionCreateRequestDto;
-import com.starbucks.starvive.featuredSection.dto.in.FeaturedSectionProductRegisterRequestDto;
-import com.starbucks.starvive.featuredSection.dto.in.FeaturedSectionUpdateRequestDto;
+import com.starbucks.starvive.featuredSection.dto.in.*;
 import com.starbucks.starvive.featuredSection.dto.out.FeaturedSectionProductGroupResponseDto;
-import com.starbucks.starvive.featuredSection.dto.out.FeaturedSectionProductResponseDto;
-import com.starbucks.starvive.featuredSection.dto.out.FeaturedSectionResponseDto;
 import com.starbucks.starvive.featuredSection.infrastructure.FeaturedSectionProductRepository;
 import com.starbucks.starvive.featuredSection.infrastructure.FeaturedSectionRepository;
-import com.starbucks.starvive.featuredSection.vo.FeaturedSectionProductVo;
-import com.starbucks.starvive.product.infrastructure.ProductOptionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
-import java.util.stream.Collectors;
+
+import static com.starbucks.starvive.common.domain.BaseResponseStatus.NO_EXIST_SECTION;
 
 @Service
 @RequiredArgsConstructor
 public class FeaturedSectionServiceImpl implements FeaturedSectionService {
 
-    private final FeaturedSectionRepository featuredSectionRepository;
-    private final FeaturedSectionProductRepository featuredSectionProductRepository;
-    private final ProductOptionRepository productOptionRepository;
+    private final FeaturedSectionRepository sectionRepository;
+    private final FeaturedSectionProductRepository productRepository;
+
+    @Override
+    public FeaturedSection getSection(UUID sectionId) {
+        return sectionRepository.findByFeaturedSectionId(sectionId)
+                .orElseThrow(() -> new BaseException(NO_EXIST_SECTION));
+    }
+
+    @Override
+    public List<FeaturedSection> getSectionList() {
+        return sectionRepository.findAll();
+    }
 
 
     @Override
-    public List<FeaturedSectionResponseDto> getSectionList() {
-        return featuredSectionRepository.findAllActivatedSections();
+    public void createSection(AddFeaturedSectionRequestDto dto) {
+        FeaturedSection section = FeaturedSection.builder()
+                .name(dto.getName())
+                .activated(dto.isActivated())
+                .build();
+        sectionRepository.save(section);
+    }
+
+    @Override
+    public void updateSection(UpdateFeaturedSectionRequestDto updateFeaturedSectionRequestDto) {
+        FeaturedSection section = sectionRepository.findByFeaturedSectionId(updateFeaturedSectionRequestDto.getFeaturedSectionId())
+                .orElseThrow(() -> new BaseException(NO_EXIST_SECTION));
+        section.update(updateFeaturedSectionRequestDto.getName(), updateFeaturedSectionRequestDto.isActivated());
+    }
+
+    @Override
+    public void deleteSection(DeleteFeaturedSectionRequestDto dto) {
+        sectionRepository.deleteById(dto.getFeaturedSectionId());
     }
 
     @Override
     public List<FeaturedSectionProductGroupResponseDto> getProductsBySections(List<UUID> sectionIds) {
-        List<FeaturedSectionProductVo> products = featuredSectionProductRepository.findProductsBySectionIds(sectionIds).stream()
-                .map(FeaturedSectionProductVo::new)
-                .toList();
-
-        Map<UUID, List<FeaturedSectionProductResponseDto>> productMap = products.stream()
-                .collect(Collectors.groupingBy(
-                        FeaturedSectionProductVo::getFeaturedSectionId,
-                        Collectors.mapping(FeaturedSectionProductVo::toItemDto, Collectors.toList())
-                ));
-
-        return sectionIds.stream()
-                .map(id -> new FeaturedSectionProductGroupResponseDto(id, productMap.getOrDefault(id, List.of())))
-                .toList();
+        List<FeaturedSectionProduct> list = productRepository.findAllByFeaturedSectionIdIn(sectionIds);
+        // 임시: 실제 응답 DTO 가공 로직은 별도 정의 필요
+        return new ArrayList<>();
     }
 
     @Override
-    public UUID createSection(FeaturedSectionCreateRequestDto featuredSectionCreateRequestDto) {
-        FeaturedSection featuredSection = FeaturedSection.builder()
-                .name(featuredSectionCreateRequestDto.getName())
-                .activated(featuredSectionCreateRequestDto.isActivated())
+    public void registerSingleProduct(AddFeaturedSectionSingleProductRequestDto dto) {
+        FeaturedSectionProduct product = FeaturedSectionProduct.builder()
+                .featuredSectionId(dto.getFeaturedSectionId())
+                .productId(dto.getProductId())
+                .productOptionId(dto.getProductOptionId())
+                .productImageId(dto.getProductImageId())
                 .build();
-        return featuredSectionRepository.save(featuredSection).getFeaturedSectionId();
+        productRepository.save(product);
     }
 
     @Override
-    public void updateSection(UUID featuredSectionId, FeaturedSectionUpdateRequestDto featuredSectionUpdateRequestDto) {
-        FeaturedSection section = featuredSectionRepository.findById(featuredSectionId)
-                .orElseThrow(() -> new BaseException(BaseResponseStatus.NO_EXIST_FEATURED_SECTION));;
-        section.update(featuredSectionUpdateRequestDto.getName(), featuredSectionUpdateRequestDto.isActivated());
-    }
-
-    @Override
-    public void deleteSection(UUID featuredSectionId) {
-        featuredSectionRepository.deleteById(featuredSectionId);
-    }
-
-    @Override
-    public void registerProductsToSection(FeaturedSectionProductRegisterRequestDto featuredSectionProductRegisterRequestDto) {
-        List<FeaturedSectionProduct> entities = featuredSectionProductRegisterRequestDto.getProducts().stream()
-                .map(p -> FeaturedSectionProduct.builder()
-                        .featuredSectionId(featuredSectionProductRegisterRequestDto.getFeaturedSectionId())
-                        .productId(p.getProductId())
-                        .productOptionId(p.getProductOptionId())
-                        .productImageId(p.getProductImageId())
+    public void registerProducts(AddFeaturedSectionProductRequestDto dto) {
+        List<FeaturedSectionProduct> products = dto.getProductIds().stream()
+                .map(pid -> FeaturedSectionProduct.builder()
+                        .featuredSectionId(dto.getFeaturedSectionId())
+                        .productId(pid)
+                        .productOptionId(null)
+                        .productImageId(null)
                         .build())
                 .toList();
-
-        featuredSectionProductRepository.saveAll(entities);
+        productRepository.saveAll(products);
     }
-
 }

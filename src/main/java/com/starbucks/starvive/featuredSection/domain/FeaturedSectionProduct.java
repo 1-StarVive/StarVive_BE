@@ -1,6 +1,5 @@
 package com.starbucks.starvive.featuredSection.domain;
 
-import com.starbucks.starvive.product.domain.Product;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;

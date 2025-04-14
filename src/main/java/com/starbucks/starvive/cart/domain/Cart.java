@@ -9,8 +9,6 @@ import java.util.UUID;
 @Entity
 @Getter
 @NoArgsConstructor
-@AllArgsConstructor
-@Builder
 public class Cart extends BaseEntity {
 
     @Id
@@ -30,26 +28,23 @@ public class Cart extends BaseEntity {
     @Column(nullable = false)
     private Integer quantity;
 
+    @Column(nullable = false)
     private Boolean checked;
 
-    public void increaseQuantity(int value) {
-        if (value <= 0) {
-            throw new IllegalArgumentException("수량은 1 이상이어야 합니다.");
-        }
-        this.quantity += value;
-    }
 
-    public void updateQuantity(int newQuantity) {
-        this.quantity = newQuantity;
-    }
-
-    //private LocalDate deletedAt; // soft delete 필드
-    private boolean deleted;
-
-
-    public Cart(UUID userId, UUID productOptionId, int quantity) {
+    @Builder
+    public Cart(UUID cartId, UUID userId, UUID productId, UUID productOptionId, Integer quantity, Boolean checked) {
+        this.cartId = cartId;
         this.userId = userId;
+        this.productId = productId;
         this.productOptionId = productOptionId;
         this.quantity = quantity;
+        this.checked = checked;
+    }
+
+    public void update(UUID productOptionId, int quantity, boolean checked) {
+        this.productOptionId = productOptionId;
+        this.quantity = quantity;
+        this.checked = checked;
     }
 }

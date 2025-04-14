@@ -1,105 +1,85 @@
 package com.starbucks.starvive.product.application;
 
-import com.starbucks.starvive.common.domain.BaseResponseStatus;
 import com.starbucks.starvive.common.exception.BaseException;
 import com.starbucks.starvive.image.domain.ProductImage;
 import com.starbucks.starvive.image.infrastructure.ProductImageRepository;
-import com.starbucks.starvive.product.domain.Product;
+import com.starbucks.starvive.product.domain.Product;;
 import com.starbucks.starvive.product.domain.ProductOption;
-import com.starbucks.starvive.product.dto.in.ProductCreateRequestDto;
-import com.starbucks.starvive.product.dto.in.ProductImageCreateRequestDto;
-import com.starbucks.starvive.product.dto.in.ProductOptionCreateRequestDto;
+import com.starbucks.starvive.product.dto.in.AddProductRequestDto;
+import com.starbucks.starvive.product.dto.in.DeleteProductRequestDto;
+import com.starbucks.starvive.product.dto.in.UpdateProductRequestDto;
 import com.starbucks.starvive.product.dto.out.ProductDetailResponseDto;
+import com.starbucks.starvive.product.dto.out.ProductListResponseDto;
 import com.starbucks.starvive.product.dto.out.ProductResponseDto;
 import com.starbucks.starvive.product.infrastructure.ProductOptionRepository;
 import com.starbucks.starvive.product.infrastructure.ProductRepository;
-import com.starbucks.starvive.product.projection.ProductDetailProjection;
-import com.starbucks.starvive.product.vo.ProductVo;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
+
+import static com.starbucks.starvive.common.domain.BaseResponseStatus.*;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
 public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
-    private final ProductOptionRepository optionRepository;
-    private final ProductImageRepository imageRepository;
+    private final ProductOptionRepository productOptionRepository;
+    private final ProductImageRepository productImageRepository;
 
     @Override
-    public UUID createProduct(ProductCreateRequestDto productCreateRequestDto) {
-               Product product = productRepository.save(Product.builder()
-                .name(productCreateRequestDto.getName())
-                .productStatus(productCreateRequestDto.getProductStatus())
-                .build());
-        return product.getProductId();
+    public void addProduct(AddProductRequestDto addProductRequestDto) {
+        Product product = Product.builder()
+                .name(addProductRequestDto.getName())
+                .productStatus(addProductRequestDto.getProductStatus())
+                .build();
+        productRepository.save(product);
     }
 
     @Override
-    public UUID createProductOption(ProductOptionCreateRequestDto ProductOptionCreateRequestDto) {
-                ProductOption option = optionRepository.save(ProductOption.builder()
-                .productId(ProductOptionCreateRequestDto.getProductId())
-                .price(ProductOptionCreateRequestDto.getPrice())
-                .stock(ProductOptionCreateRequestDto.getStock())
-                .carvedAvailable(ProductOptionCreateRequestDto.getCarvedAvailable())
-                .build());
-        return option.getProductOptionId();
+    public void updateProduct(UpdateProductRequestDto updateProductRequestDto) {
+        Product product = productRepository.findByProductId(updateProductRequestDto.getProductId())
+                .orElseThrow(() -> new BaseException(NO_EXIST_PRODUCT));
+        product.update(updateProductRequestDto.getName(), updateProductRequestDto.getProductStatus());
     }
 
     @Override
-    public UUID createProductImage(ProductImageCreateRequestDto productImageCreateRequestDto) {
-                ProductImage image = imageRepository.save(ProductImage.builder()
-                .productId(productImageCreateRequestDto.getProductId())
-                .imageThumbUrl(productImageCreateRequestDto.getImageThumbUrl())
-                .imageThumbAlt(productImageCreateRequestDto.getImageThumbAlt())
-                .build());
-        return image.getProductImageId();
+    public void deleteProduct(DeleteProductRequestDto deleteProductRequestDto) {
+        Product product = productRepository.findByProductId(deleteProductRequestDto.getProductId())
+                .orElseThrow(() -> new BaseException(NO_EXIST_PRODUCT));
+        productRepository.delete(product);
     }
 
-    @Override
-    public List<ProductResponseDto> getAllProducts() {
-        return productRepository.findAllWithOptionAndImage().stream()
-                .map(ProductVo::new)
-                .map(ProductVo::toDto)
-                .toList();
-    }
     @Override
     public ProductResponseDto getProduct(UUID productId) {
-        Product product = productRepository.findById(productId)
-                .orElseThrow(() -> new BaseException(BaseResponseStatus.NO_EXIST_PRODUCT));
-        return ProductResponseDto.builder()
-                .productId(product.getProductId())
-                .name(product.getName())
-                .productStatus(product.getProductStatus())
-                .build();
-    }
-    @Transactional
-    @Override
-    public void updateProduct(UUID productId, ProductCreateRequestDto productCreateRequestDto) {
-        Product product = productRepository.findById(productId)
-                .orElseThrow(() -> new BaseException(BaseResponseStatus.NO_EXIST_PRODUCT));
-
-        product.update(
-                productCreateRequestDto.getName(),
-                productCreateRequestDto.getProductStatus()
-        );
+        return ProductResponseDto.from(productRepository.findByProductId(productId)
+                .orElseThrow(() -> new BaseException(NO_EXIST_PRODUCT)));
     }
 
+    @Transactional(readOnly = true)
     @Override
-    public void deleteProduct(UUID productId) {
-        productRepository.deleteById(productId);
+    public List<ProductListResponseDto> getAllProducts() {
+        return productRepository.findAll().stream()
+                .map(product -> {
+                    ProductOption option = productOptionRepository.findFirstByProductId(product.getProductId())
+                            .orElseThrow(() -> new BaseException(NO_EXIST_OPTION));
+
+                    ProductImage image = productImageRepository.findFirstByProductId(product.getProductId())
+                            .orElseThrow(() -> new BaseException(NO_EXIST_IMAGE));
+
+                    return ProductListResponseDto.from(product, option, image);
+                })
+                .collect(Collectors.toList());
     }
 
-
-    @Override
+        @Override
     public ProductDetailResponseDto getProductDetail(UUID productId) {
-        ProductDetailProjection projection = productRepository
-                .findProductDetailByProductId(productId)
-                .orElseThrow(() -> new BaseException(BaseResponseStatus.NO_EXIST_PRODUCT_DETAIL));
-        return ProductDetailResponseDto.fromProjection(projection);
+        return ProductDetailResponseDto.from(productRepository.findByProductId(productId)
+                .orElseThrow(() -> new BaseException(NO_EXIST_PRODUCT)));
     }
 }
+

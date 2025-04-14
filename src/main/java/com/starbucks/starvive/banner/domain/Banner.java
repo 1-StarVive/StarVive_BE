@@ -1,5 +1,6 @@
 package com.starbucks.starvive.banner.domain;
 
+import com.starbucks.starvive.banner.dto.in.UpdateBannerImageRequestDto;
 import com.starbucks.starvive.common.domain.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -13,8 +14,6 @@ import java.util.UUID;
 @Entity
 @Getter
 @NoArgsConstructor
-@AllArgsConstructor
-@Builder
 public class Banner extends BaseEntity {
 
     @Id
@@ -47,11 +46,18 @@ public class Banner extends BaseEntity {
         this.activated = activated;
     }
 
-    public void update(String imageUrl, String alt, String link, LocalDate postedAt, boolean activated) {
-        this.imageBannerUrl = imageUrl;
-        this.imageBannerAlt = alt;
-        this.linkUrl = link;
-        this.postedAt = postedAt;
-        this.activated = activated;
+    public void updateImage(String newImageUrl) {
+        this.imageBannerUrl = newImageUrl;
+    }
+
+    public void updateInfo(UpdateBannerImageRequestDto updateBannerImageRequestDto) {
+        this.imageBannerAlt = updateBannerImageRequestDto.getImageBannerAlt();
+        this.linkUrl = updateBannerImageRequestDto.getLinkUrl();
+        this.postedAt = updateBannerImageRequestDto.getPostedAt();
+        this.activated = updateBannerImageRequestDto.isActivated();
+    }
+
+    public void softDelete() {
+        this.activated = false;
     }
 }

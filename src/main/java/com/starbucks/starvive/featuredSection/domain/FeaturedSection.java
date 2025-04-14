@@ -18,7 +18,10 @@ public class FeaturedSection {
     @Column(columnDefinition = "BINARY(16)", nullable = false)
     private UUID featuredSectionId;
 
+    @Column(nullable = false)
     private String name;
+
+    @Column(nullable = false)
     private boolean activated;
 
     public FeaturedSection(UUID featuredSectionId, String name, boolean activated) {
