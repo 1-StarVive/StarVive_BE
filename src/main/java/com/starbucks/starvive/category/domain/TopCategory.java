@@ -30,12 +30,21 @@ public class TopCategory extends BaseEntity {
 
     @Column(nullable = false)
     @ColumnDefault("false")
+    private String imageUrl;
+
+    @ColumnDefault("false")
+    private String imageAlt;
+
+    @ColumnDefault("false")
     private boolean deleted = false;
 
     @Builder
-    public TopCategory(UUID topCategoryId, String name, boolean deleted) {
+    public TopCategory(UUID topCategoryId, String name,
+                       String imageUrl, String imageAlt, boolean deleted) {
         this.topCategoryId = topCategoryId;
         this.name = name;
+        this.imageUrl = imageUrl;
+        this.imageAlt = imageAlt;
         this.deleted = deleted;
     }
 

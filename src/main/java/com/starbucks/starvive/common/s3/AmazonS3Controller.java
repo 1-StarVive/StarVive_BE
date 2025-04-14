@@ -1,13 +1,16 @@
 package com.starbucks.starvive.common.s3;
 
-import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
+
+import io.swagger.v3.oas.annotations.Operation;
+
 import java.util.List;
 
 @RequestMapping("/api/v1/images")
@@ -25,4 +28,5 @@ public class AmazonS3Controller {
         List<String> imageUrls = s3Uploader.uploadMultiple(images, "products");
         return ResponseEntity.ok(imageUrls);
     }
+}
 }

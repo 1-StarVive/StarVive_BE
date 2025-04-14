@@ -1,20 +1,22 @@
 package com.starbucks.starvive.promotion.application;
 
-import com.starbucks.starvive.promotion.dto.in.PromotionRequest;
-import com.starbucks.starvive.promotion.dto.out.PromotionTitleResponse;
+import com.starbucks.starvive.promotion.dto.in.DeletePromotionRequestDto;
+import com.starbucks.starvive.promotion.dto.in.PromotionRequestDto;
+import com.starbucks.starvive.promotion.dto.in.UpdatePromotionRequestDto;
+import com.starbucks.starvive.promotion.dto.out.ListPromotionResponseDto;
 
 import java.util.List;
 import java.util.UUID;
 
 public interface PromotionService {
 
-    void addPromotion(PromotionRequest promotionRequest);
+    void addPromotion(PromotionRequestDto promotionRequest);
 
-    List<PromotionTitleResponse> getProductsByPromotionId(UUID promotionId);
+    List<ListPromotionResponseDto> getProductsByPromotionId(UUID promotionId);
 
-    List<PromotionTitleResponse> findAllPromotions();
+    List<ListPromotionResponseDto> findAllPromotions();
 
-    void updatePromotion(UUID promotionId, PromotionRequest promotionRequest);
+    void updatePromotion(UpdatePromotionRequestDto updatePromotionRequestDto);
 
-    void deletePromotion(UUID promotionId);
+    void deletePromotion(DeletePromotionRequestDto deletePromotionRequestDto);
 }

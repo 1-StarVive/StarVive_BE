@@ -1,14 +1,14 @@
 package com.starbucks.starvive.promotion.domain;
 
 import com.starbucks.starvive.common.domain.BaseEntity;
-import com.starbucks.starvive.promotion.dto.in.PromotionRequest;
+import com.starbucks.starvive.promotion.dto.in.PromotionRequestDto;
+import com.starbucks.starvive.promotion.dto.in.UpdatePromotionRequestDto;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 import org.hibernate.annotations.ColumnDefault;
@@ -67,8 +67,10 @@ public class Promotion extends BaseEntity {
         this.deleted = deleted;
     }
 
-    public void update(PromotionRequest promotionRequest) {
-        this.title = promotionRequest.getTitle();
+    public void update(UpdatePromotionRequestDto updatePromotionRequestDto
+    ) {
+        if (title != null) this.title = title;
+        if (notice != null) this.notice = notice;
     }
 
     public void softDelete() {

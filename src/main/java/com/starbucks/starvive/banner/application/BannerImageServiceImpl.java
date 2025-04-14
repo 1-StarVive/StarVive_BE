@@ -21,7 +21,7 @@ import static com.starbucks.starvive.common.domain.BaseResponseStatus.*;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class BannerImageServiceImpl implements BannerImageService {
+public class BannerImageServiceImpl {
 
     private final BannerImageRepository bannerImageRepository;
     private final S3Uploader s3Uploader;
@@ -102,3 +102,4 @@ public class BannerImageServiceImpl implements BannerImageService {
                 .build();
     }
 }
+
