@@ -1,79 +1,60 @@
 package com.starbucks.starvive.product.presentation;
 
 import com.starbucks.starvive.product.application.ProductService;
-
-import com.starbucks.starvive.product.dto.in.ProductCreateRequestDto;
-import com.starbucks.starvive.product.dto.in.ProductImageCreateRequestDto;
-import com.starbucks.starvive.product.dto.in.ProductOptionCreateRequestDto;
-import com.starbucks.starvive.product.dto.out.ProductDetailResponseDto;
-import com.starbucks.starvive.product.dto.out.ProductResponseDto;
-
+import com.starbucks.starvive.product.dto.in.AddProductRequestDto;
+import com.starbucks.starvive.product.dto.in.DeleteProductRequestDto;
+import com.starbucks.starvive.product.dto.in.UpdateProductRequestDto;
+import com.starbucks.starvive.product.vo.*;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import java.util.List;
+import java.util.UUID;
 
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v1/product")
 @RestController
 @RequiredArgsConstructor
 public class ProductController {
 
     private final ProductService productService;
 
-//    @PostMapping("/product")
-//    public BaseResponseEntity<UUID> createProduct(
-//            @RequestBody ProductCreateRequestDto productCreateRequestDto
-//    ) {
-//        UUID productId = productService.createProduct(productCreateRequestDto);
-//        return BaseResponseEntity.ok(productId);
-//    }
-//
-//    @PostMapping("/product/option")
-//    public BaseResponseEntity<UUID> createOption(
-//            @RequestBody ProductOptionCreateRequestDto productOptionCreateRequestDto
-//    ) {
-//        UUID productOptionId = productService.createProductOption(productOptionCreateRequestDto);
-//        return BaseResponseEntity.ok(productOptionId);
-//    }
-//
-//    @PostMapping("/product/image")
-//    public BaseResponseEntity<UUID> createImage(
-//            @RequestBody ProductImageCreateRequestDto productImageCreateRequestDto
-//    ) {
-//        UUID productImageId = productService.createProductImage(productImageCreateRequestDto);
-//        return BaseResponseEntity.ok(productImageId);
-//    }
-//
-//    @GetMapping("/products")
-//    public BaseResponseEntity<List<ProductResponseDto>> getAllProducts() {
-//        List<ProductResponseDto> productList = productService.getAllProducts();
-//        return BaseResponseEntity.ok(productList);
-//    }
-//
-//    @GetMapping("/product/{productId}")
-//    public BaseResponseEntity<ProductResponseDto> getProduct(@PathVariable UUID productId) {
-//        ProductResponseDto product = productService.getProduct(productId);
-//        return BaseResponseEntity.ok(product);
-//    }
-//
-//    @PutMapping("/product/{productId}")
-//    public BaseResponseEntity<Void> updateProduct(
-//            @PathVariable UUID productId,
-//            @RequestBody ProductCreateRequestDto productCreateRequestDto
-//    ) {
-//        productService.updateProduct(productId, productCreateRequestDto);
-//        return BaseResponseEntity.ok();
-//    }
-//
-//    @DeleteMapping("/product/{productId}")
-//    public BaseResponseEntity<Void> deleteProduct(@PathVariable UUID productId) {
-//        productService.deleteProduct(productId);
-//        return BaseResponseEntity.ok();
-//    }
-//
-//    @GetMapping("/product/{productId}/detail")
-//    public BaseResponseEntity<ProductDetailResponseDto> getProductDetail(
-//            @PathVariable UUID productId
-//    ) {
-//        ProductDetailResponseDto productDetail = productService.getProductDetail(productId);
-//        return BaseResponseEntity.ok(productDetail);
-//    }
+    @Operation(summary = "상품 등록", description = "상품을 등록합니다.", tags = {"product-service"})
+    @PostMapping("/add")
+    public void addProduct(@RequestBody AddProductRequestVo addProductRequestVo) {
+        productService.addProduct(AddProductRequestDto.from(addProductRequestVo));
+    }
+
+
+    @Operation(summary = "상품 단건 조회", description = "상품 ID로 하나의 상품을 조회합니다.", tags = {"product-service"})
+    @GetMapping
+    public ProductResponseVo getProduct(@RequestParam("productId") UUID productId) {
+        return ProductResponseVo.from(productService.getProduct(productId));
+    }
+
+
+    @Operation(summary = "상품 전체 조회", description = "상품 목록을 조회합니다.", tags = {"product-service"})
+    @GetMapping("/all")
+    public List<ProductListResponseVo> getAllProducts() {
+        return productService.getAllProducts().stream()
+                .map(ProductListResponseVo::from)
+                .toList();
+    }
+
+    @Operation(summary = "상품 수정", description = "상품을 수정합니다.", tags = {"product-service"})
+    @PutMapping
+    public void updateProduct(@RequestBody UpdateProductRequestVo vo) {
+        productService.updateProduct(UpdateProductRequestDto.from(vo));
+    }
+
+    @Operation(summary = "상품 삭제", description = "상품을 삭제합니다.", tags = {"product-service"})
+    @DeleteMapping
+    public void deleteProduct(@RequestBody DeleteProductRequestVo deleteProductRequestVo) {
+        productService.deleteProduct(DeleteProductRequestDto.from(deleteProductRequestVo));
+    }
+
+    @Operation(summary = "상품 상세 조회", description = "상품 상세 정보를 조회합니다.", tags = {"product-service"})
+    @GetMapping("/detail")
+    public ProductDetailResponseVo getProductDetail(@RequestParam("productId") UUID productId) {
+        return ProductDetailResponseVo.from(productService.getProductDetail(productId));
+    }
 }

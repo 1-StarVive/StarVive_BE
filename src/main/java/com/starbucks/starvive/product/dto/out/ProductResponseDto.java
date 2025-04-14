@@ -1,27 +1,32 @@
 package com.starbucks.starvive.product.dto.out;
 
+import com.starbucks.starvive.product.domain.Product;
 import com.starbucks.starvive.product.domain.ProductStatus;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.UUID;
-
 @Getter
-@AllArgsConstructor
-@Builder
+@NoArgsConstructor
 public class ProductResponseDto {
 
     private UUID productId;
     private String name;
-    private String description;
-    private int baseDiscountRate;
-    private UUID productOptionId;
-    private int price;
-    private UUID productImageId;
-    private String imageThumbUrl;
-    private String imageThumbAlt;
     private ProductStatus productStatus;
 
+    @Builder
+    public ProductResponseDto(UUID productId, String name, ProductStatus productStatus) {
+        this.productId = productId;
+        this.name = name;
+        this.productStatus = productStatus;
+    }
+
+    public static ProductResponseDto from(Product product) {
+        return ProductResponseDto.builder()
+                .productId(product.getProductId())
+                .name(product.getName())
+                .productStatus(product.getProductStatus())
+                .build();
+    }
 }

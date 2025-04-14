@@ -59,11 +59,16 @@ public enum BaseResponseStatus {
     NO_EXIST_PRODUCT(HttpStatus.NOT_FOUND, false, 3001, "존재하지 않는 상품입니다"),
     NO_EXIST_OPTION(HttpStatus.NOT_FOUND, false, 3002, "존재하지 않는 옵션입니다"),
     NO_EXIST_CATEGORY(HttpStatus.NOT_FOUND, false, 3003, "존재하지 않는 카테고리입니다"),
+    NO_EXIST_IMAGE(HttpStatus.NOT_FOUND, false,3004, "존재하지 않는 이미지 입니다."),
+    NO_EXIST_SECTION(HttpStatus.NOT_FOUND, false, 3005, "존재하지 않는 섹션 입니다."),
+    NO_EXIST_CART(HttpStatus.NOT_FOUND, false, 3006, "장바구니에 상품이 존재하지 않습니다."),
 
     DUPLICATED_PRODUCT(HttpStatus.CONFLICT, false, 3004, "이미 등록된 상품입니다"),
     DUPLICATED_OPTION(HttpStatus.CONFLICT, false, 3005, "이미 등록된 옵션입니다"),
     DUPLICATED_CATEGORY(HttpStatus.CONFLICT, false, 3006, "이미 등록된 카테고리입니다"),
 
+    // wish
+    DUPLICATED_WISH(HttpStatus.CONFLICT, false,3007, "이미 찜된 상품입니다."),
 
     NO_EXIST_OPTIONS_IN_PRODUCT(HttpStatus.NOT_FOUND, false, 3007, "해당 상품에 옵션이 존재하지 않습니다"),
 
@@ -119,10 +124,10 @@ public enum BaseResponseStatus {
     S3_CONNECTION_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, false, 7005, "S3 연결에 실패했습니다."),
     S3_EMPTY_FILE_NAME(HttpStatus.BAD_REQUEST, false, 7006, "업로드할 파일명이 비어 있습니다."),
     S3_UPDATE_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, false, 7006, "S3 파일 수정에 실패했습니다."),
-
+    S3_EMPTY_FILE_LIST(HttpStatus.BAD_REQUEST, false, 7007, "업로드할 파일 목록이 비어 있습니다."),
     // 배너
 
-    BANNER_NOT_FOUND(HttpStatus.NOT_FOUND, false, 7007, "배너를 찾을 수 없습니다.");
+    NO_EXIST_BANNER(HttpStatus.NOT_FOUND, false, 7007, "배너를 찾을 수 없습니다.");
 
     private final HttpStatusCode httpStatusCode;
     private final boolean isSuccess;

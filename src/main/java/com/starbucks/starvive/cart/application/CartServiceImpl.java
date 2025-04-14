@@ -2,49 +2,80 @@ package com.starbucks.starvive.cart.application;
 
 import com.starbucks.starvive.cart.domain.Cart;
 import com.starbucks.starvive.cart.dto.in.AddCartItemRequestDto;
-import com.starbucks.starvive.cart.dto.in.UpdateQuantityRequestDto;
-import com.starbucks.starvive.cart.dto.out.CartItemResponseDto;
+import com.starbucks.starvive.cart.dto.in.DeleteCartItemRequestDto;
+import com.starbucks.starvive.cart.dto.in.UpdateCartItemRequestDto;
 import com.starbucks.starvive.cart.infrastructure.CartRepository;
-import com.starbucks.starvive.cart.vo.CartItemVo;
+import com.starbucks.starvive.cart.vo.CartItemResponseVo;
+import com.starbucks.starvive.common.exception.BaseException;
+import com.starbucks.starvive.image.domain.ProductImage;
+import com.starbucks.starvive.image.infrastructure.ProductImageRepository;
+import com.starbucks.starvive.product.domain.Product;
+import com.starbucks.starvive.product.domain.ProductOption;
+import com.starbucks.starvive.product.infrastructure.ProductOptionRepository;
+import com.starbucks.starvive.product.infrastructure.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
+import static com.starbucks.starvive.common.domain.BaseResponseStatus.*;
 
 @Service
 @RequiredArgsConstructor
 public class CartServiceImpl implements CartService {
 
     private final CartRepository cartRepository;
+    private final ProductRepository productRepository;
+    private final ProductOptionRepository productOptionRepository;
+    private final ProductImageRepository productImageRepository;
+
+    @Transactional(readOnly = true)
+    @Override
+    public List<CartItemResponseVo> getCartList(UUID userId) {
+        List<Cart> carts = cartRepository.findAllByUserId(userId);
+
+        return carts.stream().map(cart -> {
+            Product product = productRepository.findById(cart.getProductId())
+                    .orElseThrow(() -> new BaseException(NO_EXIST_PRODUCT));
+
+            ProductOption option = productOptionRepository.findById(cart.getProductOptionId())
+                    .orElseThrow(() -> new BaseException(NO_EXIST_OPTION));
+
+            ProductImage image = productImageRepository.findFirstByProductId(cart.getProductId())
+                    .orElseThrow(() -> new BaseException(NO_EXIST_IMAGE));
+
+            return CartItemResponseVo.from(cart, product, option, image);
+        }).collect(Collectors.toList());
+    }
 
     @Override
-    public void addItem(UUID userId, AddCartItemRequestDto addCartItemRequestDto) {
-        Cart cart = cartRepository.findByUserIdAndProductOptionId(userId, addCartItemRequestDto.getProductOptionId())
-                .orElse(new Cart(userId, addCartItemRequestDto.getProductOptionId(), 0));
-        cart.increaseQuantity(addCartItemRequestDto.getQuantity());
+    public void addItem(AddCartItemRequestDto addCartItemRequestDto) {
+        Cart cart = Cart.builder()
+                .userId(addCartItemRequestDto.getUserId())
+                .productId(addCartItemRequestDto.getProductId())
+                .productOptionId(addCartItemRequestDto.getProductOptionId())
+                .quantity(addCartItemRequestDto.getQuantity())
+                .checked(addCartItemRequestDto.isChecked())
+                .build();
         cartRepository.save(cart);
     }
 
     @Override
-    public List<CartItemResponseDto> getCartList(UUID userId) {
-        return cartRepository.findCartItemListByUserId(userId).stream()
-                .map(CartItemVo::new)
-                .map(CartItemVo::toResponseDto)
-                .toList();
+    public void updateItem(UpdateCartItemRequestDto updateCartItemRequestDto) {
+        Cart cart = cartRepository.findById(updateCartItemRequestDto.getCartId())
+                .orElseThrow(() -> new BaseException(NO_EXIST_CART));
+        cart.update(updateCartItemRequestDto.getProductOptionId(), updateCartItemRequestDto.getQuantity(), updateCartItemRequestDto.isChecked());
     }
 
     @Override
-    public void updateQuantity(UpdateQuantityRequestDto updateQuantityRequestDto) {
-        cartRepository.findById(updateQuantityRequestDto.getCartId()).ifPresent(c -> c.updateQuantity(updateQuantityRequestDto.getQuantity()));
-    }
-
-    @Override
-    public void  deleteItem(UUID cartId) {
-        cartRepository.deleteById(cartId);
+    public void deleteItem(DeleteCartItemRequestDto deleteCartItemRequestDto) {
+        cartRepository.deleteById(deleteCartItemRequestDto.getCartId());
     }
 
     @Override
     public void clearCart(UUID userId) {
-        cartRepository.deleteAll(cartRepository.findByUserId(userId));
+        cartRepository.deleteAllByUserId(userId);
     }
 }

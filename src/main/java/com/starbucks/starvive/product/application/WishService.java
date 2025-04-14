@@ -1,8 +1,9 @@
 package com.starbucks.starvive.product.application;
 
-import com.starbucks.starvive.product.dto.in.WishAddRequestDto;
-import com.starbucks.starvive.product.dto.out.WishProductResponseDto;
-import com.starbucks.starvive.product.dto.out.WishToggleResponseDto;
+import com.starbucks.starvive.product.dto.in.AddWishRequestDto;
+import com.starbucks.starvive.product.dto.in.DeleteWishRequestDto;
+import com.starbucks.starvive.product.dto.in.ToggleWishRequestDto;
+import com.starbucks.starvive.product.dto.out.WishListResponseDto;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.UUID;
@@ -10,9 +11,8 @@ import java.util.UUID;
 @Service
 public interface WishService {
 
-    void addWish(WishAddRequestDto wishAddRequestDto);
-    WishToggleResponseDto toggle(WishAddRequestDto wishAddRequestDto);
-    List<WishProductResponseDto> getList(UUID userId);
-    void deleteWish(UUID wishId);
-
+    void addWish(AddWishRequestDto addWishRequestDto);
+    void toggleWish(ToggleWishRequestDto toggleWishRequestDto);
+    void deleteWish(DeleteWishRequestDto deleteWishRequestDto);
+    List<WishListResponseDto> getWishList(UUID userId);
 }

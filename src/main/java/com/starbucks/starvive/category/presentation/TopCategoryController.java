@@ -9,7 +9,6 @@ import com.starbucks.starvive.category.vo.RegisterTopCategoryRequestVo;
 import com.starbucks.starvive.category.vo.UpdateTopCategoryRequestVo;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
