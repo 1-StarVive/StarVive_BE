@@ -1,13 +1,10 @@
 package com.starbucks.starvive.category.dto.in;
 
 import com.starbucks.starvive.category.domain.TopCategory;
-import com.starbucks.starvive.category.dto.out.RegisterTopCategoryResponseDto;
-import com.starbucks.starvive.category.vo.RegisterTopCategoryRequestVo;
+import com.starbucks.starvive.category.vo.RegisterTopCategoryVo;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.util.UUID;
 
 @Getter
 @NoArgsConstructor
@@ -35,7 +32,7 @@ public class RegisterTopCategoryRequestDto {
                 .build();
     }
 
-    public static RegisterTopCategoryRequestDto of(RegisterTopCategoryRequestVo registerTopCategoryRequestVo, String imageUrl) {
+    public static RegisterTopCategoryRequestDto of(RegisterTopCategoryVo registerTopCategoryRequestVo, String imageUrl) {
         return RegisterTopCategoryRequestDto.builder()
                 .name(registerTopCategoryRequestVo.getName())
                 .imageUrl(imageUrl)
