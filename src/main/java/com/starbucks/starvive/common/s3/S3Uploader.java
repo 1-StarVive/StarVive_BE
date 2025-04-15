@@ -1,6 +1,7 @@
 package com.starbucks.starvive.common.s3;
 
 import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.starbucks.starvive.common.exception.BaseException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -34,6 +35,7 @@ public class S3Uploader {
         String ext = getExtension(originalFilename);
         String fileName = folderName + "/" + UUID.randomUUID() + ext;
 
+
         try {
             amazonS3.putObject(bucket, fileName, multipartFile.getInputStream(), null);
         } catch (IOException e) {
@@ -52,13 +54,13 @@ public class S3Uploader {
         return uploadedUrls;
     }
 
-    public String updateFile(MultipartFile file, String key) {
+    private String updateFile(MultipartFile multipartFiles, String folderName) {
         try {
-            amazonS3.putObject(bucket, key, file.getInputStream(), null);
-            return amazonS3.getUrl(bucket, key).toString();
+            amazonS3.putObject(bucket, folderName, multipartFiles.getInputStream(), null);
         } catch (IOException e) {
             throw new BaseException(S3_UPLOAD_FAILED);
         }
+        return amazonS3.getUrl(bucket, folderName).toString();
     }
 
     public void deleteFile(String fileName) {

@@ -1,5 +1,7 @@
 package com.starbucks.starvive.banner.presentation;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.starbucks.starvive.banner.application.BannerImageService;
 import com.starbucks.starvive.banner.dto.in.AddBannerImageRequestDto;
 import com.starbucks.starvive.banner.dto.in.UpdateBannerImageRequestDto;
@@ -7,7 +9,6 @@ import com.starbucks.starvive.banner.dto.out.BannerImageResponseDto;
 import com.starbucks.starvive.banner.vo.AddBannerImageRequestVo;
 import com.starbucks.starvive.banner.vo.UpdateBannerImageRequestVo;
 import io.swagger.v3.oas.annotations.Operation;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -20,18 +21,30 @@ import java.util.UUID;
 public class BannerImageController {
 
     private final BannerImageService bannerImageService;
+    private final ObjectMapper objectMapper;
 
     @Operation(summary = "단일 배너 등록", description = "단일 배너 이미지를 등록합니다.", tags = {"banner-image"})
     @PostMapping("/single")
-    public UUID uploadBanner(@RequestPart("image") MultipartFile image,
-                             @RequestPart("addBannerImageRequestVo") AddBannerImageRequestVo addBannerImageRequestVo) {
+    public UUID uploadBanner(
+            @RequestPart("image") MultipartFile image,
+            @RequestPart("addBannerImageRequestVo") String json
+    ) throws JsonProcessingException {
+
+        // JSON 문자열 → VO 객체 수동 변환
+        AddBannerImageRequestVo addBannerImageRequestVo = objectMapper.readValue(json, AddBannerImageRequestVo.class);
+
         return bannerImageService.uploadBanner(image, AddBannerImageRequestDto.from(addBannerImageRequestVo));
     }
 
     @Operation(summary = "다중 배너 등록", description = "배너 이미지를 여러 개 등록합니다.", tags = {"banner-image"})
     @PostMapping("/multi")
-    public List<UUID> uploadMultipleBanners(@RequestPart List<MultipartFile> images,
-                                            @RequestPart AddBannerImageRequestVo addBannerImageRequestVo) {
+    public List<UUID> uploadMultipleBanners(
+            @RequestPart("images") List<MultipartFile> images,
+            @RequestPart("addBannerImageRequestVo") String json
+    ) throws JsonProcessingException {
+
+        AddBannerImageRequestVo addBannerImageRequestVo = objectMapper.readValue(json, AddBannerImageRequestVo.class);
+
         return bannerImageService.uploadMultipleBanners(images, AddBannerImageRequestDto.from(addBannerImageRequestVo));
     }
 

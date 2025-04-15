@@ -2,7 +2,7 @@ package com.starbucks.starvive.cart.application;
 
 import com.starbucks.starvive.cart.domain.Cart;
 import com.starbucks.starvive.cart.dto.in.AddCartItemRequestDto;
-import com.starbucks.starvive.cart.dto.in.DeleteCartItemRequestDto;
+import com.starbucks.starvive.cart.dto.in.DeleteSelectedCartItemsRequestDto;
 import com.starbucks.starvive.cart.dto.in.UpdateCartItemRequestDto;
 import com.starbucks.starvive.cart.infrastructure.CartRepository;
 import com.starbucks.starvive.cart.vo.CartItemResponseVo;
@@ -70,12 +70,16 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public void deleteItem(DeleteCartItemRequestDto deleteCartItemRequestDto) {
-        cartRepository.deleteById(deleteCartItemRequestDto.getCartId());
-    }
+    public void deleteSelectedItems(DeleteSelectedCartItemsRequestDto deleteSelectedCartItemsRequestDto) {
+        List<UUID> cartItemIds = deleteSelectedCartItemsRequestDto.getCartItemIds();
 
-    @Override
-    public void clearCart(UUID userId) {
-        cartRepository.deleteAllByUserId(userId);
+        // 장바구니 항목이 존재하는지 검증 (선택 사항)
+        cartItemIds.forEach(cartId -> {
+            if (!cartRepository.existsById(cartId)) {
+                throw new BaseException(NO_EXIST_CART);
+            }
+        });
+
+        cartRepository.deleteAllByIdInBatch(cartItemIds);
     }
 }
