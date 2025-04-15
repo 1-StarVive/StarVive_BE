@@ -8,5 +8,4 @@ import java.util.UUID;
 @Repository
 public interface BannerImageRepository extends JpaRepository<Banner, UUID> {
 
-
 }

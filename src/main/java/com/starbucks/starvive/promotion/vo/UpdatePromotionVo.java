@@ -10,7 +10,7 @@ import java.util.UUID;
 
 @Getter
 @NoArgsConstructor
-public class UpdatePromotionRequestVo {
+public class UpdatePromotionVo {
 
     private UUID promotionId;
 
@@ -29,10 +29,10 @@ public class UpdatePromotionRequestVo {
     private PromotionStatus promotionStatus;
 
     @Builder
-    public UpdatePromotionRequestVo(UUID promotionId, String title, String notice,
-                                    LocalDate promotionStartAt, LocalDate promotionEndAt,
-                                    Boolean mainExpose, String promotionDetailContent,
-                                    PromotionStatus promotionStatus) {
+    public UpdatePromotionVo(UUID promotionId, String title, String notice,
+                             LocalDate promotionStartAt, LocalDate promotionEndAt,
+                             Boolean mainExpose, String promotionDetailContent,
+                             PromotionStatus promotionStatus) {
         this.promotionId = promotionId;
         this.title = title;
         this.notice = notice;

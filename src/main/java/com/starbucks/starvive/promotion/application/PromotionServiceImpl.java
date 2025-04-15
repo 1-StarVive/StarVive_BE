@@ -3,7 +3,7 @@ package com.starbucks.starvive.promotion.application;
 import com.starbucks.starvive.common.exception.BaseException;
 import com.starbucks.starvive.promotion.domain.Promotion;
 import com.starbucks.starvive.promotion.dto.in.DeletePromotionRequestDto;
-import com.starbucks.starvive.promotion.dto.in.PromotionRequestDto;
+import com.starbucks.starvive.promotion.dto.in.RegisterPromotionRequestDto;
 import com.starbucks.starvive.promotion.dto.in.UpdatePromotionRequestDto;
 import com.starbucks.starvive.promotion.dto.out.ListPromotionResponseDto;
 import com.starbucks.starvive.promotion.infrastructure.PromotionRepository;
@@ -25,7 +25,7 @@ public class PromotionServiceImpl implements PromotionService {
     // 타이틀 중복 체크 x
     // 타이틀은 똑같아도 괜찮지만 진행할지 말지 .. ?
     @Override
-    public void addPromotion(PromotionRequestDto promotionRequest) {
+    public void addPromotion(RegisterPromotionRequestDto promotionRequest) {
         if (promotionRepository.findByTitle(promotionRequest.getTitle()).isPresent()) {
             throw new BaseException(DUPLICATED_PROMOTION);
         }

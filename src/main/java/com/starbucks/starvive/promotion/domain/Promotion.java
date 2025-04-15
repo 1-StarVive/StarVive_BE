@@ -1,7 +1,6 @@
 package com.starbucks.starvive.promotion.domain;
 
 import com.starbucks.starvive.common.domain.BaseEntity;
-import com.starbucks.starvive.promotion.dto.in.PromotionRequestDto;
 import com.starbucks.starvive.promotion.dto.in.UpdatePromotionRequestDto;
 import jakarta.persistence.*;
 import lombok.Builder;
@@ -69,8 +68,13 @@ public class Promotion extends BaseEntity {
 
     public void update(UpdatePromotionRequestDto updatePromotionRequestDto
     ) {
-        if (title != null) this.title = title;
-        if (notice != null) this.notice = notice;
+        if (updatePromotionRequestDto.getTitle() != null) this.title = updatePromotionRequestDto.getTitle();
+        if (updatePromotionRequestDto.getNotice() != null) this.notice = updatePromotionRequestDto.getNotice();
+        if (updatePromotionRequestDto.getPromotionStartAt() != null) this.promotionStartAt = updatePromotionRequestDto.getPromotionStartAt();
+        if (updatePromotionRequestDto.getPromotionEndAt() != null) this.promotionEndAt = updatePromotionRequestDto.getPromotionEndAt();
+        if (updatePromotionRequestDto.getMainExpose() != null) this.mainExpose = updatePromotionRequestDto.getMainExpose();
+        if (updatePromotionRequestDto.getPromotionDetailContent() != null) this.promotionDetailContent = updatePromotionRequestDto.getPromotionDetailContent();
+        if (updatePromotionRequestDto.getPromotionStatus() != null) this.promotionStatus = updatePromotionRequestDto.getPromotionStatus();
     }
 
     public void softDelete() {

@@ -7,7 +7,7 @@ import com.starbucks.starvive.product.domain.QProduct;
 import com.starbucks.starvive.product.domain.QProductOption;
 import com.starbucks.starvive.promotion.domain.QPromotion;
 import com.starbucks.starvive.promotion.domain.QPromotionProduct;
-import com.starbucks.starvive.promotion.dto.out.PromotionProductResponse;
+import com.starbucks.starvive.promotion.dto.out.PromotionProductResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -21,7 +21,7 @@ public class PromotionProductCustomImpl implements PromotionProductCustomReposit
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public List<PromotionProductResponse> findAllPromotionProducts(UUID promotionId) {
+    public List<PromotionProductResponseDto> findAllPromotionProducts(UUID promotionId) {
 
         QPromotionProduct promotionProduct = QPromotionProduct.promotionProduct;
         QPromotion promotion = QPromotion.promotion;
@@ -30,7 +30,7 @@ public class PromotionProductCustomImpl implements PromotionProductCustomReposit
         QProductOption productOption = QProductOption.productOption;
 
         return jpaQueryFactory.select(Projections.constructor(
-                        PromotionProductResponse.class,
+                        PromotionProductResponseDto.class,
                         product.productId,
                         product.name,
                         productImage.imageThumbUrl,

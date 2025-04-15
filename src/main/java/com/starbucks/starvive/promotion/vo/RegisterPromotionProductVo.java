@@ -9,18 +9,14 @@ import java.util.UUID;
 
 @Getter
 @NoArgsConstructor
-public class PromotionProductVo {
-
-    private UUID promotionProductId;
+public class RegisterPromotionProductVo {
 
     private UUID promotionId;
 
     private List<UUID> productIds;
 
     @Builder
-    public PromotionProductVo(UUID promotionProductId, UUID promotionId,
-                              List<UUID> productIds) {
-        this.promotionProductId = promotionProductId;
+    public RegisterPromotionProductVo(UUID promotionId, List<UUID> productIds) {
         this.promotionId = promotionId;
         this.productIds = productIds;
     }

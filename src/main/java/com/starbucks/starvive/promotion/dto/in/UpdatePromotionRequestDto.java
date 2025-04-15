@@ -1,7 +1,7 @@
 package com.starbucks.starvive.promotion.dto.in;
 
 import com.starbucks.starvive.promotion.domain.PromotionStatus;
-import com.starbucks.starvive.promotion.vo.UpdatePromotionRequestVo;
+import com.starbucks.starvive.promotion.vo.UpdatePromotionVo;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -44,7 +44,7 @@ public class UpdatePromotionRequestDto {
         this.promotionStatus = promotionStatus;
     }
 
-    public static UpdatePromotionRequestDto from(UpdatePromotionRequestVo updatePromotionRequestVo) {
+    public static UpdatePromotionRequestDto from(UpdatePromotionVo updatePromotionRequestVo) {
         return UpdatePromotionRequestDto.builder()
                 .promotionId(updatePromotionRequestVo.getPromotionId())
                 .title(updatePromotionRequestVo.getTitle())

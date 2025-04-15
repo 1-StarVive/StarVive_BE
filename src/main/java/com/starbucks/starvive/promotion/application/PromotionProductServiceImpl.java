@@ -1,8 +1,9 @@
 package com.starbucks.starvive.promotion.application;
 
 import com.starbucks.starvive.promotion.domain.PromotionProduct;
-import com.starbucks.starvive.promotion.dto.in.PromotionWithProductRequest;
-import com.starbucks.starvive.promotion.dto.out.PromotionProductResponse;
+import com.starbucks.starvive.promotion.dto.in.RegisterPromotionProductRequestDto;
+import com.starbucks.starvive.promotion.dto.in.UpdatePromotionProductRequestDto;
+import com.starbucks.starvive.promotion.dto.out.PromotionProductResponseDto;
 import com.starbucks.starvive.promotion.infrastructure.PromotionProductCustomRepository;
 import com.starbucks.starvive.promotion.infrastructure.PromotionProductRepository;
 
@@ -23,7 +24,7 @@ public class PromotionProductServiceImpl implements PromotionProductService {
 
     @Transactional
     @Override
-    public void addPromotionProduct(PromotionWithProductRequest promotionWithProductRequest) {
+    public void addPromotionProduct(RegisterPromotionProductRequestDto promotionWithProductRequest) {
         UUID promotionId = promotionWithProductRequest.getPromotionId();
 
         List<PromotionProduct> promotionProducts = promotionWithProductRequest.getProductIds().stream()
@@ -37,24 +38,24 @@ public class PromotionProductServiceImpl implements PromotionProductService {
     }
 
     @Override
-    public List<PromotionProductResponse> getPromotionProducts(UUID promotionId) {
+    public List<PromotionProductResponseDto> getPromotionProducts(UUID promotionId) {
         return promotionProductCustomRepository.findAllPromotionProducts(promotionId);
     }
 
-    @Transactional
-    @Override
-    public void updatePromotion(PromotionWithProductRequest promotionWithProductRequest) {
-
-        promotionProductRepository.deleteByPromotionId(promotionWithProductRequest.getPromotionId());
-
-        // 2. 새롭게 받은 productIds 기준으로 다시 등록
-        List<PromotionProduct> newProducts = promotionWithProductRequest.getProductIds().stream()
-                .map(productId -> PromotionProduct.builder()
-                        .promotionId(promotionWithProductRequest.getPromotionId())
-                        .productId(productId)
-                        .build())
-                .toList();
-
-        promotionProductRepository.saveAll(newProducts);
-    }
+//    @Transactional
+//    @Override
+//    public void updatePromotion(UpdatePromotionProductRequestDto updatePromotionProductRequestDto) {
+//
+//        promotionProductRepository.deleteByPromotionId(updatePromotionProductRequestDto.getPromotionId());
+//
+//        // 2. 새롭게 받은 productIds 기준으로 다시 등록
+//        List<PromotionProduct> newProducts = updatePromotionProductRequestDto.getProductIds().stream()
+//                .map(productId -> PromotionProduct.builder()
+//                        .promotionId(updatePromotionProductRequestDto.getPromotionId())
+//                        .productId(productId)
+//                        .build())
+//                .toList();
+//
+//        promotionProductRepository.saveAll(newProducts);
+//    }
 }

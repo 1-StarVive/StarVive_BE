@@ -2,11 +2,12 @@ package com.starbucks.starvive.promotion.presentation;
 
 import com.starbucks.starvive.promotion.application.PromotionService;
 import com.starbucks.starvive.promotion.dto.in.DeletePromotionRequestDto;
-import com.starbucks.starvive.promotion.dto.in.PromotionRequestDto;
+import com.starbucks.starvive.promotion.dto.in.RegisterPromotionRequestDto;
 import com.starbucks.starvive.promotion.dto.in.UpdatePromotionRequestDto;
 import com.starbucks.starvive.promotion.dto.out.ListPromotionResponseDto;
-import com.starbucks.starvive.promotion.vo.DeletePromotionRequestVo;
-import com.starbucks.starvive.promotion.vo.UpdatePromotionRequestVo;
+import com.starbucks.starvive.promotion.vo.DeletePromotionVo;
+import com.starbucks.starvive.promotion.vo.RegisterPromotionVo;
+import com.starbucks.starvive.promotion.vo.UpdatePromotionVo;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -26,9 +27,9 @@ public class PromotionController {
             tags = {"promotion-service"})
     @PostMapping("/add")
     public void addPromotion(
-            @RequestBody PromotionRequestDto promotionRequest
+            @RequestBody RegisterPromotionVo registerPromotionVo
     ) {
-        promotionService.addPromotion(promotionRequest);
+        promotionService.addPromotion(RegisterPromotionRequestDto.fromPromotion(registerPromotionVo));
     }
 
     @Operation(summary = "기획전 ID를 통해 하나만 조회",
@@ -54,7 +55,7 @@ public class PromotionController {
             tags = {"promotion-service"})
     @PutMapping
     public void updatePromotion(
-            @RequestBody UpdatePromotionRequestVo updatePromotionRequestVo
+            @RequestBody UpdatePromotionVo updatePromotionRequestVo
             ) {
         promotionService.updatePromotion(UpdatePromotionRequestDto.from(updatePromotionRequestVo));
     }
@@ -64,7 +65,7 @@ public class PromotionController {
             tags = {"promotion-service"})
     @DeleteMapping
     public void deletePromotion(
-            @RequestBody DeletePromotionRequestVo deletePromotionRequestVo
+            @RequestBody DeletePromotionVo deletePromotionRequestVo
     ) {
         promotionService.deletePromotion(DeletePromotionRequestDto.from(deletePromotionRequestVo));
     }

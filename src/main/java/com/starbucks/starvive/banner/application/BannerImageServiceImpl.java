@@ -21,7 +21,7 @@ import static com.starbucks.starvive.common.domain.BaseResponseStatus.*;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class BannerImageServiceImpl {
+public class BannerImageServiceImpl implements BannerImageService {
 
     private final BannerImageRepository bannerImageRepository;
     private final S3Uploader s3Uploader;
@@ -29,13 +29,13 @@ public class BannerImageServiceImpl {
     private static final String FOLDER_NAME = "banner";
 
     @Override
-    public UUID uploadBanner(MultipartFile image, AddBannerImageRequestDto dto) {
+    public UUID uploadBanner(MultipartFile image, AddBannerImageRequestDto addBannerImageRequestDto) {
         if (image == null || image.isEmpty()) {
             throw new BaseException(S3_EMPTY_FILE_NAME);
         }
 
         String imageUrl = s3Uploader.upload(image, FOLDER_NAME);
-        Banner banner = buildBanner(imageUrl, dto);
+        Banner banner = buildBanner(imageUrl, addBannerImageRequestDto);
 
         return bannerImageRepository.save(banner).getBannerId();
     }

@@ -1,4 +1,4 @@
-package com.starbucks.starvive.promotion.dto.out;
+package com.starbucks.starvive.promotion.vo;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -8,7 +8,7 @@ import java.util.UUID;
 
 @Getter
 @NoArgsConstructor
-public class PromotionProductResponse {
+public class LIstPromotionProductVo {
 
     private UUID productId;
 
@@ -23,10 +23,9 @@ public class PromotionProductResponse {
     private int baseDiscountRate;
 
     @Builder
-    public PromotionProductResponse (UUID productId,
-                                    String name, String imageThumbUrl,
-                                    String imageThumbAlt, int price,
-                                    int baseDiscountRate) {
+    public LIstPromotionProductVo(UUID productId, String name,
+                                  String imageThumbUrl, String imageThumbAlt,
+                                  int price, int baseDiscountRate) {
         this.productId = productId;
         this.name = name;
         this.imageThumbUrl = imageThumbUrl;

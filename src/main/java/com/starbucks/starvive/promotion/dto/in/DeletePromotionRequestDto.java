@@ -1,6 +1,6 @@
 package com.starbucks.starvive.promotion.dto.in;
 
-import com.starbucks.starvive.promotion.vo.DeletePromotionRequestVo;
+import com.starbucks.starvive.promotion.vo.DeletePromotionVo;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,7 +18,7 @@ public class DeletePromotionRequestDto {
         this.promotionId = promotionId;
     }
 
-    public static DeletePromotionRequestDto from(DeletePromotionRequestVo deletePromotionRequestVo) {
+    public static DeletePromotionRequestDto from(DeletePromotionVo deletePromotionRequestVo) {
         return DeletePromotionRequestDto.builder()
                 .promotionId(deletePromotionRequestVo.getPromotionId())
                 .build();

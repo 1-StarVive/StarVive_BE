@@ -1,20 +1,27 @@
 package com.starbucks.starvive.promotion.dto.in;
 
 import com.starbucks.starvive.promotion.domain.PromotionProduct;
-import com.starbucks.starvive.promotion.vo.PromotionProductVo;
+import com.starbucks.starvive.promotion.vo.RegisterPromotionProductVo;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 import java.util.UUID;
 
 @Getter
-@Builder
-public class PromotionWithProductRequest {
+@NoArgsConstructor
+public class RegisterPromotionProductRequestDto {
 
     private UUID promotionId;
 
     private List<UUID> productIds;
+
+    @Builder
+    public RegisterPromotionProductRequestDto(UUID promotionId, List<UUID> productIds) {
+        this.promotionId = promotionId;
+        this.productIds = productIds;
+    }
 
     public PromotionProduct toPromotion() {
         return PromotionProduct.builder()
@@ -22,8 +29,8 @@ public class PromotionWithProductRequest {
                 .build();
     }
 
-    public static PromotionWithProductRequest from(PromotionProductVo promotionProductVo) {
-        return PromotionWithProductRequest.builder()
+    public static RegisterPromotionProductRequestDto from(RegisterPromotionProductVo promotionProductVo) {
+        return RegisterPromotionProductRequestDto.builder()
                 .promotionId(promotionProductVo.getPromotionId())
                 .productIds(promotionProductVo.getProductIds())
                 .build();
