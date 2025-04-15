@@ -22,16 +22,16 @@ public class ProductCategory extends BaseEntity {
     @Column(updatable = false, nullable = false, columnDefinition = "BINARY(16)")
     private UUID productCategoryId;
 
-    @Column(nullable = false, columnDefinition = "BINARY(16)")
+    @Column(columnDefinition = "BINARY(16)")
     private UUID productId;
 
-    @Column(nullable = false, columnDefinition = "BINARY(16)")
+    @Column(columnDefinition = "BINARY(16)")
     private UUID topCategoryId;
 
-    @Column(nullable = false, columnDefinition = "BINARY(16)")
+    @Column(columnDefinition = "BINARY(16)")
     private UUID middleCategoryId;
 
-    @Column(nullable = false, columnDefinition = "BINARY(16)")
+    @Column(columnDefinition = "BINARY(16)")
     private UUID bottomCategoryId;
 
     @Builder

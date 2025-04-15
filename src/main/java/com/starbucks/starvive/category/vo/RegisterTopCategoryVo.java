@@ -6,15 +6,15 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class RegisterTopCategoryRequestVo {
+public class RegisterTopCategoryVo {
 
     private String name;
 
     private String imageAlt;
 
     @Builder
-    public RegisterTopCategoryRequestVo(String name,
-                                        String imageAlt) {
+    public RegisterTopCategoryVo(String name,
+                                 String imageAlt) {
         this.name = name;
         this.imageAlt = imageAlt;
     }

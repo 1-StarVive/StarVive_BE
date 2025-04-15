@@ -3,11 +3,10 @@ package com.starbucks.starvive.category.application;
 import com.starbucks.starvive.category.domain.TopCategory;
 import com.starbucks.starvive.category.dto.in.DeleteTopCategoryRequestDto;
 import com.starbucks.starvive.category.dto.in.RegisterTopCategoryRequestDto;
-import com.starbucks.starvive.category.dto.in.TopCategoryRequestDto;
 import com.starbucks.starvive.category.dto.in.UpdateTopCategoryRequestDto;
 import com.starbucks.starvive.category.dto.out.TopCategoryResponseDto;
 import com.starbucks.starvive.category.infrastructure.TopCategoryRepository;
-import com.starbucks.starvive.category.vo.RegisterTopCategoryRequestVo;
+import com.starbucks.starvive.category.vo.RegisterTopCategoryVo;
 import com.starbucks.starvive.common.exception.BaseException;
 import com.starbucks.starvive.common.s3.S3Uploader;
 import jakarta.transaction.Transactional;
@@ -29,14 +28,14 @@ public class TopCategoryServiceImpl implements TopCategoryService {
 
     @Override
     @Transactional
-    public void addTopCategory(RegisterTopCategoryRequestVo registerTopCategoryRequestVo, MultipartFile multipartFile) {
-        if (topCategoryRepository.findByNameAndDeletedFalse(registerTopCategoryRequestVo.getName()).isPresent()) {
+    public void addTopCategory(RegisterTopCategoryVo registerTopCategoryVo, MultipartFile multipartFile) {
+        if (topCategoryRepository.findByNameAndDeletedFalse(registerTopCategoryVo.getName()).isPresent()) {
             throw new BaseException(DUPLICATED_OPTION);
         }
 
         String imageUrl = s3Uploader.upload(multipartFile, "top-categories");
 
-        RegisterTopCategoryRequestDto registerTopCategoryRequestDto = RegisterTopCategoryRequestDto.of(registerTopCategoryRequestVo, imageUrl);
+        RegisterTopCategoryRequestDto registerTopCategoryRequestDto = RegisterTopCategoryRequestDto.of(registerTopCategoryVo, imageUrl);
 
         topCategoryRepository.save(registerTopCategoryRequestDto.toTopCategory());
     }
