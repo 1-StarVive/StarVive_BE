@@ -14,7 +14,7 @@ import java.util.UUID;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class productRequiredInfo {
+public class ProductRequiredInfo {
 
     @Id
     @UuidGenerator
