@@ -39,8 +39,8 @@ public class FeaturedSectionController {
 
     @Operation(summary = "추천 섹션 수정", description = "추천 섹션을 수정합니다.", tags = {"featured-section"})
     @PutMapping
-    public void updateSection(@RequestBody UpdateFeaturedSectionRequestVo vo) {
-        featuredSectionService.updateSection(UpdateFeaturedSectionRequestDto.from(vo));
+    public void updateSection(@RequestBody UpdateFeaturedSectionRequestVo updateFeaturedSectionRequestVo) {
+        featuredSectionService.updateSection(UpdateFeaturedSectionRequestDto.from(updateFeaturedSectionRequestVo));
     }
 
     @Operation(summary = "추천 섹션 삭제", description = "추천 섹션을 삭제합니다.", tags = {"featured-section"})
@@ -51,19 +51,19 @@ public class FeaturedSectionController {
 
     @Operation(summary = "추천 섹션 상품 리스트 조회", description = "추천 섹션 ID 리스트로 섹션별 상품을 조회합니다.", tags = {"featured-section"})
     @PostMapping("/products")
-    public List<FeaturedSectionProductGroupResponseDto> getProductsBySection(@RequestBody FeaturedSectionProductRequestVo vo) {
-        return featuredSectionService.getProductsBySections(vo.getFeaturedSectionsIds());
+    public List<FeaturedSectionProductGroupResponseDto> getProductsBySection(@RequestBody FeaturedSectionProductRequestVo featuredSectionProductRequestVo) {
+        return featuredSectionService.getProductsBySections(featuredSectionProductRequestVo.getFeaturedSectionsIds());
     }
 
     @Operation(summary = "추천 섹션에 상품 단건 등록", description = "추천 섹션에 하나의 상품을 등록합니다.", tags = {"featured-section"})
     @PostMapping("/register-product")
-    public void registerSingleProduct(@RequestBody AddFeaturedSectionSingleProductRequestVo vo) {
-        featuredSectionService.registerSingleProduct(AddFeaturedSectionSingleProductRequestDto.from(vo));
+    public void registerSingleProduct(@RequestBody AddFeaturedSectionSingleProductRequestVo addFeaturedSectionSingleProductRequestVo) {
+        featuredSectionService.registerSingleProduct(AddFeaturedSectionSingleProductRequestDto.from(addFeaturedSectionSingleProductRequestVo));
     }
 
     @Operation(summary = "추천 섹션에 상품 일괄 등록", description = "추천 섹션에 여러 상품을 한 번에 등록합니다.", tags = {"featured-section"})
     @PostMapping("/register-products")
-    public void registerMultipleProducts(@RequestBody AddFeaturedSectionProductRequestVo vo) {
-        featuredSectionService.registerProducts(AddFeaturedSectionProductRequestDto.from(vo));
+    public void registerMultipleProducts(@RequestBody AddFeaturedSectionProductRequestVo addFeaturedSectionProductRequestVo) {
+        featuredSectionService.registerProducts(AddFeaturedSectionProductRequestDto.from(addFeaturedSectionProductRequestVo));
     }
 }

@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
-
 import static com.starbucks.starvive.common.domain.BaseResponseStatus.*;
 
 @Slf4j
@@ -25,7 +24,6 @@ public class BannerImageServiceImpl implements BannerImageService {
 
     private final BannerImageRepository bannerImageRepository;
     private final S3Uploader s3Uploader;
-
     private static final String FOLDER_NAME = "banner";
 
     @Override
@@ -41,7 +39,7 @@ public class BannerImageServiceImpl implements BannerImageService {
     }
 
     @Override
-    public List<UUID> uploadMultipleBanners(List<MultipartFile> images, AddBannerImageRequestDto dto) {
+    public List<UUID> uploadMultipleBanners(List<MultipartFile> images, AddBannerImageRequestDto addBannerImageRequestDto) {
         if (images == null || images.isEmpty()) {
             throw new BaseException(S3_EMPTY_FILE_LIST);
         }
@@ -50,7 +48,7 @@ public class BannerImageServiceImpl implements BannerImageService {
         List<UUID> savedIds = new ArrayList<>();
 
         for (String imageUrl : imageUrls) {
-            Banner banner = buildBanner(imageUrl, dto);
+            Banner banner = buildBanner(imageUrl, addBannerImageRequestDto);
             savedIds.add(bannerImageRepository.save(banner).getBannerId());
         }
 
@@ -66,17 +64,18 @@ public class BannerImageServiceImpl implements BannerImageService {
     }
 
     @Override
-    public void updateBannerImage(UUID bannerId, MultipartFile image, UpdateBannerImageRequestDto dto) {
+    public void updateBannerImage(UUID bannerId, MultipartFile image, UpdateBannerImageRequestDto updateBannerImageRequestDto) {
         Banner banner = bannerImageRepository.findById(bannerId)
                 .orElseThrow(() -> new BaseException(NO_EXIST_BANNER));
 
         if (image != null && !image.isEmpty()) {
+
             log.info("Updating banner image for bannerId: {}", bannerId);
             String updatedUrl = s3Uploader.upload(image, FOLDER_NAME);
             banner.updateImage(updatedUrl);
         }
 
-        banner.updateInfo(dto);
+        banner.updateInfo(updateBannerImageRequestDto);
     }
 
     @Override
@@ -92,13 +91,13 @@ public class BannerImageServiceImpl implements BannerImageService {
     }
 
     // ✅ 공통 Banner 빌더
-    private Banner buildBanner(String imageUrl, AddBannerImageRequestDto dto) {
+    private Banner buildBanner(String imageUrl, AddBannerImageRequestDto addBannerImageRequestDto) {
         return Banner.builder()
                 .imageBannerUrl(imageUrl)
-                .imageBannerAlt(dto.getImageBannerAlt())
-                .linkUrl(dto.getLinkUrl())
-                .postedAt(dto.getPostedAt())
-                .activated(dto.isActivated())
+                .imageBannerAlt(addBannerImageRequestDto.getImageBannerAlt())
+                .linkUrl(addBannerImageRequestDto.getLinkUrl())
+                .postedAt(addBannerImageRequestDto.getPostedAt())
+                .activated(addBannerImageRequestDto.isActivated())
                 .build();
     }
 }

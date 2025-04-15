@@ -1,5 +1,6 @@
 package com.starbucks.starvive.banner.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.starbucks.starvive.banner.dto.in.UpdateBannerImageRequestDto;
 import com.starbucks.starvive.common.domain.BaseEntity;
 import jakarta.persistence.*;
@@ -30,6 +31,7 @@ public class Banner extends BaseEntity {
     @Column(nullable = false)
     private String linkUrl; // 이동 주소
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     @Column(nullable = false)
     private LocalDate postedAt; // 배너 게시일
 

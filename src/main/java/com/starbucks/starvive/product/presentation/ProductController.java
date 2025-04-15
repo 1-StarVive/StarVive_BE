@@ -42,8 +42,8 @@ public class ProductController {
 
     @Operation(summary = "상품 수정", description = "상품을 수정합니다.", tags = {"product-service"})
     @PutMapping
-    public void updateProduct(@RequestBody UpdateProductRequestVo vo) {
-        productService.updateProduct(UpdateProductRequestDto.from(vo));
+    public void updateProduct(@RequestBody UpdateProductRequestVo updateProductRequestVo) {
+        productService.updateProduct(UpdateProductRequestDto.from(updateProductRequestVo));
     }
 
     @Operation(summary = "상품 삭제", description = "상품을 삭제합니다.", tags = {"product-service"})
