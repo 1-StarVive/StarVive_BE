@@ -16,4 +16,7 @@ public interface ShippingAddressService {
     void deleteShippingAddress(DeleteShippingAddressRequestDto deleteShippingAddressRequestDto);
 
     void updateShippingAddress(UUID shippingAddressId, UpdateShippingAddressDto updateShippingAddressDto);
+
+    //void setDefaultShippingAddress(UUID shippingAddressId, UserDetails userDetails);
+
 }

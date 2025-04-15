@@ -26,7 +26,7 @@ import org.springframework.http.HttpStatus;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/api/v1/users")
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
@@ -69,7 +69,7 @@ public class UserController {
         Optional<String> newAccessToken = userService.refreshAccessToken(requestRefreshToken);
 
         return newAccessToken
-            .map(token -> ResponseEntity.ok(new RefreshResponse(token)))
+            .map(token -> ResponseEntity.ok(new RefreshResponse(token, 3600)))
             .orElseThrow(() -> new TokenRefreshException(requestRefreshToken, "Refresh token is not in database!"));
     }
 
@@ -84,9 +84,10 @@ public class UserController {
     @Getter
     private static class RefreshResponse {
         private String accessToken;
-        
-        public RefreshResponse(String accessToken) {
+        private int expiresIn;
+        public RefreshResponse(String accessToken, int accessTokenExpirationTime) {
             this.accessToken = accessToken;
+            this.expiresIn = accessTokenExpirationTime;
         }
     }
 } 

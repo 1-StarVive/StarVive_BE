@@ -1,11 +1,21 @@
 package com.starbucks.starvive.product.application;
 
-import com.starbucks.starvive.common.utils.CursorPage;
-import com.starbucks.starvive.product.dto.in.FilterProductListRequest;
-import com.starbucks.starvive.product.dto.out.ProductListResponse;
+import com.starbucks.starvive.product.dto.in.AddProductRequestDto;
+import com.starbucks.starvive.product.dto.in.DeleteProductRequestDto;
+import com.starbucks.starvive.product.dto.in.UpdateProductRequestDto;
+import com.starbucks.starvive.product.dto.out.ProductDetailResponseDto;
+import com.starbucks.starvive.product.dto.out.ProductListResponseDto;
+import com.starbucks.starvive.product.dto.out.ProductResponseDto;
+import java.util.List;
+import java.util.UUID;
 
 public interface ProductService {
 
-    CursorPage<ProductListResponse> findFilteredProducts(FilterProductListRequest request);
+    void addProduct(AddProductRequestDto addProductRequestDto);
+    void updateProduct(UpdateProductRequestDto updateProductRequestDto);
+    void deleteProduct(DeleteProductRequestDto deleteProductRequestDto);
+    ProductResponseDto getProduct(UUID productId);
+    List<ProductListResponseDto> getAllProducts();
+    ProductDetailResponseDto getProductDetail(UUID productId);
 
 }

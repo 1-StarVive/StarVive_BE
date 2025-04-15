@@ -48,50 +48,50 @@ public class SecurityConfig {
     @Bean
     public AuthenticationEntryPoint unauthorizedEntryPoint() {
         return (request, response, authException) ->
-            response.sendError(HttpStatus.UNAUTHORIZED.value(), "Unauthorized");
+                response.sendError(HttpStatus.UNAUTHORIZED.value(), "Unauthorized");
     }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            .csrf(AbstractHttpConfigurer::disable)
-            .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-            .sessionManagement((sessionManagement) -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-            .authorizeHttpRequests(auth -> auth
-                .requestMatchers(
-                    "/api/users/signin",
-                    "/api/users/signup",
-                    "/api/users/refresh",
-                    "/login/oauth2/code/**", 
-                    "/oauth2/**", 
-                    "/swagger-ui/**", 
-                    "/v3/api-docs/**", 
-                    "/error",
-                    "/api/v1/**",
-                    "/api/v1/auth/**", 
-                    "/api/v1/size/**", 
-                    "/api/v1/color/**", 
-                    "/api/v1/products/**", 
-                    "/api/v1/category/**", 
-                    "/api/v1/vendor/**" ,
-                    "/api/v1/topCategories/**",
-                    "/api/v1/middleCategories/**",
-                    "/api/v1/bottomCategories/**"
-                ).permitAll()
-                .requestMatchers(HttpMethod.GET, "/api/v1/**").permitAll()
-                .requestMatchers("/api/users/signout").authenticated()
-                .anyRequest().authenticated()
-            )
-            .oauth2Login(oauth2 -> oauth2
-                .userInfoEndpoint(userInfo -> userInfo
-                    .userService(customOAuth2UserService)
+                .csrf(AbstractHttpConfigurer::disable)
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                .sessionManagement((sessionManagement) -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(
+                                "/api/users/signin",
+                                "/api/users/signup",
+                                "/api/users/refresh",
+                                "/login/oauth2/code/**",
+                                "/oauth2/**",
+                                "/swagger-ui/**",
+                                "/v3/api-docs/**",
+                                "/error",
+                                "/api/v1/**",
+                                "/api/v1/auth/**",
+                                "/api/v1/size/**",
+                                "/api/v1/color/**",
+                                "/api/v1/products/**",
+                                "/api/v1/category/**",
+                                "/api/v1/vendor/**" ,
+                                "/api/v1/topCategories/**",
+                                "/api/v1/middleCategories/**",
+                                "/api/v1/bottomCategories/**"
+                        ).permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/**").permitAll()
+                        .requestMatchers("/api/users/signout").authenticated()
+                        .anyRequest().authenticated()
                 )
-                .successHandler(oAuth2AuthenticationSuccessHandler)
-            )
-            .authenticationProvider(daoAuthenticationProvider)
-            .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-            .exceptionHandling(exceptions -> exceptions.authenticationEntryPoint(unauthorizedEntryPoint())
-            );
+                .oauth2Login(oauth2 -> oauth2
+                        .userInfoEndpoint(userInfo -> userInfo
+                                .userService(customOAuth2UserService)
+                        )
+                        .successHandler(oAuth2AuthenticationSuccessHandler)
+                )
+                .authenticationProvider(daoAuthenticationProvider)
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                .exceptionHandling(exceptions -> exceptions.authenticationEntryPoint(unauthorizedEntryPoint())
+                );
         return http.build();
     }
 }

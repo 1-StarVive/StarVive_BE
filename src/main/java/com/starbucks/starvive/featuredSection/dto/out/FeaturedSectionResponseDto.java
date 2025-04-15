@@ -1,17 +1,22 @@
 package com.starbucks.starvive.featuredSection.dto.out;
 
-import com.starbucks.starvive.featuredSection.vo.FeaturedSectionProductVo;
-import lombok.AllArgsConstructor;
+import com.starbucks.starvive.featuredSection.domain.FeaturedSection;
 import lombok.Builder;
 import lombok.Getter;
-
-import java.util.List;
+import java.util.UUID;
 
 @Getter
 @Builder
-@AllArgsConstructor
 public class FeaturedSectionResponseDto {
-    private String featuredSectionsId;
+    private UUID featuredSectionId;
     private String name;
+    private boolean activated;
 
+    public static FeaturedSectionResponseDto from(FeaturedSection featuredSection) {
+        return FeaturedSectionResponseDto.builder()
+                .featuredSectionId(featuredSection.getFeaturedSectionId())
+                .name(featuredSection.getName())
+                .activated(featuredSection.isActivated())
+                .build();
+    }
 }

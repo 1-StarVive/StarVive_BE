@@ -9,10 +9,14 @@ pipeline {
         KAKAO_CLIENT_ID_CRED = credentials('kakao-client-id')
         KAKAO_CLIENT_SECRET_CRED = credentials('kakao-client-secret')
         JWT_SECRET_KEY_CRED = credentials('jwt-secret-key')
+        AWS_ACCESS_KEY_ID_CRED = credentials('aws-access-key-id')
+        AWS_SECRET_ACCESS_KEY_CRED = credentials('aws-secret-access-key')
         DB_NAME = 'starvive_dev'
         SERVER_PORT = '8082'
         CONTAINER_NAME = 'springboot-container-dev'
         IMAGE_TAG = 'dev'
+        AWS_REGION = 'ap-northeast-2'
+        S3_BUCKET_NAME = 'starvive-assets'
     }
     
     stages {
@@ -47,7 +51,7 @@ pipeline {
                     docker stop ${CONTAINER_NAME} || true
                     docker rm ${CONTAINER_NAME} || true
                     
-                    # 새로운 컨테이너 실행 - 환경 변수 주입
+                    # 새로운 컨테이너 실행 - 환경 변수 주입 (AWS 포함)
                     docker run -d --name ${CONTAINER_NAME} \
                     -e SPRING_DATASOURCE_URL=jdbc:mysql://localhost:3306/${DB_NAME} \
                     -e SPRING_DATASOURCE_USERNAME=${DB_CREDS_USR} \
@@ -57,6 +61,11 @@ pipeline {
                     -e KAKAO_CLIENT_ID=${KAKAO_CLIENT_ID_CRED} \
                     -e KAKAO_CLIENT_SECRET=${KAKAO_CLIENT_SECRET_CRED} \
                     -e JWT_SECRET_KEY=${JWT_SECRET_KEY_CRED} \
+                    -e AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID_CRED} \
+                    -e AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY_CRED} \
+                    -e AWS_REGION=${AWS_REGION} \
+                    -e AWS_DEFAULT_REGION=${AWS_REGION} \
+                    -e S3_BUCKET_NAME=${S3_BUCKET_NAME} \
                     -e SERVER_PORT=${SERVER_PORT} \
                     --network=host \
                     springboot-app:${IMAGE_TAG}

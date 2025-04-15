@@ -1,35 +1,69 @@
 package com.starbucks.starvive.featuredSection.presentation;
 
 import com.starbucks.starvive.featuredSection.application.FeaturedSectionService;
-import com.starbucks.starvive.featuredSection.dto.in.FeaturedSectionProductRequestDto;
-import com.starbucks.starvive.featuredSection.dto.out.FeaturedSectionProductResponseDto;
-import com.starbucks.starvive.featuredSection.dto.out.FeaturedSectionResponseDto;
+import com.starbucks.starvive.featuredSection.dto.in.*;
+import com.starbucks.starvive.featuredSection.dto.out.FeaturedSectionProductGroupResponseDto;
+import com.starbucks.starvive.featuredSection.vo.*;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
+import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/v1/featured-Sections")
+@RequestMapping("/api/v1/featured-section")
 @RequiredArgsConstructor
 public class FeaturedSectionController {
 
-    private final FeaturedSectionService sectionService;
+    private final FeaturedSectionService featuredSectionService;
 
-    // 추천 섹션 리스트 (이름과 ID만 반환)
-    // @GetMapping
-    // public ResponseEntity<List<FeaturedSectionResponseDto>> getSections() {
-    //     return ResponseEntity.ok(sectionService.getOnlySections());
-    // }
+    @Operation(summary = "추천 섹션 단건 조회", description = "추천 섹션 ID로 단건을 조회합니다.", tags = {"featured-section"})
+    @GetMapping
+    public FeaturedSectionResponseVo getSection(@RequestParam("featuredSectionId") UUID featuredSectionId) {
+        return FeaturedSectionResponseVo.from(featuredSectionService.getSection(featuredSectionId));
+    }
 
-    // //  특정 섹션 ID 배열로 섹션 + 상품 목록 조회
-    // @PostMapping("/products")
-    // public ResponseEntity<List<FeaturedSectionProductResponseDto>> getSectionProducts(
-    //         @RequestBody FeaturedSectionProductRequestDto request
-    // ) {
-    //     return ResponseEntity.ok(
-    //             sectionService.getSectionsByIds(request.getFeaturedSectionsIds())
-    //     );
-    // }
+    @Operation(summary = "추천 섹션 전체 조회", description = "모든 추천 섹션을 조회합니다.", tags = {"featured-section"})
+    @GetMapping("/all")
+    public List<FeaturedSectionResponseVo> getAllSections() {
+        return featuredSectionService.getSectionList().stream()
+                .map(FeaturedSectionResponseVo::from)
+                .toList();
+    }
+
+    @Operation(summary = "추천 섹션 등록", description = "추천 섹션을 등록합니다.", tags = {"featured-section"})
+    @PostMapping("/add")
+    public void createSection(@RequestBody AddFeaturedSectionRequestVo addFeaturedSectionRequestVo) {
+        featuredSectionService.createSection(AddFeaturedSectionRequestDto.from(addFeaturedSectionRequestVo));
+    }
+
+    @Operation(summary = "추천 섹션 수정", description = "추천 섹션을 수정합니다.", tags = {"featured-section"})
+    @PutMapping
+    public void updateSection(@RequestBody UpdateFeaturedSectionRequestVo vo) {
+        featuredSectionService.updateSection(UpdateFeaturedSectionRequestDto.from(vo));
+    }
+
+    @Operation(summary = "추천 섹션 삭제", description = "추천 섹션을 삭제합니다.", tags = {"featured-section"})
+    @DeleteMapping
+    public void deleteSection(@RequestBody DeleteFeaturedSectionRequestVo deleteFeaturedSectionRequestVo) {
+        featuredSectionService.deleteSection(DeleteFeaturedSectionRequestDto.from(deleteFeaturedSectionRequestVo));
+    }
+
+    @Operation(summary = "추천 섹션 상품 리스트 조회", description = "추천 섹션 ID 리스트로 섹션별 상품을 조회합니다.", tags = {"featured-section"})
+    @PostMapping("/products")
+    public List<FeaturedSectionProductGroupResponseDto> getProductsBySection(@RequestBody FeaturedSectionProductRequestVo vo) {
+        return featuredSectionService.getProductsBySections(vo.getFeaturedSectionsIds());
+    }
+
+    @Operation(summary = "추천 섹션에 상품 단건 등록", description = "추천 섹션에 하나의 상품을 등록합니다.", tags = {"featured-section"})
+    @PostMapping("/register-product")
+    public void registerSingleProduct(@RequestBody AddFeaturedSectionSingleProductRequestVo vo) {
+        featuredSectionService.registerSingleProduct(AddFeaturedSectionSingleProductRequestDto.from(vo));
+    }
+
+    @Operation(summary = "추천 섹션에 상품 일괄 등록", description = "추천 섹션에 여러 상품을 한 번에 등록합니다.", tags = {"featured-section"})
+    @PostMapping("/register-products")
+    public void registerMultipleProducts(@RequestBody AddFeaturedSectionProductRequestVo vo) {
+        featuredSectionService.registerProducts(AddFeaturedSectionProductRequestDto.from(vo));
+    }
 }

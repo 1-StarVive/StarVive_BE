@@ -1,8 +1,10 @@
 package com.starbucks.starvive.category.application;
 
 import com.starbucks.starvive.category.domain.BottomCategory;
-import com.starbucks.starvive.category.dto.in.BottomCategoryRequest;
-import com.starbucks.starvive.category.dto.out.BottomCategoryResponse;
+import com.starbucks.starvive.category.dto.in.BottomCategoryRequestDto;
+import com.starbucks.starvive.category.dto.in.DeleteBottomCategoryRequestDto;
+import com.starbucks.starvive.category.dto.in.UpdateBottomCategoryRequestDto;
+import com.starbucks.starvive.category.dto.out.BottomCategoryResponseDto;
 import com.starbucks.starvive.category.infrastructure.BottomCategoryRepository;
 import com.starbucks.starvive.common.exception.BaseException;
 import jakarta.transaction.Transactional;
@@ -22,42 +24,41 @@ public class BottomCategoryServiceImpl implements BottomCategoryService {
 
     @Transactional
     @Override
-    public void addBottomCategory(BottomCategoryRequest bottomCategoryRequest) {
+    public void addBottomCategory(BottomCategoryRequestDto bottomCategoryRequest) {
         if(bottomCategoryRepository
                 .findByNameAndMiddleCategoryId(bottomCategoryRequest.getName(), bottomCategoryRequest.getMiddleCategoryId())
                 .isPresent()) {
             throw new BaseException(DUPLICATED_CATEGORY);
         }
 
-        BottomCategory bottomCategory = bottomCategoryRequest.toCategory();
-        bottomCategoryRepository.save(bottomCategory);
+        bottomCategoryRepository.save(bottomCategoryRequest.toCategory());
     }
 
     @Override
-    public List<BottomCategoryResponse> findBottomCategories(UUID middleCategoryId) {
+    public List<BottomCategoryResponseDto> findBottomCategories(UUID middleCategoryId) {
         return bottomCategoryRepository.findByMiddleCategoryIdAndDeletedFalse(middleCategoryId)
-                .stream().map(BottomCategoryResponse::from).toList();
+                .stream().map(BottomCategoryResponseDto::from).toList();
     }
 
     @Override
-    public List<BottomCategoryResponse> findBottomCategories() {
+    public List<BottomCategoryResponseDto> findBottomCategories() {
         return bottomCategoryRepository.findAllByDeletedFalse()
-                .stream().map(BottomCategoryResponse::from).toList();
+                .stream().map(BottomCategoryResponseDto::from).toList();
     }
 
     @Transactional
     @Override
-    public void updateBottomCategory(UUID bottomCategoryId, BottomCategoryRequest bottomCategoryRequest) {
-        BottomCategory bottomCategory = bottomCategoryRepository.findById(bottomCategoryId)
+    public void updateBottomCategory(UpdateBottomCategoryRequestDto updateBottomCategoryRequestDto) {
+        BottomCategory bottomCategory = bottomCategoryRepository.findById(updateBottomCategoryRequestDto.getBottomCategoryId())
                 .orElseThrow(() -> new BaseException(NO_EXIST_CATEGORY));
 
-        bottomCategory.updateBottomCategoryId(bottomCategoryRequest);
+        bottomCategory.update(updateBottomCategoryRequestDto);
     }
 
     @Transactional
     @Override
-    public void deleteBottomCategory(UUID bottomCategoryId) {
-        BottomCategory bottomCategory = bottomCategoryRepository.findById(bottomCategoryId)
+    public void deleteBottomCategory(DeleteBottomCategoryRequestDto deleteBottomCategoryRequestDto) {
+        BottomCategory bottomCategory = bottomCategoryRepository.findById(deleteBottomCategoryRequestDto.getBottomCategoryId())
                 .orElseThrow(() -> new BaseException(ALREADY_DELETED_CATEGORY));
 
         bottomCategory.softDelete();

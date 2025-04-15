@@ -1,6 +1,6 @@
 package com.starbucks.starvive.category.domain;
 
-import com.starbucks.starvive.category.dto.in.MiddleCategoryRequest;
+import com.starbucks.starvive.category.dto.in.UpdateMiddleCategoryRequestDto;
 import com.starbucks.starvive.common.domain.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 
 import java.util.UUID;
 
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.UuidGenerator;
 
 @Entity
@@ -27,22 +28,22 @@ public class MiddleCategory extends BaseEntity {
     @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false, columnDefinition = "BINARY(16)")
     private UUID topCategoryId;
 
     @Column(nullable = false)
+    @ColumnDefault("false")
     private boolean deleted = false;
 
     @Builder
-    public MiddleCategory(UUID middleCategoryId, String name, UUID topCategoryId) {
+    public MiddleCategory(UUID middleCategoryId, String name, UUID topCategoryId, boolean deleted) {
         this.middleCategoryId = middleCategoryId;
         this.name = name;
         this.topCategoryId = topCategoryId;
+        this.deleted = deleted;
     }
 
-    public void updateMiddleCategory(MiddleCategoryRequest middleCategoryRequest) {
-        this.name = middleCategoryRequest.getName();
-        this.topCategoryId = middleCategoryRequest.getTopCategoryId();
+    public void update(UpdateMiddleCategoryRequestDto updateMiddleCategoryRequestDto) {
+        this.name = updateMiddleCategoryRequestDto.getName();
     }
 
     public void softDelete() {

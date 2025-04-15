@@ -7,7 +7,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -53,13 +52,13 @@ public class S3Uploader {
         return uploadedUrls;
     }
 
-    private String updateFile(MultipartFile multipartFiles, String folderName) {
+    public String updateFile(MultipartFile file, String key) {
         try {
-            amazonS3.putObject(bucket, folderName, multipartFiles.getInputStream(), null);
+            amazonS3.putObject(bucket, key, file.getInputStream(), null);
+            return amazonS3.getUrl(bucket, key).toString();
         } catch (IOException e) {
             throw new BaseException(S3_UPLOAD_FAILED);
         }
-        return amazonS3.getUrl(bucket, folderName).toString();
     }
 
     public void deleteFile(String fileName) {

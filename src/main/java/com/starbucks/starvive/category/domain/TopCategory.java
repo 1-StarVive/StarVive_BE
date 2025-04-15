@@ -1,6 +1,6 @@
 package com.starbucks.starvive.category.domain;
 
-import com.starbucks.starvive.category.dto.in.TopCategoryRequest;
+import com.starbucks.starvive.category.dto.in.UpdateTopCategoryRequestDto;
 import com.starbucks.starvive.common.domain.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 
 import java.util.UUID;
 
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.UuidGenerator;
 
 @Entity
@@ -28,26 +29,27 @@ public class TopCategory extends BaseEntity {
     private String name;
 
     @Column(nullable = false)
-    private String thumbImageUrl;
+    @ColumnDefault("false")
+    private String imageUrl;
 
-    @Column(nullable = false)
-    private String thumbAlt;
+    @ColumnDefault("false")
+    private String imageAlt;
 
-    @Column(nullable = false)
+    @ColumnDefault("false")
     private boolean deleted = false;
 
     @Builder
-    public TopCategory(UUID topCategoryId, String name, String thumbImageUrl, String thumbAlt) {
+    public TopCategory(UUID topCategoryId, String name,
+                       String imageUrl, String imageAlt, boolean deleted) {
         this.topCategoryId = topCategoryId;
         this.name = name;
-        this.thumbImageUrl = thumbImageUrl;
-        this.thumbAlt = thumbAlt;
+        this.imageUrl = imageUrl;
+        this.imageAlt = imageAlt;
+        this.deleted = deleted;
     }
 
-    public void update(TopCategoryRequest topCategoryRequest) {
-        this.name = topCategoryRequest.getName();
-        this.thumbImageUrl = topCategoryRequest.getThumbImageUrl();
-        this.thumbAlt = topCategoryRequest.getThumbAlt();
+    public void update(UpdateTopCategoryRequestDto updateTopCategoryRequestDto) {
+        this.name = updateTopCategoryRequestDto.getName();
     }
 
     public void softDelete() {

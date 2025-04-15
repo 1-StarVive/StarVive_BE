@@ -79,6 +79,10 @@ public class ShippingAddress {
     }
     
 
+    public void setSelectedBase(boolean selectedBase) {
+        this.selectedBase = selectedBase;
+    }
+
     public void softDelete() {
         this.deleted = true;
     }

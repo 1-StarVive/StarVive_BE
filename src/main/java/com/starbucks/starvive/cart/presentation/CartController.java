@@ -3,15 +3,16 @@ package com.starbucks.starvive.cart.presentation;
 import com.starbucks.starvive.cart.application.CartService;
 import com.starbucks.starvive.cart.dto.in.AddCartItemRequestDto;
 import com.starbucks.starvive.cart.dto.in.DeleteCartItemRequestDto;
-import com.starbucks.starvive.cart.dto.in.UpdateQuantityRequestDto;
-import com.starbucks.starvive.cart.dto.out.*;
+import com.starbucks.starvive.cart.dto.in.UpdateCartItemRequestDto;
+import com.starbucks.starvive.cart.vo.AddCartItemRequestVo;
+import com.starbucks.starvive.cart.vo.CartItemResponseVo;
+import com.starbucks.starvive.cart.vo.DeleteCartItemRequestVo;
+import com.starbucks.starvive.cart.vo.UpdateCartItemRequestVo;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.UUID;
-
-// 작성자 : 김보미
 
 @RestController
 @RequestMapping("/api/v1/cart")
@@ -20,38 +21,33 @@ public class CartController {
 
     private final CartService cartService;
 
-//
-//    // 장바구니에 상품 추가
-//    @PostMapping
-//    public ResponseEntity<AddCartItemResponseDto> add(
-//            @RequestParam UUID userId,
-//            @RequestBody AddCartItemRequestDto dto) {
-//        return ResponseEntity.ok(cartService.addItem(userId, dto));
-//    }
-//
-//     // 장바구니 목록 조회
-//    @GetMapping
-//    public ResponseEntity<List<CartItemResponseDto>> getCart(@RequestParam UUID userId) {
-//        return ResponseEntity.ok(cartService.getCartList(userId));
-//    }
-//
-//    // 장바구니 상품 수량 변경
-//    @PatchMapping("/{cartId}")
-//    public ResponseEntity<UpdateQuantityResponseDto> updateQuantity(
-//            @PathVariable UUID cartId,
-//            @RequestBody UpdateQuantityRequestDto dto) {
-//        return ResponseEntity.ok(cartService.updateQuantity(cartId, dto.getQuantity()));
-//    }
-//
-//    // 장바구니 개별 상품 삭제
-//    @DeleteMapping
-//    public ResponseEntity<DeleteCartItemResponseDto> delete(@RequestBody DeleteCartItemRequestDto dto) {
-//        return ResponseEntity.ok(cartService.deleteItem(dto.getCartId()));
-//    }
-//
-//    // 장바구니 전체 비우기
-//    @DeleteMapping("/items")
-//    public ResponseEntity<ClearCartResponseDto> clearCart(@RequestParam UUID userId) {
-//        return ResponseEntity.ok(cartService.clearCart(userId));
-//    }
+    @Operation(summary = "장바구니 전체 조회", description = "사용자의 장바구니 목록을 조회합니다.", tags = {"cart"})
+    @GetMapping("/all")
+    public List<CartItemResponseVo> getCartList(@RequestParam("userId") UUID userId) {
+        return cartService.getCartList(userId);
+    }
+
+    @Operation(summary = "장바구니 상품 추가", description = "상품을 장바구니에 추가합니다.", tags = {"cart"})
+    @PostMapping("/add")
+    public void addItem(@RequestBody AddCartItemRequestVo addCartItemRequestVo) {
+        cartService.addItem(AddCartItemRequestDto.from(addCartItemRequestVo));
+    }
+
+    @Operation(summary = "장바구니 항목 수정", description = "옵션, 수량, 체크 상태를 수정합니다.", tags = {"cart"})
+    @PutMapping
+    public void updateItem(@RequestBody UpdateCartItemRequestVo updateCartItemRequestVo) {
+        cartService.updateItem(UpdateCartItemRequestDto.from(updateCartItemRequestVo));
+    }
+
+    @Operation(summary = "장바구니 항목 삭제", description = "장바구니 항목을 삭제합니다.", tags = {"cart"})
+    @DeleteMapping
+    public void deleteItem(@RequestBody DeleteCartItemRequestVo deleteCartItemRequestVo) {
+        cartService.deleteItem(DeleteCartItemRequestDto.from(deleteCartItemRequestVo));
+    }
+
+    @Operation(summary = "장바구니 전체 비우기", description = "사용자의 장바구니를 전체 비웁니다.", tags = {"cart"})
+    @DeleteMapping("/clear")
+    public void clearCart(@RequestParam("userId") UUID userId) {
+        cartService.clearCart(userId);
+    }
 }

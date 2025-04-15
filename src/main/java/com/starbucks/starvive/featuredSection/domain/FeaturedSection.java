@@ -1,34 +1,37 @@
 package com.starbucks.starvive.featuredSection.domain;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-
 import org.hibernate.annotations.UuidGenerator;
+import java.util.UUID;
 
 @Getter
 @Entity
+@NoArgsConstructor
+@Builder
 public class FeaturedSection {
 
     @Id
     @UuidGenerator
-    @Column(updatable = false, nullable = false, columnDefinition = "BINARY(16)")
-    private UUID id;
+    @Column(columnDefinition = "BINARY(16)", nullable = false)
+    private UUID featuredSectionId;
 
     @Column(nullable = false)
-    private String name; // 추천 섹션 이름
+    private String name;
 
     @Column(nullable = false)
     private boolean activated;
 
+    public FeaturedSection(UUID featuredSectionId, String name, boolean activated) {
+        this.featuredSectionId = featuredSectionId;
+        this.name = name;
+        this.activated = activated;
+    }
 
-    //@Column(columnDefinition = "BINARY(16)", nullable = false)
-    //private String productId;
-
-
+    public void update(String name, boolean activated) {
+        this.name = name;
+        this.activated = activated;
+    }
 }
