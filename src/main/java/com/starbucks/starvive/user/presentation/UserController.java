@@ -33,16 +33,15 @@ public class UserController {
 
     @PostMapping("/signup")
     public ResponseEntity<?> signUp(@Valid @RequestBody SignUpRequestVo signUpRequestVo, BindingResult bindingResult) {
+        
         if (bindingResult.hasErrors()) {
-            String errorMessages = bindingResult.getAllErrors().stream()
-                    .map(error -> error.getDefaultMessage())
-                    .collect(Collectors.joining(", "));
-            return ResponseEntity.badRequest().body("입력 값 오류: " + errorMessages);
+            return ResponseEntity.badRequest()
+            .body("입력 값 오류: " + bindingResult.getAllErrors().stream()
+            .map(error -> error.getDefaultMessage())
+            .collect(Collectors.joining(", ")));
         }
 
-        SignUpRequestDto signUpRequestDto = SignUpRequestDto.from(signUpRequestVo);
-        userService.signUp(signUpRequestDto);
-
+        userService.signUp(SignUpRequestDto.from(signUpRequestVo));
         return ResponseEntity.status(HttpStatus.CREATED).body("회원가입이 성공적으로 완료되었습니다.");
     }
 
@@ -57,7 +56,7 @@ public class UserController {
             User user = (User) userDetails;
             UUID userId = user.getUserId();
             userService.signOut(userId);
-            return ResponseEntity.ok("Signed out successfully.");
+            return ResponseEntity.ok("로그아웃 성공공");
         } else {
             return ResponseEntity.status(401).body("Unauthorized: Invalid user details type");
         }
