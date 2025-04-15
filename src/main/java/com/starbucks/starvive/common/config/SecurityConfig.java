@@ -69,8 +69,6 @@ public class SecurityConfig {
                                 "/error",
                                 "/api/v1/**",
                                 "/api/v1/auth/**",
-                                "/api/v1/size/**",
-                                "/api/v1/color/**",
                                 "/api/v1/products/**",
                                 "/api/v1/category/**",
                                 "/api/v1/vendor/**" ,

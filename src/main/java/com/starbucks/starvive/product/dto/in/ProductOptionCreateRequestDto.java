@@ -15,19 +15,15 @@ public class ProductOptionCreateRequestDto {
     private Boolean carvedAvailable;
     private int baseDiscountRate;
     private UUID productId;
-    private UUID colorId;
-    private UUID sizeId;
 
     @Builder
     public ProductOptionCreateRequestDto(int price,Integer stock, Boolean carvedAvailable, int baseDiscountRate,
-                                         UUID productId, UUID colorId, UUID sizeId) {
+                                         UUID productId) {
         this.price = price;
         this.stock = stock;
         this.carvedAvailable = carvedAvailable;
         this.baseDiscountRate = baseDiscountRate;
         this.productId = productId;
-        this.colorId = colorId;
-        this.sizeId = sizeId;
     }
 
         public ProductOption toEntity() {
@@ -37,8 +33,6 @@ public class ProductOptionCreateRequestDto {
                     .carvedAvailable(carvedAvailable != null ? carvedAvailable : false)
                     .baseDiscountRate(baseDiscountRate)
                     .productId(productId)
-                    .colorId(colorId)
-                    .sizeId(sizeId)
                     .build();
     }
 }
