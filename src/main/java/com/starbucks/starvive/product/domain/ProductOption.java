@@ -40,16 +40,10 @@ public class ProductOption extends BaseEntity {
     @Column(nullable = false, columnDefinition = "BINARY(16)")
     private UUID productId;
 
-    @Column(nullable = false, columnDefinition = "BINARY(16)")
-    private UUID colorId;
-
-    @Column(nullable = false, columnDefinition = "BINARY(16)")
-    private UUID sizeId;
-
     @Builder
     public ProductOption(UUID productOptionId, Integer stock,
                          int price, Boolean carvedAvailable,
-                         int baseDiscountRate, String name, UUID productId,UUID colorId,UUID sizeId) {
+                         int baseDiscountRate, String name, UUID productId) {
         this.productOptionId = productOptionId;
         this.stock = stock;
         this.price = price;
@@ -57,7 +51,5 @@ public class ProductOption extends BaseEntity {
         this.baseDiscountRate = baseDiscountRate;
         this.name = name;
         this.productId = productId;
-        this.colorId = colorId;
-        this.sizeId = sizeId;
     }
 }
