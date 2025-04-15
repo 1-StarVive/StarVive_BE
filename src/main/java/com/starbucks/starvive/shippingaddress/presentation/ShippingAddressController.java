@@ -22,7 +22,7 @@ import com.starbucks.starvive.shippingaddress.vo.in.UpdateShippingAddressVo;
 import com.starbucks.starvive.shippingaddress.dto.in.UpdateShippingAddressDto;
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/shipping-address")
+@RequestMapping("/api/v1/shipping-address")
 public class ShippingAddressController {
     
     private final ShippingAddressService shippingAddressService;
