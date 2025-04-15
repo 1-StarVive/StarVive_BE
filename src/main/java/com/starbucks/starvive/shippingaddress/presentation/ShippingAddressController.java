@@ -17,12 +17,13 @@ import com.starbucks.starvive.shippingaddress.vo.in.AddShippingAddressVo;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import com.starbucks.starvive.shippingaddress.vo.in.UpdateShippingAddressVo;
 import com.starbucks.starvive.shippingaddress.dto.in.UpdateShippingAddressDto;
+import com.starbucks.starvive.shippingaddress.dto.in.DeleteShippingAddressRequestDto;
+import com.starbucks.starvive.shippingaddress.vo.in.DeleteShippipngAddressVo;
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/shipping-address")
+@RequestMapping("api/v1/shipping-address")
 public class ShippingAddressController {
     
     private final ShippingAddressService shippingAddressService;
@@ -46,8 +47,8 @@ public class ShippingAddressController {
     }
     
     @DeleteMapping
-    public void deleteShippingAddress(@RequestParam UUID shippingAddressId) {
-        shippingAddressService.deleteShippingAddress(shippingAddressId);
+    public void deleteShippingAddress(@RequestBody DeleteShippipngAddressVo deleteShippipngAddressVo) {
+        shippingAddressService.deleteShippingAddress(DeleteShippingAddressRequestDto.from(deleteShippipngAddressVo));
     }
     
 }

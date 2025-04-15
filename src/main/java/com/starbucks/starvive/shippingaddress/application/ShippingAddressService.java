@@ -6,14 +6,14 @@ import java.util.List;
 import com.starbucks.starvive.shippingaddress.domain.ShippingAddress;
 import java.util.UUID;
 import com.starbucks.starvive.shippingaddress.dto.in.UpdateShippingAddressDto;
-
+import com.starbucks.starvive.shippingaddress.dto.in.DeleteShippingAddressRequestDto;
 public interface ShippingAddressService {
 
     void addShippingAddress(AddShippingAddressDto addShippingAddressDto, UserDetails userDetails);
 
     List<ShippingAddress> getShippingAddress(UserDetails userDetails);
 
-    void deleteShippingAddress(UUID shippingAddressId);
+    void deleteShippingAddress(DeleteShippingAddressRequestDto deleteShippingAddressRequestDto);
 
     void updateShippingAddress(UUID shippingAddressId, UpdateShippingAddressDto updateShippingAddressDto);
 }
