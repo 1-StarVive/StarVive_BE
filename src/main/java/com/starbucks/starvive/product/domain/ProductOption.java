@@ -36,7 +36,6 @@ public class ProductOption extends BaseEntity {
     @Column(nullable = false)
     private int baseDiscountRate;
 
-    @Column(nullable = false)
     private String name; // 길이 ? 사이즈 ?
 
     @Column(nullable = false, columnDefinition = "BINARY(16)")

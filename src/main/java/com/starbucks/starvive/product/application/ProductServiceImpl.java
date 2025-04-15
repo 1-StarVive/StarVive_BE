@@ -3,7 +3,7 @@ package com.starbucks.starvive.product.application;
 import com.starbucks.starvive.common.exception.BaseException;
 import com.starbucks.starvive.image.domain.ProductImage;
 import com.starbucks.starvive.image.infrastructure.ProductImageRepository;
-import com.starbucks.starvive.product.domain.Product;;
+import com.starbucks.starvive.product.domain.Product;
 import com.starbucks.starvive.product.domain.ProductOption;
 import com.starbucks.starvive.product.dto.in.AddProductRequestDto;
 import com.starbucks.starvive.product.dto.in.DeleteProductRequestDto;

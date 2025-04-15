@@ -8,7 +8,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.UuidGenerator;
-
+import com.starbucks.starvive.shippingaddress.dto.in.UpdateShippingAddressDto;
 import java.util.UUID;
 
 @Entity
@@ -48,8 +48,11 @@ public class ShippingAddress {
     @Column(nullable = false, columnDefinition = "BINARY(16)")
     UUID userUuid;
 
+    @Column(nullable = false)
+    private boolean deleted = false;
+
     @Builder
-    private ShippingAddress(UUID shippingAddressId, String addressNickName, String receiverName, String postalCode, String baseAddress, String detailAddress, String phoneNumber, String memo, boolean selectedBase, UUID userUuid) {
+    private ShippingAddress(UUID shippingAddressId, String addressNickName, String receiverName, String postalCode, String baseAddress, String detailAddress, String phoneNumber, String memo, boolean selectedBase, UUID userUuid, boolean deleted) {
         this.shippingAddressId = shippingAddressId;
         this.addressNickName = addressNickName;
         this.receiverName = receiverName;
@@ -60,6 +63,28 @@ public class ShippingAddress {
         this.memo = memo;
         this.selectedBase = selectedBase;
         this.userUuid = userUuid;
+        this.deleted = deleted;
+    }
+    
+
+    public void update(UpdateShippingAddressDto updateShippingAddressDto) {
+        this.addressNickName = updateShippingAddressDto.getAddressNickName();
+        this.receiverName = updateShippingAddressDto.getReceiverName();
+        this.postalCode = updateShippingAddressDto.getPostalCode();
+        this.baseAddress = updateShippingAddressDto.getBaseAddress();
+        this.detailAddress = updateShippingAddressDto.getDetailAddress();
+        this.phoneNumber = updateShippingAddressDto.getPhoneNumber();
+        this.memo = updateShippingAddressDto.getMemo();
+        this.selectedBase = updateShippingAddressDto.isSelectedBase();
+    }
+    
+
+    public void setSelectedBase(boolean selectedBase) {
+        this.selectedBase = selectedBase;
+    }
+
+    public void softDelete() {
+        this.deleted = true;
     }
 
 }

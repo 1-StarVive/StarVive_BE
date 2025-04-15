@@ -33,16 +33,15 @@ public class UserController {
 
     @PostMapping("/signup")
     public ResponseEntity<?> signUp(@Valid @RequestBody SignUpRequestVo signUpRequestVo, BindingResult bindingResult) {
+        
         if (bindingResult.hasErrors()) {
-            String errorMessages = bindingResult.getAllErrors().stream()
-                    .map(error -> error.getDefaultMessage())
-                    .collect(Collectors.joining(", "));
-            return ResponseEntity.badRequest().body("입력 값 오류: " + errorMessages);
+            return ResponseEntity.badRequest()
+            .body("입력 값 오류: " + bindingResult.getAllErrors().stream()
+            .map(error -> error.getDefaultMessage())
+            .collect(Collectors.joining(", ")));
         }
 
-        SignUpRequestDto signUpRequestDto = SignUpRequestDto.from(signUpRequestVo);
-        userService.signUp(signUpRequestDto);
-
+        userService.signUp(SignUpRequestDto.from(signUpRequestVo));
         return ResponseEntity.status(HttpStatus.CREATED).body("회원가입이 성공적으로 완료되었습니다.");
     }
 
@@ -57,7 +56,7 @@ public class UserController {
             User user = (User) userDetails;
             UUID userId = user.getUserId();
             userService.signOut(userId);
-            return ResponseEntity.ok("Signed out successfully.");
+            return ResponseEntity.ok("로그아웃 성공공");
         } else {
             return ResponseEntity.status(401).body("Unauthorized: Invalid user details type");
         }
@@ -70,7 +69,7 @@ public class UserController {
         Optional<String> newAccessToken = userService.refreshAccessToken(requestRefreshToken);
 
         return newAccessToken
-            .map(token -> ResponseEntity.ok(new RefreshResponse(token)))
+            .map(token -> ResponseEntity.ok(new RefreshResponse(token, 3600)))
             .orElseThrow(() -> new TokenRefreshException(requestRefreshToken, "Refresh token is not in database!"));
     }
 
@@ -85,9 +84,10 @@ public class UserController {
     @Getter
     private static class RefreshResponse {
         private String accessToken;
-        
-        public RefreshResponse(String accessToken) {
+        private int expiresIn;
+        public RefreshResponse(String accessToken, int accessTokenExpirationTime) {
             this.accessToken = accessToken;
+            this.expiresIn = accessTokenExpirationTime;
         }
     }
 } 
