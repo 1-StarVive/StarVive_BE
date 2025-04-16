@@ -65,16 +65,19 @@ public enum BaseResponseStatus {
     NO_EXIST_SECTION(HttpStatus.NOT_FOUND, false, 3005, "존재하지 않는 섹션 입니다."),
     NO_EXIST_CART(HttpStatus.NOT_FOUND, false, 3006, "장바구니에 상품이 존재하지 않습니다."),
 
-    DUPLICATED_PRODUCT(HttpStatus.CONFLICT, false, 3004, "이미 등록된 상품입니다"),
-    DUPLICATED_OPTION(HttpStatus.CONFLICT, false, 3005, "이미 등록된 옵션입니다"),
-    DUPLICATED_CATEGORY(HttpStatus.CONFLICT, false, 3006, "이미 등록된 카테고리입니다"),
+    DUPLICATED_PRODUCT(HttpStatus.CONFLICT, false, 3007, "이미 등록된 상품입니다"),
+    DUPLICATED_OPTION(HttpStatus.CONFLICT, false, 3008, "이미 등록된 옵션입니다"),
+    DUPLICATED_CATEGORY(HttpStatus.CONFLICT, false, 3009, "이미 등록된 카테고리입니다"),
 
     // wish
-    DUPLICATED_WISH(HttpStatus.CONFLICT, false,3007, "이미 찜된 상품입니다."),
+    DUPLICATED_WISH(HttpStatus.CONFLICT, false,3010, "이미 찜된 상품입니다."),
 
-    NO_EXIST_OPTIONS_IN_PRODUCT(HttpStatus.NOT_FOUND, false, 3007, "해당 상품에 옵션이 존재하지 않습니다"),
+    NO_EXIST_OPTIONS_IN_PRODUCT(HttpStatus.NOT_FOUND, false, 3011, "해당 상품에 옵션이 존재하지 않습니다"),
 
-    ALREADY_DELETED_CATEGORY(HttpStatus.BAD_REQUEST, false, 3008, "이미 삭제된 카테고리입니다."),
+    ALREADY_DELETED_CATEGORY(HttpStatus.BAD_REQUEST, false, 3012, "이미 삭제된 카테고리입니다."),
+
+    DUPLICATED_PRODUCT_CATEGORY(HttpStatus.CONFLICT, false, 3015, "이미 등록된 상품-카테고리입니다."),
+
 
     // Promotion
     DUPLICATED_PROMOTION(HttpStatus.CONFLICT, false, 3101, "이미 등록된 기획전입니다."),

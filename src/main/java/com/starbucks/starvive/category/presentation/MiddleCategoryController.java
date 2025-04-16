@@ -40,10 +40,20 @@ public class MiddleCategoryController {
         return middleCategoryService.findMiddleCategories();
     }
 
+    @Operation(summary = "상위 카테고리 ID로 중간 카테고리 조회",
+            description = "상위 카테고리 ID를 통해 중간 카테고리를 조회합니다.",
+            tags = {"middle-category-service"})
+    @GetMapping(params = "topId")
+    public List<MiddleCategoryResponseDto> getMiddleCategoriesByTopId(
+            @RequestParam("topId") UUID topCategoryId
+    ) {
+        return middleCategoryService.findMiddleCategoryByTopId(topCategoryId);
+    }
+
     @Operation(summary = "중간 카테고리 ID 조회",
             description = "중간 카테고리 ID를 통해 조회합니다.",
             tags = {"middle-category-service"})
-    @GetMapping
+    @GetMapping(params = "middleId")
     public MiddleCategoryResponseDto getMiddleCategoryById(@RequestParam("middleId") UUID middleCategoryId) {
         return middleCategoryService.findMiddleCategoryById(middleCategoryId);
     }
