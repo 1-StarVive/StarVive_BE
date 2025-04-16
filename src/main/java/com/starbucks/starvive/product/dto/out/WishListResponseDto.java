@@ -4,7 +4,6 @@ import com.starbucks.starvive.image.domain.ProductImage;
 import com.starbucks.starvive.product.domain.Product;
 import com.starbucks.starvive.product.domain.ProductOption;
 import com.starbucks.starvive.product.domain.Wish;
-import com.starbucks.starvive.product.vo.WishProductVo;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

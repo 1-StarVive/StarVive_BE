@@ -8,7 +8,6 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.UuidGenerator;
-
 import java.util.UUID;
 
 @Entity
@@ -29,5 +28,6 @@ public class ProductRequiredInfo {
 
     @Column(columnDefinition = "BINARY(16)", nullable = false)
     private UUID productId;
+
 }
 
