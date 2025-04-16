@@ -23,8 +23,10 @@ public enum BaseResponseStatus {
     DISABLED_USER(HttpStatus.FORBIDDEN, false, 404, "비활성화된 계정입니다. 계정을 복구하시겠습니까?"),
     FAILED_TO_RESTORE(HttpStatus.INTERNAL_SERVER_ERROR, false, 405, "계정 복구에 실패했습니다. 관리자에게 문의해주세요."),
     NO_EXIST_OAUTH(HttpStatus.NOT_FOUND, false, 406, "소셜 로그인 정보가 존재하지 않습니다."),
-
-
+    USER_NOT_IMPLEMENT_USERDETAILS(HttpStatus.INTERNAL_SERVER_ERROR, false, 407, "유저 객체가 UserDetails를 구현하지 않음"),
+    ALREADY_EXIST_EMAIL(HttpStatus.CONFLICT, false, 408, "이미 사용 중인 이메일입니다."),
+    ALREADY_EXIST_LOGIN_ID(HttpStatus.CONFLICT, false, 409, "이미 사용 중인 로그인 ID입니다."),
+    INVALID_LOGIN_ID(HttpStatus.BAD_REQUEST, false, 411, "로그인 ID를 다시 확인해주세요."),
     /**
      * 900: 기타 에러
      */
@@ -36,7 +38,7 @@ public enum BaseResponseStatus {
      */
     // token
     TOKEN_NOT_VALID(HttpStatus.UNAUTHORIZED, false, 2001, "토큰이 유효하지 않습니다."),
-
+    TOKEN_EXPIRED(HttpStatus.UNAUTHORIZED, false, 2002, "토큰이 만료되었습니다."),
     // Users
     DUPLICATED_USER(HttpStatus.CONFLICT, false, 2101, "이미 가입된 멤버입니다."),
     FAILED_TO_LOGIN(HttpStatus.UNAUTHORIZED, false, 2102, "아이디 또는 패스워드를 다시 확인하세요."),
