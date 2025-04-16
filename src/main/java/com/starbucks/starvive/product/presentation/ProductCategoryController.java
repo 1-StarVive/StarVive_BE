@@ -1,15 +1,9 @@
 package com.starbucks.starvive.product.presentation;
 
 import com.starbucks.starvive.product.application.ProductCategoryService;
-import com.starbucks.starvive.product.dto.in.RegisterProductCategoryRequestDto;
-import com.starbucks.starvive.product.dto.out.ProductListResponseDto;
-import com.starbucks.starvive.product.vo.RegisterProductCategoryVo;
-import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.UUID;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RequestMapping("/api/v1/product-category")
 @RestController
@@ -39,5 +33,4 @@ public class ProductCategoryController {
     ) {
         return productCategoryService.getProductsByCategory(topCategoryId, middleCategoryId, bottomCategoryId);
     }
-
 }
