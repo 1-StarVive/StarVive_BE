@@ -4,8 +4,6 @@ import java.time.Instant;
 import java.util.UUID;
 import java.util.Optional;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -20,17 +18,19 @@ import com.starbucks.starvive.user.domain.RefreshToken;
 import com.starbucks.starvive.user.dto.in.SignInRequestDto;
 import com.starbucks.starvive.user.dto.out.SignInResponseDto;
 import com.starbucks.starvive.user.dto.in.SignUpRequestDto;
-import com.starbucks.starvive.user.repository.UserRepository;
-import com.starbucks.starvive.user.repository.RefreshTokenRepository;
+import com.starbucks.starvive.user.infrastructure.UserRepository;
+import com.starbucks.starvive.user.infrastructure.RefreshTokenRepository;
 import com.starbucks.starvive.common.jwt.JwtTokenProvider;
-import com.starbucks.starvive.common.exception.TokenRefreshException;
 import com.starbucks.starvive.common.utils.NicknameGenerator;
 import com.starbucks.starvive.user.domain.SocialLoginType;
+import com.starbucks.starvive.common.exception.BaseException;
+import static com.starbucks.starvive.common.domain.BaseResponseStatus.*;
+import lombok.AllArgsConstructor;
 
 @Service
+@AllArgsConstructor
 public class UserServiceImpl implements UserService {
 
-    private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
@@ -38,7 +38,10 @@ public class UserServiceImpl implements UserService {
     private final RefreshTokenRepository refreshTokenRepository;
 
     @Override
+    @Transactional
     public void signUp(SignUpRequestDto signUpRequestDto) {
+
+        validateSignUpRequest(signUpRequestDto);
 
         String encodedPassword = passwordEncoder.encode(signUpRequestDto.getPassword());
 
@@ -46,17 +49,20 @@ public class UserServiceImpl implements UserService {
         String finalNickname = (requestedNickname == null || requestedNickname.isBlank())
                 ? NicknameGenerator.generateRandomNickname() : requestedNickname;
 
+        String rawPhoneNumber = signUpRequestDto.getPhoneNumber();
+        String finalPhoneNumber = (rawPhoneNumber == null || rawPhoneNumber.isBlank()) ? " " : rawPhoneNumber;
+
         User userToSave = User.builder()
-            .loginId(signUpRequestDto.getLoginId()) 
-            .email(signUpRequestDto.getEmail()) 
-            .password(encodedPassword) 
-            .name(signUpRequestDto.getName().isBlank()? "사용자": signUpRequestDto.getName()) 
-            .nickname(finalNickname) 
-            .phoneNumber(signUpRequestDto.getPhoneNumber().isBlank()? " ": signUpRequestDto.getPhoneNumber()) 
-            .birth(signUpRequestDto.getBirth()) 
-            .gender(signUpRequestDto.getGender() == null ? Gender.OTHER: signUpRequestDto.getGender()) 
-            .socialLoginType(SocialLoginType.NONE) 
-            .status(UserStatus.ACTIVE) 
+            .loginId(signUpRequestDto.getLoginId())
+            .email(signUpRequestDto.getEmail())
+            .password(encodedPassword)
+            .name(signUpRequestDto.getName().isBlank() ? "사용자": signUpRequestDto.getName())
+            .nickname(finalNickname)
+            .phoneNumber(finalPhoneNumber)
+            .birth(signUpRequestDto.getBirth())
+            .gender(signUpRequestDto.getGender() == null ? Gender.OTHER: signUpRequestDto.getGender())
+            .socialLoginType(SocialLoginType.NONE)
+            .status(UserStatus.ACTIVE)
             .termsAgreed(signUpRequestDto.isTermsAgreed())
             .privacyAgreed(signUpRequestDto.isPrivacyAgreed())
             .cardTermsAgreed(signUpRequestDto.isCardTermsAgreed())
@@ -66,6 +72,17 @@ public class UserServiceImpl implements UserService {
             .build();
 
         this.userRepository.save(userToSave);
+    }
+
+    private void validateSignUpRequest(SignUpRequestDto signUpRequestDto) {
+        if (userRepository.existsByEmail(signUpRequestDto.getEmail())) {
+            throw new BaseException(ALREADY_EXIST_EMAIL);
+        }
+
+        String loginId = signUpRequestDto.getLoginId();
+        if (loginId != null && !loginId.isBlank() && userRepository.existsByLoginId(loginId)) {
+            throw new BaseException(ALREADY_EXIST_LOGIN_ID);
+        }
     }
 
     @Override
@@ -80,10 +97,8 @@ public class UserServiceImpl implements UserService {
             );
 
             User authenticatedUser = (User) authentication.getPrincipal();
-
             String accessToken = this.createAccessToken(authentication);
             String refreshToken = this.createRefreshToken(authentication);
-
             long expiresIn = jwtTokenProvider.getAccessTokenExpirationTime();
 
             Instant expiryDate = Instant.now().plusMillis(jwtTokenProvider.getRefreshTokenExpirationTime());
@@ -99,11 +114,9 @@ public class UserServiceImpl implements UserService {
             return SignInResponseDto.from(authenticatedUser, accessToken, refreshToken, expiresIn);
 
         } catch (org.springframework.security.core.AuthenticationException e) {
-            logger.warn("로그인 실패  : {}", signInRequestDto.getLoginId());
-            throw new org.springframework.security.authentication.BadCredentialsException("로그인 실패");
+            throw new BaseException(FAILED_TO_LOGIN);
         } catch (Exception e) {
-            logger.error("로그인 중 예상치 못한 오류  : {}", signInRequestDto.getLoginId(), e);
-            throw new RuntimeException("로그인 중 예상치 못한 오류 발생");
+            throw new BaseException(INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -117,22 +130,18 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public Optional<String> refreshAccessToken(String refreshToken) {
         if (!jwtTokenProvider.validateRefreshToken(refreshToken)) {
-            logger.warn("리프레시토큰 인증실패  : {}", refreshToken);
             return Optional.empty();
         }
 
         return refreshTokenRepository.findById(refreshToken)
                 .map(tokenEntity -> {
                     if (tokenEntity.isExpired()) {
-                        logger.info("리프레시토큰 만료, 삭제중: {}", refreshToken);
                         refreshTokenRepository.delete(tokenEntity);
-                        throw new TokenRefreshException(refreshToken, "리프레시토큰 만료, 새로운 로그인 요청");
+                        throw new BaseException(TOKEN_EXPIRED);
                     }
-                    logger.info("새로운 엑세스토큰 발급중: {}", tokenEntity.getUserId());
                     return Optional.of(jwtTokenProvider.generateAccessToken(tokenEntity.getUserId()));
                 })
                 .orElseGet(() -> {
-                    logger.warn("리프레시토큰 데이터베이스에 없음: {}", refreshToken);
                     return Optional.empty();
                 });
     }
@@ -145,27 +154,17 @@ public class UserServiceImpl implements UserService {
         return this.jwtTokenProvider.generateRefreshToken(authentication);
     }
 
-    public UserServiceImpl(final UserRepository userRepository, 
-                          final PasswordEncoder passwordEncoder, 
-                          final AuthenticationManager authenticationManager, 
-                          final JwtTokenProvider jwtTokenProvider,
-                          final RefreshTokenRepository refreshTokenRepository) {
-        this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
-        this.authenticationManager = authenticationManager;
-        this.jwtTokenProvider = jwtTokenProvider;
-        this.refreshTokenRepository = refreshTokenRepository;
-    }
+    
 
     @Override
     @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(String loginId) {
         User user = this.userRepository.findByLoginId(loginId)
-                .orElseThrow(() -> new org.springframework.security.core.userdetails.UsernameNotFoundException("유저 없음: " + loginId));
+                .orElseThrow(() -> new BaseException(NO_EXIST_USER));
         if (user instanceof UserDetails) {
             return (UserDetails) user;
         } else {
-            throw new IllegalStateException("유저 객체가 UserDetails를 구현하지 않음: " + loginId);
+            throw new BaseException(USER_NOT_IMPLEMENT_USERDETAILS);
         }
     }
 }

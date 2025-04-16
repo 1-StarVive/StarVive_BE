@@ -9,10 +9,15 @@ import lombok.NoArgsConstructor;
 public class ProductListResponse {
 
     private String imageThumbUrl;
+
     private String imageThumbAlt;
+
     private String name;
+
     private int baseDiscountRate;
+
     private int discountedPrice;
+
     private int price;
 
     @Builder

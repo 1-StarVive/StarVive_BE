@@ -33,11 +33,11 @@ public class ProductController {
     @Operation(summary = "상품 목록 조회 (무한스크롤)", description = "마지막 상품 ID 기준으로 다음 상품 목록을 조회합니다.", tags = {"product-service"})
     @GetMapping("/all")
     public List<ProductListResponseVo> getAllProducts(
-        @RequestParam(required = false) UUID lastProductId,
-        @RequestParam(defaultValue = "20") int size) {
-    return productService.getProductsByCursor(lastProductId, size).stream()
-            .map(ProductListResponseVo::from)
-            .toList();
+            @RequestParam(required = false) UUID lastProductId,
+            @RequestParam(defaultValue = "20") int size) {
+        return productService.getProductsByCursor(lastProductId, size).stream()
+                .map(ProductListResponseVo::from)
+                .toList();
     }
 
     @Operation(summary = "상품 수정", description = "상품을 수정합니다.", tags = {"product-service"})

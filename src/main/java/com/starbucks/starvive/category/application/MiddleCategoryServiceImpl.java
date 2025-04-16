@@ -35,6 +35,12 @@ public class MiddleCategoryServiceImpl implements MiddleCategoryService {
     }
 
     @Override
+    public List<MiddleCategoryResponseDto> findMiddleCategoryByTopId(UUID topCategoryId) {
+        return middleCategoryRepository.findByTopCategoryIdAndDeletedFalse(topCategoryId)
+                .stream().map(MiddleCategoryResponseDto::from).toList();
+    }
+
+    @Override
     public MiddleCategoryResponseDto findMiddleCategoryById(UUID middleCategoryId) {
         MiddleCategory middleCategory = middleCategoryRepository.findByDeletedFalseAndMiddleCategoryId(middleCategoryId)
                 .orElseThrow(() -> new BaseException(NO_EXIST_CATEGORY));

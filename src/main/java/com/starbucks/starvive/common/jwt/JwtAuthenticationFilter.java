@@ -2,7 +2,7 @@ package com.starbucks.starvive.common.jwt;
 
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
-import com.starbucks.starvive.user.repository.UserRepository;
+import com.starbucks.starvive.user.infrastructure.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.ServletException;
