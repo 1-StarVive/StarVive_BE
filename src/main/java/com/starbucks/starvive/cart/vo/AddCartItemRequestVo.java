@@ -8,7 +8,6 @@ import java.util.UUID;
 @NoArgsConstructor
 public class AddCartItemRequestVo {
 
-    private UUID userId;
     private UUID productId;
     private UUID productOptionId;
     private int quantity;
