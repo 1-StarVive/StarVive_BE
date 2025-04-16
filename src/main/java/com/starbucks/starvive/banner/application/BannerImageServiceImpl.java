@@ -90,7 +90,7 @@ public class BannerImageServiceImpl implements BannerImageService {
         banner.softDelete();
     }
 
-    // 공통 Banner 빌더
+    // ✅ 공통 Banner 빌더
     private Banner buildBanner(String imageUrl, AddBannerImageRequestDto addBannerImageRequestDto) {
         return Banner.builder()
                 .imageBannerUrl(imageUrl)
