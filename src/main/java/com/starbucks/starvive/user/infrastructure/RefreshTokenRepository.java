@@ -1,4 +1,4 @@
-package com.starbucks.starvive.user.repository;
+package com.starbucks.starvive.user.infrastructure;
 
 import com.starbucks.starvive.user.domain.RefreshToken;
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -14,6 +14,8 @@ import com.starbucks.starvive.product.dto.out.ProductResponseDto;
 import com.starbucks.starvive.product.infrastructure.ProductOptionRepository;
 import com.starbucks.starvive.product.infrastructure.ProductRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
@@ -60,18 +62,19 @@ public class ProductServiceImpl implements ProductService {
 
     @Transactional(readOnly = true)
     @Override
-    public List<ProductListResponseDto> getAllProducts() {
-        return productRepository.findAll().stream()
+    public List<ProductListResponseDto> getProductsByCursor(UUID lastProductId, int size) {
+        Pageable pageable = PageRequest.of(0, size);
+        List<Product> products = (lastProductId == null)
+                ? productRepository.findAllByOrderByProductIdDesc(pageable)
+                : productRepository.findByProductIdLessThanOrderByProductIdDesc(lastProductId, pageable);
+
+        return products.stream()
                 .map(product -> {
-                    ProductOption option = productOptionRepository.findFirstByProductId(product.getProductId())
-                            .orElseThrow(() -> new BaseException(NO_EXIST_OPTION));
-
-                    ProductImage image = productImageRepository.findFirstByProductId(product.getProductId())
-                            .orElseThrow(() -> new BaseException(NO_EXIST_IMAGE));
-
+                    ProductOption option = productOptionRepository.findFirstByProductId(product.getProductId()).orElse(null);
+                    ProductImage image = productImageRepository.findFirstByProductId(product.getProductId()).orElseThrow(() -> new BaseException(NO_EXIST_IMAGE));
                     return ProductListResponseDto.from(product, option, image);
                 })
-                .collect(Collectors.toList());
+                .toList();
     }
 
         @Override
