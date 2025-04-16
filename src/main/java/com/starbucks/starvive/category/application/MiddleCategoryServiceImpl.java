@@ -42,6 +42,12 @@ public class MiddleCategoryServiceImpl implements MiddleCategoryService {
     }
 
     @Override
+    public List<MiddleCategoryResponseDto> findMiddleCategoryByTopId(UUID topCategoryId) {
+        return middleCategoryRepository.findByTopCategoryIdAndDeletedFalse(topCategoryId)
+                .stream().map(MiddleCategoryResponseDto::from).toList();
+    }
+
+    @Override
     public List<MiddleCategoryResponseDto> findMiddleCategories() {
         return middleCategoryRepository.findAllByDeletedFalse()
                 .stream().map(MiddleCategoryResponseDto::from).toList();
