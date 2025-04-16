@@ -14,8 +14,6 @@ public interface MiddleCategoryService {
 
     MiddleCategoryResponseDto findMiddleCategoryById(UUID middleCategoryId);
 
-    List<MiddleCategoryResponseDto> findMiddleCategoryByTopId(UUID topCategoryId);
-
     List<MiddleCategoryResponseDto> findMiddleCategories();
 
     void updateMiddleCategory(UpdateMiddleCategoryRequestDto updateMiddleCategoryRequestDto);
