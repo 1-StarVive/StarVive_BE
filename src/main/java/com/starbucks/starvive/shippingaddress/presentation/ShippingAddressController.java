@@ -2,23 +2,18 @@ package com.starbucks.starvive.shippingaddress.presentation;
 
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import com.starbucks.starvive.shippingaddress.domain.ShippingAddress;
 import com.starbucks.starvive.shippingaddress.application.ShippingAddressService;
 import com.starbucks.starvive.shippingaddress.dto.in.AddShippingAddressDto;
 import com.starbucks.starvive.shippingaddress.vo.in.AddShippingAddressVo;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PutMapping;
 import com.starbucks.starvive.shippingaddress.vo.in.UpdateShippingAddressVo;
 import com.starbucks.starvive.shippingaddress.dto.in.UpdateShippingAddressDto;
 import com.starbucks.starvive.shippingaddress.dto.in.DeleteShippingAddressRequestDto;
 import com.starbucks.starvive.shippingaddress.vo.in.DeleteShippipngAddressVo;
+import java.util.UUID;
 
 @RequiredArgsConstructor
 @RestController
@@ -39,6 +34,13 @@ public class ShippingAddressController {
         shippingAddressService.addShippingAddress(dto, userDetails);
     }
 
+    @GetMapping("?{shippingAddressId}")
+    public ShippingAddress getShippingAddressById(
+            @PathVariable UUID shippingAddressId,
+            @AuthenticationPrincipal UserDetails userDetails) {
+        return shippingAddressService.getShippingAddressById(shippingAddressId, userDetails);
+    }
+
     @GetMapping
     public List<ShippingAddress> getShippingAddress(@AuthenticationPrincipal UserDetails userDetails) {
         List<ShippingAddress> shippingAddresses = shippingAddressService.getShippingAddress(userDetails);
@@ -49,5 +51,5 @@ public class ShippingAddressController {
     public void deleteShippingAddress(@RequestBody DeleteShippipngAddressVo deleteShippipngAddressVo) {
         shippingAddressService.deleteShippingAddress(DeleteShippingAddressRequestDto.from(deleteShippipngAddressVo));
     }
-    
+
 }

@@ -131,7 +131,12 @@ public enum BaseResponseStatus {
     S3_EMPTY_FILE_LIST(HttpStatus.BAD_REQUEST, false, 7008, "업로드할 파일 목록이 비어 있습니다."),
 
     // 배너
-    NO_EXIST_BANNER(HttpStatus.NOT_FOUND, false, 7009, "배너를 찾을 수 없습니다.");
+    NO_EXIST_BANNER(HttpStatus.NOT_FOUND, false, 7009, "배너를 찾을 수 없습니다."),
+
+    /**
+     * 8000: shipping address service error
+     */
+    FORBIDDEN_SHIPPING_ADDRESS(HttpStatus.FORBIDDEN, false, 8002, "해당 배송지에 접근 권한이 없습니다.");
 
     private final HttpStatusCode httpStatusCode;
     private final boolean isSuccess;
