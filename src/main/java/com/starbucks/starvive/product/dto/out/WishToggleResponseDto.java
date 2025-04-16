@@ -6,7 +6,7 @@ import java.util.UUID;
 
 @Getter
 @AllArgsConstructor
-public class ToggleWishResponseDto {
+public class WishToggleResponseDto {
 
     private UUID productId;
     private boolean wished;

@@ -24,20 +24,20 @@ public class ProductController {
         productService.addProduct(AddProductRequestDto.from(addProductRequestVo));
     }
 
+
     @Operation(summary = "상품 단건 조회", description = "상품 ID로 하나의 상품을 조회합니다.", tags = {"product-service"})
     @GetMapping
     public ProductResponseVo getProduct(@RequestParam("productId") UUID productId) {
         return ProductResponseVo.from(productService.getProduct(productId));
     }
 
-    @Operation(summary = "상품 목록 조회 (무한스크롤)", description = "마지막 상품 ID 기준으로 다음 상품 목록을 조회합니다.", tags = {"product-service"})
+
+    @Operation(summary = "상품 전체 조회", description = "상품 목록을 조회합니다.", tags = {"product-service"})
     @GetMapping("/all")
-    public List<ProductListResponseVo> getAllProducts(
-        @RequestParam(required = false) UUID lastProductId,
-        @RequestParam(defaultValue = "20") int size) {
-    return productService.getProductsByCursor(lastProductId, size).stream()
-            .map(ProductListResponseVo::from)
-            .toList();
+    public List<ProductListResponseVo> getAllProducts() {
+        return productService.getAllProducts().stream()
+                .map(ProductListResponseVo::from)
+                .toList();
     }
 
     @Operation(summary = "상품 수정", description = "상품을 수정합니다.", tags = {"product-service"})
