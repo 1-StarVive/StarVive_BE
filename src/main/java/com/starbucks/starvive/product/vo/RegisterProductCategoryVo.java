@@ -3,7 +3,6 @@ package com.starbucks.starvive.product.vo;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
 import java.util.UUID;
 
 @Getter

@@ -21,21 +21,22 @@ public class ProductOption extends BaseEntity {
     @Column(updatable = false, nullable = false, columnDefinition = "BINARY(16)")
     private UUID productOptionId;
 
-    @Column(nullable = false)
-    @ColumnDefault("false")
+    @Column(nullable = true)
+    @ColumnDefault("true")
     private Integer stock; // 상품 옵션의 남은 재고 수량
 
     @Column(nullable = false)
     private int price;
 
-    @Column(nullable = false)
-    @ColumnDefault("false")
+    @Column(nullable = true)
+    @ColumnDefault("true")
     private Boolean carvedAvailable; // 각인 여부
 
     @Column(nullable = false)
     private int baseDiscountRate;
 
-    private String name; // 길이 ? 사이즈 ?
+    @Column(nullable = false)
+    private String name;
 
     @Column(nullable = false, columnDefinition = "BINARY(16)")
     private UUID productId;

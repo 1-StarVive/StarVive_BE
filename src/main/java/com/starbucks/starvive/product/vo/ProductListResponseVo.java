@@ -11,23 +11,29 @@ import java.util.UUID;
 public class ProductListResponseVo {
 
     private UUID productId;
-    private String imageThumbUrl;
     private String name;
+    private String imageThumbUrl;
+    private String imageThumbAlt;
+    private int baseDiscountRate;
     private int price;
 
     @Builder
-    public ProductListResponseVo(UUID productId,String imageThumbUrl, String name,int price) {
+    public ProductListResponseVo(UUID productId, String name, String imageThumbUrl, String imageThumbAlt, int baseDiscountRate, int price) {
         this.productId = productId;
-        this.imageThumbUrl = imageThumbUrl;
         this.name = name;
+        this.imageThumbUrl = imageThumbUrl;
+        this.imageThumbAlt = imageThumbAlt;
+        this.baseDiscountRate = baseDiscountRate;
         this.price = price;
     }
 
     public static ProductListResponseVo from(ProductListResponseDto productListResponseDto) {
         return ProductListResponseVo.builder()
                 .productId(productListResponseDto.getProductId())
-                .imageThumbUrl(productListResponseDto.getImageThumbUrl())
                 .name(productListResponseDto.getName())
+                .imageThumbUrl(productListResponseDto.getImageThumbUrl())
+                .imageThumbAlt(productListResponseDto.getImageThumbAlt())
+                .baseDiscountRate(productListResponseDto.getBaseDiscountRate())
                 .price(productListResponseDto.getPrice())
                 .build();
     }
