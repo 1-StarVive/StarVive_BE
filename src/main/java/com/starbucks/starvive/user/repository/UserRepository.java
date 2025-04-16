@@ -19,6 +19,9 @@ public interface UserRepository extends JpaRepository<User, UUID> {
     // 로그인 아이디로 사용자 찾기
     Optional<User> findByLoginId(String loginId);
 
+    // 로그인 아이디가 존재하는지 확인
+    boolean existsByLoginId(String loginId);
+
     // 소셜 로그인 타입과 소셜 ID로 사용자 찾기
     Optional<User> findBySocialLoginTypeAndSocialId(SocialLoginType socialLoginType, String socialId);
 
