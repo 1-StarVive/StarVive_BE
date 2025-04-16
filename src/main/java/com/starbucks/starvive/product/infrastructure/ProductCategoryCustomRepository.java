@@ -12,4 +12,5 @@ public interface ProductCategoryCustomRepository {
     List<ProductListResponseDto> findProductsByCategory(UUID topCategoryId,
                                                         UUID middleCategoryId,
                                                         UUID bottomCategoryId);
+
 }

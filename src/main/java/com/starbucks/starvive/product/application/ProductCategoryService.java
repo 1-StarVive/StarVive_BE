@@ -11,4 +11,5 @@ public interface ProductCategoryService {
     void addProductCategory(RegisterProductCategoryRequestDto registerProductCategoryRequestDto);
 
     List<ProductListResponseDto> getProductsByCategory(UUID topCategoryId, UUID middleCategoryId, UUID bottomCategoryId);
+
 }

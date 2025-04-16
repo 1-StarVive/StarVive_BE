@@ -57,5 +57,6 @@ public class ProductCategoryCustomImpl implements ProductCategoryCustomRepositor
                 .join(image).on(image.productId.eq(product.productId))
                 .where(builder)
                 .fetch();
+
     }
 }

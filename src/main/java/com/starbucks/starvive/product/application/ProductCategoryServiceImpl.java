@@ -42,5 +42,6 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
     @Override
     public List<ProductListResponseDto> getProductsByCategory(UUID topCategoryId, UUID middleCategoryId, UUID bottomCategoryId) {
         return productCategoryCustomRepository.findProductsByCategory(topCategoryId, middleCategoryId, bottomCategoryId);
+
     }
 }
