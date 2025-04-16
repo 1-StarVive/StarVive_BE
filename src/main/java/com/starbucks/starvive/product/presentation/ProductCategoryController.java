@@ -39,4 +39,5 @@ public class ProductCategoryController {
     ) {
         return productCategoryService.getProductsByCategory(topCategoryId, middleCategoryId, bottomCategoryId);
     }
+
 }
