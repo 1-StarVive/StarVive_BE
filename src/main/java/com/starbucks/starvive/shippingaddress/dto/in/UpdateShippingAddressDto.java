@@ -1,14 +1,12 @@
 package com.starbucks.starvive.shippingaddress.dto.in;
 
-import java.util.UUID;
-import com.starbucks.starvive.shippingaddress.domain.ShippingAddress;
 import com.starbucks.starvive.shippingaddress.vo.in.UpdateShippingAddressVo;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+
 @Getter
-@Builder
-@AllArgsConstructor
+@NoArgsConstructor
 public class UpdateShippingAddressDto {
 
     private String addressNickName;
@@ -20,9 +18,6 @@ public class UpdateShippingAddressDto {
     private String memo;
     private boolean selectedBase;
 
-    
-    
-    
     public static UpdateShippingAddressDto from(UpdateShippingAddressVo updateShippingAddressVo) {
         return UpdateShippingAddressDto.builder()
                 .addressNickName(updateShippingAddressVo.getAddressNickName())
@@ -34,5 +29,19 @@ public class UpdateShippingAddressDto {
                 .memo(updateShippingAddressVo.getMemo())
                 .selectedBase(updateShippingAddressVo.isSelectedBase())
                 .build();
+    }
+
+    @Builder
+    public UpdateShippingAddressDto(String addressNickName,
+     String receiverName, String postalCode, String baseAddress,
+      String detailAddress, String phoneNumber, String memo, boolean selectedBase) {
+        this.addressNickName = addressNickName;
+        this.receiverName = receiverName;
+        this.postalCode = postalCode;
+        this.baseAddress = baseAddress;
+        this.detailAddress = detailAddress;
+        this.phoneNumber = phoneNumber;
+        this.memo = memo;
+        this.selectedBase = selectedBase;
     }
 }

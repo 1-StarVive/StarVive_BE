@@ -1,7 +1,7 @@
 package com.starbucks.starvive.shippingaddress.application;
 
 import org.springframework.stereotype.Service;
-import com.starbucks.starvive.shippingaddress.repository.ShippingAddressRepository;
+
 import com.starbucks.starvive.shippingaddress.dto.in.AddShippingAddressDto;
 import org.springframework.security.core.userdetails.UserDetails;
 import lombok.RequiredArgsConstructor;
@@ -11,7 +11,10 @@ import java.util.List;
 import com.starbucks.starvive.user.domain.User;
 import org.springframework.transaction.annotation.Transactional;
 import com.starbucks.starvive.shippingaddress.dto.in.UpdateShippingAddressDto;
+import com.starbucks.starvive.shippingaddress.infrastructure.ShippingAddressRepository;
 import com.starbucks.starvive.shippingaddress.dto.in.DeleteShippingAddressRequestDto;
+import com.starbucks.starvive.common.domain.BaseResponseStatus;
+import com.starbucks.starvive.common.exception.BaseException;
 
 @RequiredArgsConstructor
 @Service
@@ -33,24 +36,25 @@ public class ShippingAddressServiceImpl implements ShippingAddressService {
     }
 
     @Override
+    @Transactional
     public List<ShippingAddress> getShippingAddress(UserDetails userDetails) {
         User user = (User) userDetails;
         return shippingAddressRepository.findByUserUuidAndDeletedFalse(user.getUserId());
     }
 
-    @Transactional
     @Override
+    @Transactional
     public void deleteShippingAddress(DeleteShippingAddressRequestDto deleteShippingAddressRequestDto) {
         ShippingAddress shippingAddress = shippingAddressRepository.findById(deleteShippingAddressRequestDto.getShippingAddressId())
-                .orElseThrow();
+                .orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_FOUND_SHIPPING_ADDRESS));
         shippingAddress.softDelete();
     }
 
-    @Transactional
     @Override
+    @Transactional
     public void updateShippingAddress(UUID shippingAddressId, UpdateShippingAddressDto updateShippingAddressDto) {
         ShippingAddress existingAddress = shippingAddressRepository.findById(shippingAddressId)
-                .orElseThrow(() -> new RuntimeException("수정할 배송지를 찾을 수 없습니다: " + shippingAddressId));
+                .orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_FOUND_SHIPPING_ADDRESS));
 
         UUID userId = existingAddress.getUserUuid();
 
@@ -61,7 +65,6 @@ public class ShippingAddressServiceImpl implements ShippingAddressService {
         }
     }
 
-    @Transactional
     private void setOnlyOneDefaultAddress(UUID userId, UUID defaultAddressId) {
         shippingAddressRepository.updateOtherAddressesSelectedBaseStatus(userId, defaultAddressId, false);
     }

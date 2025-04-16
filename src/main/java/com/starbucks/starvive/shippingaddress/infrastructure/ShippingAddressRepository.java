@@ -1,4 +1,4 @@
-package com.starbucks.starvive.shippingaddress.repository;
+package com.starbucks.starvive.shippingaddress.infrastructure;
 
 import org.springframework.stereotype.Repository;
 import java.util.UUID;
