@@ -11,7 +11,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import java.util.Arrays;
-import com.starbucks.starvive.user.repository.UserRepository;
+import com.starbucks.starvive.user.infrastructure.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 
 @Configuration

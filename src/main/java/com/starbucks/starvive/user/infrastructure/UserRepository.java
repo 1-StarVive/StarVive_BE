@@ -1,4 +1,4 @@
-package com.starbucks.starvive.user.repository;
+package com.starbucks.starvive.user.infrastructure;
 
 import com.starbucks.starvive.user.domain.User;
 import com.starbucks.starvive.user.domain.SocialLoginType;

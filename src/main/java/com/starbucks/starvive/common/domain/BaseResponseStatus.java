@@ -65,16 +65,18 @@ public enum BaseResponseStatus {
     NO_EXIST_SECTION(HttpStatus.NOT_FOUND, false, 3005, "존재하지 않는 섹션 입니다."),
     NO_EXIST_CART(HttpStatus.NOT_FOUND, false, 3006, "장바구니에 상품이 존재하지 않습니다."),
 
-    DUPLICATED_PRODUCT(HttpStatus.CONFLICT, false, 3004, "이미 등록된 상품입니다"),
-    DUPLICATED_OPTION(HttpStatus.CONFLICT, false, 3005, "이미 등록된 옵션입니다"),
-    DUPLICATED_CATEGORY(HttpStatus.CONFLICT, false, 3006, "이미 등록된 카테고리입니다"),
+    DUPLICATED_PRODUCT(HttpStatus.CONFLICT, false, 3007, "이미 등록된 상품입니다"),
+    DUPLICATED_OPTION(HttpStatus.CONFLICT, false, 3008, "이미 등록된 옵션입니다"),
+    DUPLICATED_CATEGORY(HttpStatus.CONFLICT, false, 3009, "이미 등록된 카테고리입니다"),
 
     // wish
-    DUPLICATED_WISH(HttpStatus.CONFLICT, false,3007, "이미 찜된 상품입니다."),
+    DUPLICATED_WISH(HttpStatus.CONFLICT, false,3010, "이미 찜된 상품입니다."),
 
-    NO_EXIST_OPTIONS_IN_PRODUCT(HttpStatus.NOT_FOUND, false, 3007, "해당 상품에 옵션이 존재하지 않습니다"),
+    NO_EXIST_OPTIONS_IN_PRODUCT(HttpStatus.NOT_FOUND, false, 3011, "해당 상품에 옵션이 존재하지 않습니다"),
 
-    ALREADY_DELETED_CATEGORY(HttpStatus.BAD_REQUEST, false, 3008, "이미 삭제된 카테고리입니다."),
+    ALREADY_DELETED_CATEGORY(HttpStatus.BAD_REQUEST, false, 3012, "이미 삭제된 카테고리입니다."),
+
+    DUPLICATED_PRODUCT_CATEGORY(HttpStatus.CONFLICT, false, 3015, "이미 등록된 상품-카테고리입니다."),
 
     // Promotion
     DUPLICATED_PROMOTION(HttpStatus.CONFLICT, false, 3101, "이미 등록된 기획전입니다."),
@@ -125,11 +127,11 @@ public enum BaseResponseStatus {
     S3_FILE_NOT_FOUND(HttpStatus.NOT_FOUND, false, 7004, "S3에서 파일을 찾을 수 없습니다."),
     S3_CONNECTION_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, false, 7005, "S3 연결에 실패했습니다."),
     S3_EMPTY_FILE_NAME(HttpStatus.BAD_REQUEST, false, 7006, "업로드할 파일명이 비어 있습니다."),
-    S3_UPDATE_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, false, 7006, "S3 파일 수정에 실패했습니다."),
-    S3_EMPTY_FILE_LIST(HttpStatus.BAD_REQUEST, false, 7007, "업로드할 파일 목록이 비어 있습니다."),
-    // 배너
+    S3_UPDATE_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, false, 7007, "S3 파일 수정에 실패했습니다."),
+    S3_EMPTY_FILE_LIST(HttpStatus.BAD_REQUEST, false, 7008, "업로드할 파일 목록이 비어 있습니다."),
 
-    NO_EXIST_BANNER(HttpStatus.NOT_FOUND, false, 7007, "배너를 찾을 수 없습니다.");
+    // 배너
+    NO_EXIST_BANNER(HttpStatus.NOT_FOUND, false, 7009, "배너를 찾을 수 없습니다.");
 
     private final HttpStatusCode httpStatusCode;
     private final boolean isSuccess;

@@ -2,8 +2,8 @@ package com.starbucks.starvive.user.oauth2;
 
 import com.starbucks.starvive.common.jwt.JwtTokenProvider;
 import com.starbucks.starvive.user.domain.*;
-import com.starbucks.starvive.user.repository.RefreshTokenRepository;
-import com.starbucks.starvive.user.repository.UserRepository;
+import com.starbucks.starvive.user.infrastructure.RefreshTokenRepository;
+import com.starbucks.starvive.user.infrastructure.UserRepository;
 import com.starbucks.starvive.user.dto.out.SignInResponseDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;

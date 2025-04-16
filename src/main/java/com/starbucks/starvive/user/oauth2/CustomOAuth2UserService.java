@@ -1,7 +1,7 @@
 package com.starbucks.starvive.user.oauth2;
 
 import com.starbucks.starvive.user.domain.User;
-import com.starbucks.starvive.user.repository.UserRepository;
+import com.starbucks.starvive.user.infrastructure.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
