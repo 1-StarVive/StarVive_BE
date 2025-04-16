@@ -65,6 +65,26 @@ public class ShippingAddressServiceImpl implements ShippingAddressService {
         }
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public ShippingAddress getShippingAddressById(UUID shippingAddressId, UserDetails userDetails) {
+        User user = (User) userDetails;
+        UUID userId = user.getUserId();
+
+        ShippingAddress shippingAddress = shippingAddressRepository.findById(shippingAddressId)
+                .orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_FOUND_SHIPPING_ADDRESS));
+
+        if (shippingAddress.isDeleted()) {
+            throw new BaseException(BaseResponseStatus.NOT_FOUND_SHIPPING_ADDRESS);
+        }
+
+        if (!shippingAddress.getUserUuid().equals(userId)) {
+            throw new BaseException(BaseResponseStatus.FORBIDDEN_SHIPPING_ADDRESS);
+        }
+
+        return shippingAddress;
+    }
+
     private void setOnlyOneDefaultAddress(UUID userId, UUID defaultAddressId) {
         shippingAddressRepository.updateOtherAddressesSelectedBaseStatus(userId, defaultAddressId, false);
     }

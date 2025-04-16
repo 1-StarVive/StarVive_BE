@@ -17,6 +17,8 @@ public interface ShippingAddressService {
 
     void updateShippingAddress(UUID shippingAddressId, UpdateShippingAddressDto updateShippingAddressDto);
 
+    ShippingAddress getShippingAddressById(UUID shippingAddressId, UserDetails userDetails);
+
     //void setDefaultShippingAddress(UUID shippingAddressId, UserDetails userDetails);
 
 }
