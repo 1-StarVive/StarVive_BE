@@ -56,5 +56,6 @@ public class ProductController {
     @GetMapping("/detail")
     public ProductDetailResponseVo getProductDetail(@RequestParam("productId") UUID productId) {
         return ProductDetailResponseVo.from(productService.getProductDetail(productId));
+
     }
 }
