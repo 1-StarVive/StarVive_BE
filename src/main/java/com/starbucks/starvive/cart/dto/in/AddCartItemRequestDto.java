@@ -9,15 +9,13 @@ import java.util.UUID;
 @Getter
 @NoArgsConstructor
 public class AddCartItemRequestDto {
-    private UUID userId;
     private UUID productId;
     private UUID productOptionId;
     private int quantity;
     private boolean checked;
 
     @Builder
-    public AddCartItemRequestDto(UUID userId, UUID productId, UUID productOptionId, int quantity, boolean checked) {
-        this.userId = userId;
+    public AddCartItemRequestDto(UUID productId, UUID productOptionId, int quantity, boolean checked) {
         this.productId = productId;
         this.productOptionId = productOptionId;
         this.quantity = quantity;
@@ -26,7 +24,6 @@ public class AddCartItemRequestDto {
 
     public static AddCartItemRequestDto from(AddCartItemRequestVo addCartItemRequestVo) {
         return AddCartItemRequestDto.builder()
-                .userId(addCartItemRequestVo.getUserId())
                 .productId(addCartItemRequestVo.getProductId())
                 .productOptionId(addCartItemRequestVo.getProductOptionId())
                 .quantity(addCartItemRequestVo.getQuantity())

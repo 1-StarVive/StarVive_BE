@@ -12,19 +12,16 @@ import java.util.UUID;
 @NoArgsConstructor
 public class DeleteSelectedCartItemsRequestDto {
 
-    private UUID userId;
     private List<UUID> cartItemIds;
 
     @Builder
-    public DeleteSelectedCartItemsRequestDto(UUID userId, List<UUID> cartItemIds) {
-        this.userId = userId;
+    public DeleteSelectedCartItemsRequestDto(List<UUID> cartItemIds) {
         this.cartItemIds = cartItemIds;
     }
 
     // VO → DTO 변환 메서드
     public static DeleteSelectedCartItemsRequestDto from(DeleteSelectedCartItemsRequestVo deleteSelectedCartItemsRequestVo) {
         return DeleteSelectedCartItemsRequestDto.builder()
-                .userId(deleteSelectedCartItemsRequestVo.getUserId())
                 .cartItemIds(deleteSelectedCartItemsRequestVo.getCartItemIds())
                 .build();
     }

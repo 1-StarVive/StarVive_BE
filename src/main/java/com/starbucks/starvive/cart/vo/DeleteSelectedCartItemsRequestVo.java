@@ -10,7 +10,6 @@ import java.util.UUID;
 @NoArgsConstructor
 public class DeleteSelectedCartItemsRequestVo {
 
-    private UUID userId;
     private List<UUID> cartItemIds;
 
 }

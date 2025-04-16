@@ -12,7 +12,7 @@ import java.util.UUID;
 public interface CartService {
 
     List<CartItemResponseVo> getCartList(UUID userId);
-    void addItem(AddCartItemRequestDto addCartItemRequestDto);
-    void updateItem(UpdateCartItemRequestDto updateCartItemRequestDto);
-    void deleteSelectedItems(DeleteSelectedCartItemsRequestDto deleteSelectedCartItemsRequestDto);
+    void addItem(AddCartItemRequestDto addCartItemRequestDto, UUID userId);
+    void updateItem(UpdateCartItemRequestDto updateCartItemRequestDto, UUID userId);
+    void deleteSelectedItems(DeleteSelectedCartItemsRequestDto deleteSelectedCartItemsRequestDto, UUID userId);
 }

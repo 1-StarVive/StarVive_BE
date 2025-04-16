@@ -51,9 +51,9 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public void addItem(AddCartItemRequestDto addCartItemRequestDto) {
+    public void addItem(AddCartItemRequestDto addCartItemRequestDto, UUID userId) {
         Cart cart = Cart.builder()
-                .userId(addCartItemRequestDto.getUserId())
+                .userId(userId)
                 .productId(addCartItemRequestDto.getProductId())
                 .productOptionId(addCartItemRequestDto.getProductOptionId())
                 .quantity(addCartItemRequestDto.getQuantity())
@@ -63,14 +63,14 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public void updateItem(UpdateCartItemRequestDto updateCartItemRequestDto) {
+    public void updateItem(UpdateCartItemRequestDto updateCartItemRequestDto, UUID userId) {
         Cart cart = cartRepository.findById(updateCartItemRequestDto.getCartId())
                 .orElseThrow(() -> new BaseException(NO_EXIST_CART));
         cart.update(updateCartItemRequestDto.getProductOptionId(), updateCartItemRequestDto.getQuantity(), updateCartItemRequestDto.isChecked());
     }
 
     @Override
-    public void deleteSelectedItems(DeleteSelectedCartItemsRequestDto deleteSelectedCartItemsRequestDto) {
+    public void deleteSelectedItems(DeleteSelectedCartItemsRequestDto deleteSelectedCartItemsRequestDto, UUID userId) {
         List<UUID> cartItemIds = deleteSelectedCartItemsRequestDto.getCartItemIds();
 
         // 장바구니 항목이 존재하는지 검증 (선택 사항)

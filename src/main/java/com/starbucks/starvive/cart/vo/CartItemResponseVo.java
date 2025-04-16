@@ -13,7 +13,6 @@ import java.util.UUID;
 @NoArgsConstructor
 public class CartItemResponseVo {
 
-    private UUID userId;
     private UUID cartId;
     private UUID productId;
     private String name;
@@ -23,10 +22,9 @@ public class CartItemResponseVo {
     private int quantity;
 
     @Builder
-    public CartItemResponseVo(UUID userId, UUID cartId, UUID productId,
+    public CartItemResponseVo(UUID cartId, UUID productId,
                               String name, String imageThumbUrl, String imageThumbAlt,
                               int price, int quantity) {
-        this.userId = userId;
         this.cartId = cartId;
         this.productId = productId;
         this.name = name;
@@ -38,7 +36,6 @@ public class CartItemResponseVo {
 
     public static CartItemResponseVo from(Cart cart, Product product, ProductOption option, ProductImage image) {
         return CartItemResponseVo.builder()
-                .userId(cart.getUserId())
                 .cartId(cart.getCartId())
                 .productId(cart.getProductId())
                 .name(product.getName())
