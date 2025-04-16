@@ -59,21 +59,6 @@ public class ProductServiceImpl implements ProductService {
                 .orElseThrow(() -> new BaseException(NO_EXIST_PRODUCT)));
     }
 
-    //    @Transactional(readOnly = true)
-//    @Override
-//    public List<ProductListResponseDto> getAllProducts() {
-//        return productRepository.findAll().stream()
-//                .map(product -> {
-//                    ProductOption option = productOptionRepository.findFirstByProductId(product.getProductId())
-//                            .orElse(null);
-//
-//                    ProductImage image = productImageRepository.findFirstByProductId(product.getProductId())
-//                            .orElse(null);
-//
-//                    return ProductListResponseDto.from(product, option, image);
-//                })
-//                .collect(Collectors.toList());
-//    }
     @Transactional(readOnly = true)
     @Override
     public List<ProductListResponseDto> getProductsByCursor(UUID lastProductId, int size) {
