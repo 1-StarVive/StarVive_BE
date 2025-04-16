@@ -12,7 +12,6 @@ public class UpdateBannerImageRequestVo {
 
     private UUID bannerId;
     private String imageBannerAlt;
-    private String linkUrl;
     private LocalDate postedAt;
     private boolean activated;
 }

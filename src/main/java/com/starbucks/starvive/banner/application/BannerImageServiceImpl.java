@@ -95,7 +95,6 @@ public class BannerImageServiceImpl implements BannerImageService {
         return Banner.builder()
                 .imageBannerUrl(imageUrl)
                 .imageBannerAlt(addBannerImageRequestDto.getImageBannerAlt())
-                .linkUrl(addBannerImageRequestDto.getLinkUrl())
                 .postedAt(addBannerImageRequestDto.getPostedAt())
                 .activated(addBannerImageRequestDto.isActivated())
                 .build();

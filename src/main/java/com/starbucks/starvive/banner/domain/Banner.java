@@ -28,9 +28,6 @@ public class Banner extends BaseEntity {
     @Column(nullable = false)
     private String imageBannerAlt;
 
-    @Column(nullable = false)
-    private String linkUrl; // 이동 주소
-
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     @Column(nullable = false)
     private LocalDate postedAt; // 배너 게시일
@@ -40,10 +37,9 @@ public class Banner extends BaseEntity {
 
 
     @Builder
-    public Banner(String imageBannerUrl, String imageBannerAlt, String linkUrl, LocalDate postedAt, boolean activated) {
+    public Banner(String imageBannerUrl, String imageBannerAlt, LocalDate postedAt, boolean activated) {
         this.imageBannerUrl = imageBannerUrl;
         this.imageBannerAlt = imageBannerAlt;
-        this.linkUrl = linkUrl;
         this.postedAt = postedAt;
         this.activated = activated;
     }
@@ -54,7 +50,6 @@ public class Banner extends BaseEntity {
 
     public void updateInfo(UpdateBannerImageRequestDto updateBannerImageRequestDto) {
         this.imageBannerAlt = updateBannerImageRequestDto.getImageBannerAlt();
-        this.linkUrl = updateBannerImageRequestDto.getLinkUrl();
         this.postedAt = updateBannerImageRequestDto.getPostedAt();
         this.activated = updateBannerImageRequestDto.isActivated();
     }
