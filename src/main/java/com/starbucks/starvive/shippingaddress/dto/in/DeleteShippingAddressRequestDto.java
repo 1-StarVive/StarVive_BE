@@ -1,15 +1,14 @@
 package com.starbucks.starvive.shippingaddress.dto.in;
 
-import jakarta.validation.constraints.NotNull; // 유효성 검사 추가
-import lombok.AllArgsConstructor;
+import jakarta.validation.constraints.NotNull; 
+import lombok.NoArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import com.starbucks.starvive.shippingaddress.vo.in.DeleteShippipngAddressVo;
 import java.util.UUID;
 
 @Getter
-@Builder
-@AllArgsConstructor
+@NoArgsConstructor
 public class DeleteShippingAddressRequestDto {
 
     @NotNull()
@@ -19,5 +18,10 @@ public class DeleteShippingAddressRequestDto {
         return DeleteShippingAddressRequestDto.builder()
                 .shippingAddressId(deleteShippipngAddressVo.getShippingAddressId())
                 .build();
+    }
+
+    @Builder
+    public DeleteShippingAddressRequestDto(UUID shippingAddressId) {
+        this.shippingAddressId = shippingAddressId;
     }
 } 

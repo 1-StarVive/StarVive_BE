@@ -8,19 +8,18 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import java.util.List;
 import com.starbucks.starvive.shippingaddress.domain.ShippingAddress;
 import com.starbucks.starvive.shippingaddress.application.ShippingAddressService;
 import com.starbucks.starvive.shippingaddress.dto.in.AddShippingAddressDto;
 import com.starbucks.starvive.shippingaddress.vo.in.AddShippingAddressVo;
-import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PutMapping;
 import com.starbucks.starvive.shippingaddress.vo.in.UpdateShippingAddressVo;
 import com.starbucks.starvive.shippingaddress.dto.in.UpdateShippingAddressDto;
 import com.starbucks.starvive.shippingaddress.dto.in.DeleteShippingAddressRequestDto;
 import com.starbucks.starvive.shippingaddress.vo.in.DeleteShippipngAddressVo;
+
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("api/v1/shipping-address")

@@ -2,14 +2,13 @@ package com.starbucks.starvive.shippingaddress.dto.in;
 
 import lombok.Getter;
 import lombok.Builder;
-import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import com.starbucks.starvive.shippingaddress.domain.ShippingAddress;
 import com.starbucks.starvive.shippingaddress.vo.in.AddShippingAddressVo;
 import java.util.UUID;
 
 @Getter
-@Builder
-@AllArgsConstructor
+@NoArgsConstructor
 public class AddShippingAddressDto {
 
     private String addressNickName;
@@ -48,4 +47,17 @@ public class AddShippingAddressDto {
                 .build();
     }
 
+    @Builder
+    public AddShippingAddressDto(String addressNickName,
+     String receiverName, String postalCode, String baseAddress,
+      String detailAddress, String phoneNumber, String memo, boolean selectedBase) {
+        this.addressNickName = addressNickName;
+        this.receiverName = receiverName;
+        this.postalCode = postalCode;
+        this.baseAddress = baseAddress;
+        this.detailAddress = detailAddress;
+        this.phoneNumber = phoneNumber;
+        this.memo = memo;
+        this.selectedBase = selectedBase;
+    }
 }

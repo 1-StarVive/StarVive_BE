@@ -3,13 +3,13 @@ package com.starbucks.starvive.user.dto.in;
 import com.starbucks.starvive.user.domain.Gender;
 import com.starbucks.starvive.user.domain.User;
 import com.starbucks.starvive.user.vo.SignUpRequestVo;
-import lombok.Builder;
+import lombok.NoArgsConstructor;
 import lombok.Getter;
-
+import lombok.Builder;
 import java.time.LocalDate;
 
 @Getter
-@Builder
+@NoArgsConstructor
 public class SignUpRequestDto {
     
     private String loginId;
@@ -64,5 +64,23 @@ public class SignUpRequestDto {
             .marketingSmsAgreed(marketingSmsAgreed)
             .nicknameTermAgreed(nicknameTermAgreed)
             .build();
+    }
+
+    @Builder
+    public SignUpRequestDto(String loginId, String email, String password, String name, String nickname, String phoneNumber, LocalDate birth, Gender gender, boolean termsAgreed, boolean privacyAgreed, boolean cardTermsAgreed, boolean marketingEmailAgreed, boolean marketingSmsAgreed, boolean nicknameTermAgreed) {
+        this.loginId = loginId;
+        this.email = email;
+        this.password = password;
+        this.name = name;
+        this.nickname = nickname;
+        this.phoneNumber = phoneNumber;
+        this.birth = birth;
+        this.gender = gender;
+        this.termsAgreed = termsAgreed;
+        this.privacyAgreed = privacyAgreed;
+        this.cardTermsAgreed = cardTermsAgreed;
+        this.marketingEmailAgreed = marketingEmailAgreed;
+        this.marketingSmsAgreed = marketingSmsAgreed;
+        this.nicknameTermAgreed = nicknameTermAgreed;
     }
 }
