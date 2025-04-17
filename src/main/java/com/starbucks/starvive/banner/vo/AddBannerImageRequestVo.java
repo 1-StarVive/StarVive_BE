@@ -10,7 +10,6 @@ import java.time.LocalDate;
 public class AddBannerImageRequestVo {
 
     private String imageBannerAlt;
-    private String linkUrl;
     private LocalDate postedAt;
     private boolean activated;
 
