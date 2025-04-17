@@ -54,7 +54,7 @@ pipeline {
             steps {
                 sh '''
                     # (선택 사항) 기존 서비스 중지 및 관련 리소스 정리 (볼륨 제외)
-                    # docker-compose -f docker-compose.yml down --remove-orphans || true 
+                    docker-compose -f docker-compose.yml down --remove-orphans || true 
                     
                     echo "Starting application using docker-compose..."
                     # Docker Compose 실행 (-f 로 파일 지정, up -d 로 백그라운드 실행)
