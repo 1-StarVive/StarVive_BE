@@ -25,7 +25,7 @@ import static com.starbucks.starvive.common.domain.BaseResponseStatus.*;
 @Service
 @RequiredArgsConstructor
 public class WishServiceImpl implements WishService {
-//ㅋ
+//ㅋㅋ
     private final WishRepository wishRepository;
     private final ProductOptionRepository productOptionRepository;
     private final ProductRepository productRepository;
