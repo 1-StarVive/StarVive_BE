@@ -1,0 +1,71 @@
+version: '3.8' # Docker Compose 파일 버전 지정
+
+services:
+  # Spring Boot 애플리케이션 서비스 정의
+  app:
+    # Jenkins에서 빌드한 이미지를 사용합니다. 
+    # Jenkinsfile의 이미지 이름/태그와 일치해야 합니다.
+    # Jenkins에서 환경 변수(예: IMAGE_NAME=springboot-app:dev)로 전달받는 것이 좋습니다.
+    image: ${IMAGE_NAME:-springboot-app:dev} 
+    container_name: ${CONTAINER_NAME:-springboot-container-dev} # Jenkinsfile의 CONTAINER_NAME 사용
+    restart: always # 컨테이너 비정상 종료 시 자동 재시작
+    ports:
+      # Jenkinsfile의 SERVER_PORT를 호스트에 매핑
+      - "${SERVER_PORT:-8082}:${SERVER_PORT:-8082}" 
+    environment:
+      # --- Jenkinsfile에서 주입할 환경 변수들 ---
+      # DB 설정 (Compose 네트워크 내의 mysql 서비스 사용 가정, 또는 외부 DB 주소)
+      # 만약 mysql 컨테이너도 이 Compose 파일에서 관리한다면 호스트를 'mysql'로 지정 가능
+      - SPRING_DATASOURCE_URL=jdbc:mysql://${DB_HOST:-mysql}:${DB_PORT:-3306}/${DB_NAME:-starvive_dev}?useSSL=false&allowPublicKeyRetrieval=true
+      # Use Jenkins Credential variables directly (check names in Jenkins)
+      - SPRING_DATASOURCE_USERNAME=${db-credentials-dev_USR}
+      - SPRING_DATASOURCE_PASSWORD=${db-credentials-dev_PSW}
+      # Redis 설정 (같은 네트워크 내의 'redis' 서비스 사용)
+      - SPRING_DATA_REDIS_HOST=${REDIS_HOST:-redis}
+      - SPRING_DATA_REDIS_PORT=${REDIS_PORT:-6379}
+      # - SPRING_DATA_REDIS_PASSWORD=${REDIS_PASSWORD} # 필요시 Redis 비밀번호 주입
+      # OAuth 설정 (Use Jenkins Credential variable names)
+      - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID_CRED}
+      - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET_CRED}
+      - KAKAO_CLIENT_ID=${KAKAO_CLIENT_ID_CRED}
+      - KAKAO_CLIENT_SECRET=${KAKAO_CLIENT_SECRET_CRED}
+      # JWT 설정 (Use Jenkins Credential variable name)
+      - JWT_SECRET_KEY=${JWT_SECRET_KEY_CRED}
+      # AWS 설정 (Use Jenkins Credential variable names)
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID_CRED}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY_CRED}
+      - AWS_REGION=${AWS_REGION:-ap-northeast-2}
+      - AWS_DEFAULT_REGION=${AWS_REGION:-ap-northeast-2} # 중복될 수 있지만 명시적으로 추가
+      - S3_BUCKET_NAME=${S3_BUCKET_NAME:-starvive-assets}
+      # 기타 설정
+      - SERVER_PORT=${SERVER_PORT:-8082}
+      - SPRING_PROFILES_ACTIVE=${SPRING_PROFILES_ACTIVE:-prod} # 배포 환경 프로필 지정
+    depends_on: # 서비스 시작 순서 제어 (선택 사항이지만 권장)
+      - redis
+      # - mysql # 만약 mysql도 여기서 관리한다면
+    networks: # 사용할 네트워크 지정
+      - starvive-network
+
+  # Redis 서비스 정의 (기존 컨테이너 설정을 기반으로)
+  redis:
+    image: redis:7.2.4 # 기존과 동일한 이미지 버전 사용
+    container_name: redis # 기존과 동일한 이름 사용 (선택 사항)
+    restart: always
+    ports:
+      # 호스트의 6379 포트와 컨테이너의 6379 포트 매핑 (외부 접근용)
+      - "6379:6379"
+    volumes:
+      # 데이터 영속성을 위한 볼륨 마운트 (매우 중요!)
+      # 'redis-data' 라는 Docker 관리 볼륨을 컨테이너 내부 /data 에 연결
+      - redis-data:/data
+    networks: # 사용할 네트워크 지정
+      - starvive-network
+
+# Docker 네트워크 정의
+networks:
+  starvive-network:
+    driver: bridge # 기본 브릿지 드라이버 사용
+
+# Docker 볼륨 정의
+volumes:
+  redis-data: # Redis 데이터를 저장할 명명된 볼륨 

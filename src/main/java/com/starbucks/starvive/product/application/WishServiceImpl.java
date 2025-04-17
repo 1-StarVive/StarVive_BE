@@ -1,14 +1,14 @@
 package com.starbucks.starvive.product.application;
 
 import com.starbucks.starvive.common.exception.BaseException;
+import com.starbucks.starvive.image.domain.ProductImage;
+import com.starbucks.starvive.image.infrastructure.ProductImageRepository;
 import com.starbucks.starvive.product.domain.Product;
 import com.starbucks.starvive.product.dto.in.AddWishRequestDto;
 import com.starbucks.starvive.product.dto.in.DeleteWishRequestDto;
 import com.starbucks.starvive.product.dto.in.ToggleWishRequestDto;
 import com.starbucks.starvive.product.dto.out.WishListResponseDto;
 import com.starbucks.starvive.product.infrastructure.ProductRepository;
-import com.starbucks.starvive.image.domain.ProductImage;
-import com.starbucks.starvive.image.infrastructure.ProductImageRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -26,17 +26,18 @@ import static com.starbucks.starvive.common.domain.BaseResponseStatus.*;
 @RequiredArgsConstructor
 public class WishServiceImpl implements WishService {
 
+    private final StringRedisTemplate redisTemplate;
+    private final ProductRepository productRepository;
+    private final ProductImageRepository productImageRepository;
+
     private static final String USER_LIKES_KEY_PREFIX = "user:";
     private static final String USER_LIKES_KEY_SUFFIX = ":likes";
     private static final String PRODUCT_LIKED_BY_KEY_PREFIX = "product:";
     private static final String PRODUCT_LIKED_BY_KEY_SUFFIX = ":liked_by";
 
-    private final StringRedisTemplate redisTemplate;
-    private final ProductRepository productRepository;
-    private final ProductImageRepository productImageRepository;
-
     @Override
     public void addWish(AddWishRequestDto dto) {
+
         UUID userId = dto.getUserId();
         UUID productId = dto.getProductId();
 
@@ -52,9 +53,10 @@ public class WishServiceImpl implements WishService {
 
         log.info("찜 추가: userId={}, productId={}", userId, productId);
     }
-
+    
     @Override
     public void deleteWish(DeleteWishRequestDto dto) {
+        
         UUID userId = dto.getUserId();
         UUID productId = dto.getProductId();
 
@@ -66,8 +68,34 @@ public class WishServiceImpl implements WishService {
         log.info("찜 삭제: userId={}, productId={}", userId, productId);
     }
 
+    @Transactional(readOnly = true)
+    @Override
+    public List<WishListResponseDto> getWishList(UUID userId) {
+
+        String userLikesKey = USER_LIKES_KEY_PREFIX + userId + USER_LIKES_KEY_SUFFIX;
+
+        Set<String> likedProductIdsStr = redisTemplate.opsForSet().members(userLikesKey);
+        if (likedProductIdsStr == null || likedProductIdsStr.isEmpty()) {
+            return List.of();
+        }
+
+        List<UUID> likedProductIds = likedProductIdsStr.stream()
+                .map(UUID::fromString)
+                .toList();
+
+        List<Product> likedProducts = productRepository.findAllById(likedProductIds);
+
+        return likedProducts.stream()
+                .map(product -> {
+                    ProductImage image = productImageRepository.findFirstByProductId(product.getProductId()).orElse(null);
+                    return WishListResponseDto.fromProduct(product, image);
+                })
+                .toList();
+    }
+
     @Override
     public void toggleWish(ToggleWishRequestDto dto) {
+
         UUID userId = dto.getUserId();
         UUID productId = dto.getProductId();
 
@@ -91,27 +119,5 @@ public class WishServiceImpl implements WishService {
         }
     }
 
-    @Transactional(readOnly = true)
-    @Override
-    public List<WishListResponseDto> getWishList(UUID userId) {
-        String userLikesKey = USER_LIKES_KEY_PREFIX + userId + USER_LIKES_KEY_SUFFIX;
-
-        Set<String> likedProductIdsStr = redisTemplate.opsForSet().members(userLikesKey);
-        if (likedProductIdsStr == null || likedProductIdsStr.isEmpty()) {
-            return List.of();
-        }
-
-        List<UUID> likedProductIds = likedProductIdsStr.stream()
-                .map(UUID::fromString)
-                .toList();
-
-        List<Product> likedProducts = productRepository.findAllById(likedProductIds);
-
-        return likedProducts.stream()
-                .map(product -> {
-                    ProductImage image = productImageRepository.findFirstByProductId(product.getProductId()).orElse(null);
-                    return WishListResponseDto.fromProduct(product, image);
-                })
-                .toList();
-    }
+    
 }

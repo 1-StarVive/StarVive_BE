@@ -17,6 +17,12 @@ pipeline {
         IMAGE_TAG = 'dev'
         AWS_REGION = 'ap-northeast-2'
         S3_BUCKET_NAME = 'starvive-assets'
+        IMAGE_NAME = "springboot-app:${IMAGE_TAG}"
+        DB_HOST = 'mysql'
+        DB_PORT = '3306'
+        REDIS_HOST = 'redis'
+        REDIS_PORT = '6379'
+        SPRING_PROFILES_ACTIVE = 'prod'
     }
     
     stages {
@@ -47,50 +53,44 @@ pipeline {
         stage('Deploy') {
             steps {
                 sh '''
-                    # 기존 컨테이너 중지 및 제거
-                    docker stop ${CONTAINER_NAME} || true
-                    docker rm ${CONTAINER_NAME} || true
+                    # (선택 사항) 기존 서비스 중지 및 관련 리소스 정리 (볼륨 제외)
+                    # docker-compose -f docker-compose.yml down --remove-orphans || true 
                     
-                    # 새로운 컨테이너 실행 - 환경 변수 주입 (AWS 포함)
-                    docker run -d --name ${CONTAINER_NAME} \
-                    -e SPRING_DATASOURCE_URL=jdbc:mysql://localhost:3306/${DB_NAME} \
-                    -e SPRING_DATASOURCE_USERNAME=${DB_CREDS_USR} \
-                    -e SPRING_DATASOURCE_PASSWORD=${DB_CREDS_PSW} \
-                    -e GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID_CRED} \
-                    -e GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET_CRED} \
-                    -e KAKAO_CLIENT_ID=${KAKAO_CLIENT_ID_CRED} \
-                    -e KAKAO_CLIENT_SECRET=${KAKAO_CLIENT_SECRET_CRED} \
-                    -e JWT_SECRET_KEY=${JWT_SECRET_KEY_CRED} \
-                    -e AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID_CRED} \
-                    -e AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY_CRED} \
-                    -e AWS_REGION=${AWS_REGION} \
-                    -e AWS_DEFAULT_REGION=${AWS_REGION} \
-                    -e S3_BUCKET_NAME=${S3_BUCKET_NAME} \
-                    -e SERVER_PORT=${SERVER_PORT} \
-                    --network=host \
-                    springboot-app:${IMAGE_TAG}
-                    
-                    # 컨테이너가 제대로 시작되었는지 확인
-                    sleep 30
-                    if ! docker ps | grep -q ${CONTAINER_NAME}; then
-                        echo "Container failed to start"
-                        docker logs ${CONTAINER_NAME}
+                    echo "Starting application using docker-compose..."
+                    # Docker Compose 실행 (-f 로 파일 지정, up -d 로 백그라운드 실행)
+                    # Jenkins 환경 변수들이 자동으로 전달된다고 가정
+                    # 이미지 빌드를 Jenkins에서 이미 했으므로 --build 옵션 불필요
+                    docker-compose -f docker-compose.yml up -d --remove-orphans
+
+                    # 애플리케이션 상태 확인 (기존 로직 활용)
+                    echo "Checking application status..."
+                    sleep 30 
+                    # 컨테이너 이름으로 확인 (docker-compose.yml의 container_name과 일치해야 함)
+                    if ! docker ps | grep -q "${CONTAINER_NAME}"; then 
+                        echo "Container ${CONTAINER_NAME} failed to start"
+                        # docker-compose logs <서비스이름> 으로 로그 확인 가능
+                        docker-compose -f docker-compose.yml logs app 
                         exit 1
                     fi
                     
-                    # 애플리케이션이 응답하는지 확인
+                    # health check 로직은 유지 (포트 번호는 Jenkins 변수 사용)
                     for i in {1..30}; do
+                        # curl 대상 주소는 localhost 유지 (Compose가 호스트 포트에 매핑)
                         if curl -s http://localhost:${SERVER_PORT}/actuator/health > /dev/null; then
-                            echo "Application is up and running"
-                            exit 0
+                            echo "Application is up and running on port ${SERVER_PORT}"
+                            # 성공 시 Jenkins 빌드 상태를 성공으로 간주 (exit 0 불필요할 수 있음)
+                            break # 확인되면 루프 종료
                         fi
                         echo "Waiting for application to start... (attempt $i/30)"
                         sleep 2
                     done
                     
-                    echo "Application failed to start"
-                    docker logs ${CONTAINER_NAME}
-                    exit 1
+                    # 최종 확인 후 실패 처리
+                    if ! curl -s http://localhost:${SERVER_PORT}/actuator/health > /dev/null; then
+                         echo "Application failed to start after waiting"
+                         docker-compose -f docker-compose.yml logs app
+                         exit 1
+                    fi
                 '''
             }
         }
@@ -117,7 +117,7 @@ pipeline {
                 du -sh . || true
             '''
             
-            // 워크스페이스 정리 (성공, 실패 모두 정리)
+            # 워크스페이스 정리 (성공, 실패 모두 정리)
             cleanWs()
         }
     }

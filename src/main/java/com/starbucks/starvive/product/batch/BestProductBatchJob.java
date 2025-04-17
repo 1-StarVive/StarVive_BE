@@ -55,11 +55,11 @@ public class BestProductBatchJob {
         bestProductRepository.deleteAllInBatch();
         log.debug("기존 베스트 상품 데이터 삭제 완료.");
 
-        int rank = 1;
+        int currentRank = 1;
         for (UUID productId : bestProductIds) {
             BestProduct bestProduct = BestProduct.builder()
                     .productId(productId)
-                    .bestRank(rank++)
+                    .bestRank(currentRank++)
                     .build();
             bestProductRepository.save(bestProduct);
         }

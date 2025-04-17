@@ -9,6 +9,7 @@ import java.util.UUID;
 @Getter
 @NoArgsConstructor
 public class DeleteWishRequestDto {
+    
     private UUID userId;
     private UUID productId;
 
