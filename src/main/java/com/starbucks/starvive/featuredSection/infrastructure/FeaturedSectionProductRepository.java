@@ -1,10 +1,12 @@
 package com.starbucks.starvive.featuredSection.infrastructure;
 
 import com.starbucks.starvive.featuredSection.domain.FeaturedSectionProduct;
+import com.starbucks.starvive.product.domain.Product;
+import com.starbucks.starvive.product.domain.ProductOption;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Repository
@@ -12,6 +14,7 @@ public interface FeaturedSectionProductRepository extends JpaRepository<Featured
 
     // 추천 섹션 ID 리스트로 해당 상품 목록을 조회
     List<FeaturedSectionProduct> findAllByFeaturedSectionIdIn(List<UUID> featuredSectionIds);
+
 
     // 특정 섹션에 속한 모든 상품 조회
     List<FeaturedSectionProduct> findAllByFeaturedSectionId(UUID featuredSectionId);

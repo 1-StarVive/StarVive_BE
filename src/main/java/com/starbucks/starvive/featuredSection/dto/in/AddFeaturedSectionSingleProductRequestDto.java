@@ -23,12 +23,12 @@ public class AddFeaturedSectionSingleProductRequestDto {
         this.productImageId = productImageId;
     }
 
-    public static AddFeaturedSectionSingleProductRequestDto from(AddFeaturedSectionSingleProductRequestVo vo) {
+    public static AddFeaturedSectionSingleProductRequestDto from(AddFeaturedSectionSingleProductRequestVo addFeaturedSectionSingleProductRequestVo) {
         return AddFeaturedSectionSingleProductRequestDto.builder()
-                .featuredSectionId(vo.getFeaturedSectionId())
-                .productId(vo.getProductId())
-                .productOptionId(vo.getProductOptionId())
-                .productImageId(vo.getProductImageId())
+                .featuredSectionId(addFeaturedSectionSingleProductRequestVo.getFeaturedSectionId())
+                .productId(addFeaturedSectionSingleProductRequestVo.getProductId())
+                .productOptionId(addFeaturedSectionSingleProductRequestVo.getProductOptionId())
+                .productImageId(addFeaturedSectionSingleProductRequestVo.getProductImageId())
                 .build();
     }
 }
