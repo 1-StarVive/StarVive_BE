@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RequestMapping("/api/v1/product")
 @RestController
@@ -58,6 +59,14 @@ public class ProductController {
     @GetMapping("/detail")
     public ProductDetailResponseVo getProductDetail(@RequestParam("productId") UUID productId) {
         return ProductDetailResponseVo.from(productService.getProductDetail(productId));
+    }
+
+    @Operation(summary = "베스트 상품 목록 조회", description = "인기 상품(베스트 상품) 목록을 순위 순으로 조회합니다.", tags = {"product-service"})
+    @GetMapping("/best")
+    public List<BestProductResponseVo> getBestProducts() {
+        return productService.getBestProducts().stream()
+                .map(BestProductResponseVo::from)
+                .collect(Collectors.toList());
     }
 
     @GetMapping("/admin/run-best-product-batch")
