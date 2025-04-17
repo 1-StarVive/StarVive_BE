@@ -7,6 +7,5 @@ import java.util.UUID;
 @Getter
 @NoArgsConstructor
 public class ToggleWishRequestVo {
-    private UUID userId;
-    private UUID productOptionId;
+    private UUID productId;
 }

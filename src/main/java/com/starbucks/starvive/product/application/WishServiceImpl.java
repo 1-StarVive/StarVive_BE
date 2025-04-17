@@ -4,81 +4,121 @@ import com.starbucks.starvive.common.exception.BaseException;
 import com.starbucks.starvive.image.domain.ProductImage;
 import com.starbucks.starvive.image.infrastructure.ProductImageRepository;
 import com.starbucks.starvive.product.domain.Product;
-import com.starbucks.starvive.product.domain.ProductOption;
-import com.starbucks.starvive.product.domain.Wish;
 import com.starbucks.starvive.product.dto.in.AddWishRequestDto;
 import com.starbucks.starvive.product.dto.in.DeleteWishRequestDto;
 import com.starbucks.starvive.product.dto.in.ToggleWishRequestDto;
 import com.starbucks.starvive.product.dto.out.WishListResponseDto;
-import com.starbucks.starvive.product.infrastructure.ProductOptionRepository;
 import com.starbucks.starvive.product.infrastructure.ProductRepository;
-import com.starbucks.starvive.product.infrastructure.WishRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import static com.starbucks.starvive.common.domain.BaseResponseStatus.*;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class WishServiceImpl implements WishService {
 
-    int aaa = 1;
-    private final WishRepository wishRepository;
-    private final ProductOptionRepository productOptionRepository;
+
+    private final StringRedisTemplate redisTemplate;
     private final ProductRepository productRepository;
     private final ProductImageRepository productImageRepository;
 
-    @Transactional
+    private static final String USER_LIKES_KEY_PREFIX = "user:";
+    private static final String USER_LIKES_KEY_SUFFIX = ":likes";
+    private static final String PRODUCT_LIKED_BY_KEY_PREFIX = "product:";
+    private static final String PRODUCT_LIKED_BY_KEY_SUFFIX = ":liked_by";
+
     @Override
     public void addWish(AddWishRequestDto dto) {
-        if (wishRepository.findByUserIdAndProductOptionId(dto.getUserId(), dto.getProductOptionId()).isPresent()) {
-            throw new BaseException(DUPLICATED_WISH);
-        }
-        Wish wish = Wish.builder()
-                .userId(dto.getUserId())
-                .productOptionId(dto.getProductOptionId())
-                .build();
-        wishRepository.save(wish);
-    }
 
-    @Transactional
+        UUID userId = dto.getUserId();
+        UUID productId = dto.getProductId();
+
+        if (!productRepository.existsById(productId)) {
+            throw new BaseException(NO_EXIST_PRODUCT);
+        }
+
+        String userLikesKey = USER_LIKES_KEY_PREFIX + userId + USER_LIKES_KEY_SUFFIX;
+        String productLikedByKey = PRODUCT_LIKED_BY_KEY_PREFIX + productId + PRODUCT_LIKED_BY_KEY_SUFFIX;
+
+        redisTemplate.opsForSet().add(userLikesKey, productId.toString());
+        redisTemplate.opsForSet().add(productLikedByKey, userId.toString());
+
+        log.info("찜 추가: userId={}, productId={}", userId, productId);
+    }
+    
     @Override
     public void deleteWish(DeleteWishRequestDto dto) {
-        wishRepository.deleteById(dto.getWishId());
-    }
+        
+        UUID userId = dto.getUserId();
+        UUID productId = dto.getProductId();
 
-    @Transactional
-    @Override
-    public void toggleWish(ToggleWishRequestDto dto) {
-        wishRepository.findByUserIdAndProductOptionId(dto.getUserId(), dto.getProductOptionId())
-                .ifPresentOrElse(
-                        wish -> wishRepository.deleteById(wish.getWishId()),
-                        () -> wishRepository.save(Wish.builder()
-                                .userId(dto.getUserId())
-                                .productOptionId(dto.getProductOptionId())
-                                .build()));
+        String userLikesKey = USER_LIKES_KEY_PREFIX + userId + USER_LIKES_KEY_SUFFIX;
+        String productLikedByKey = PRODUCT_LIKED_BY_KEY_PREFIX + productId + PRODUCT_LIKED_BY_KEY_SUFFIX;
+
+        redisTemplate.opsForSet().remove(userLikesKey, productId.toString());
+        redisTemplate.opsForSet().remove(productLikedByKey, userId.toString());
+        log.info("찜 삭제: userId={}, productId={}", userId, productId);
     }
 
     @Transactional(readOnly = true)
     @Override
     public List<WishListResponseDto> getWishList(UUID userId) {
-        List<Wish> wishes = wishRepository.findAllByUserId(userId);
-        return wishes.stream().map(wish -> {
-            ProductOption option = productOptionRepository.findById(wish.getProductOptionId())
-                    .orElseThrow(() -> new BaseException(NO_EXIST_OPTION));
 
-            Product product = productRepository.findById(option.getProductId())
-                    .orElseThrow(() -> new BaseException(NO_EXIST_PRODUCT));
+        String userLikesKey = USER_LIKES_KEY_PREFIX + userId + USER_LIKES_KEY_SUFFIX;
 
-            ProductImage image = productImageRepository.findFirstByProductId(product.getProductId())
-                    .orElseThrow(() -> new BaseException(NO_EXIST_IMAGE));
+        Set<String> likedProductIdsStr = redisTemplate.opsForSet().members(userLikesKey);
+        if (likedProductIdsStr == null || likedProductIdsStr.isEmpty()) {
+            return List.of();
+        }
 
-            return WishListResponseDto.from(wish, option, product, image);
+        List<UUID> likedProductIds = likedProductIdsStr.stream()
+                .map(UUID::fromString)
+                .toList();
 
-        }).toList();
+        List<Product> likedProducts = productRepository.findAllById(likedProductIds);
+
+        return likedProducts.stream()
+                .map(product -> {
+                    ProductImage image = productImageRepository.findFirstByProductId(product.getProductId()).orElse(null);
+                    return WishListResponseDto.fromProduct(product, image);
+                })
+                .toList();
     }
+
+    @Override
+    public void toggleWish(ToggleWishRequestDto dto) {
+
+        UUID userId = dto.getUserId();
+        UUID productId = dto.getProductId();
+
+        if (!productRepository.existsById(productId)) {
+            throw new BaseException(NO_EXIST_PRODUCT);
+        }
+
+        String userLikesKey = USER_LIKES_KEY_PREFIX + userId + USER_LIKES_KEY_SUFFIX;
+        String productLikedByKey = PRODUCT_LIKED_BY_KEY_PREFIX + productId + PRODUCT_LIKED_BY_KEY_SUFFIX;
+
+        Boolean isMember = redisTemplate.opsForSet().isMember(userLikesKey, productId.toString());
+
+        if (Boolean.TRUE.equals(isMember)) {
+            redisTemplate.opsForSet().remove(userLikesKey, productId.toString());
+            redisTemplate.opsForSet().remove(productLikedByKey, userId.toString());
+            log.info("찜 해제 (토글): userId={}, productId={}", userId, productId);
+        } else {
+            redisTemplate.opsForSet().add(userLikesKey, productId.toString());
+            redisTemplate.opsForSet().add(productLikedByKey, userId.toString());
+            log.info("찜 추가 (토글): userId={}, productId={}", userId, productId);
+        }
+    }
+
+    
 }
