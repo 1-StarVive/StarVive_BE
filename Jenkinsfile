@@ -97,7 +97,7 @@ pipeline {
                 
                 docker system prune -a -f || true 
                 
-                find . -name "*@tmp" -type d -exec rm -rf {} \; 2>/dev/null || true
+                find . -name "*@tmp" -type d -exec rm -rf {} \\; 2>/dev/null || true
                 
                 echo "Current workspace size:"
                 du -sh . || true
