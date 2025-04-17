@@ -95,11 +95,9 @@ pipeline {
             sh '''
                 rm -rf ~/.gradle/caches/ || true
                 
-                docker system prune -f || true
+                docker system prune -a -f || true 
                 
-                find . -name "*@tmp" -type d -exec rm -rf {} \\; 2>/dev/null || true
-                
-                docker images -q --filter "dangling=true" | xargs docker rmi -f || true
+                find . -name "*@tmp" -type d -exec rm -rf {} \; 2>/dev/null || true
                 
                 echo "Current workspace size:"
                 du -sh . || true
