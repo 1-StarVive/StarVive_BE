@@ -29,11 +29,16 @@ public class ProductImage extends BaseEntity {
     @Column(columnDefinition = "BINARY(16)", nullable = false)
     private UUID productId;
 
+    @Column(nullable = false)
+    private boolean isMain;
+
     @Builder
-    public ProductImage(UUID productImageId, String imageThumbUrl, String imageThumbAlt, UUID productId) {
+    public ProductImage(UUID productImageId, String imageThumbUrl, String imageThumbAlt, UUID productId
+    , boolean isMain) {
         this.productImageId = productImageId;
         this.imageThumbUrl = imageThumbUrl;
         this.imageThumbAlt = imageThumbAlt;
         this.productId = productId;
+        this.isMain = isMain;
     }
 }

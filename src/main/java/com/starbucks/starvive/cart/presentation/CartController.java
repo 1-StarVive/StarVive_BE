@@ -39,7 +39,7 @@ public class CartController {
     @Operation(summary = "장바구니 상품 추가", description = "상품을 장바구니에 추가합니다.", tags = {"cart"})
     @PostMapping("/add")
     public void addItem(@RequestBody AddCartItemRequestVo addCartItemRequestVo, @AuthenticationPrincipal UserDetails userDetails) {
-        cartService.addItem(AddCartItemRequestDto.from(addCartItemRequestVo), getUserId(userDetails));
+        cartService.addItem(AddCartItemRequestDto.from(addCartItemRequestVo, getUserId(userDetails)), getUserId(userDetails));
     }
 
     @Operation(summary = "장바구니 항목 수정", description = "옵션, 수량, 체크 상태를 수정합니다.", tags = {"cart"})

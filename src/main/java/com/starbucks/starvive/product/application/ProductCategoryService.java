@@ -1,6 +1,8 @@
 package com.starbucks.starvive.product.application;
 
+import com.starbucks.starvive.common.utils.CursorPage;
 import com.starbucks.starvive.product.dto.in.RegisterProductCategoryRequestDto;
+import com.starbucks.starvive.product.dto.out.ProductCategoryListResponseDto;
 import com.starbucks.starvive.product.dto.out.ProductListResponseDto;
 
 import java.util.List;
@@ -10,6 +12,8 @@ public interface ProductCategoryService {
 
     void addProductCategory(RegisterProductCategoryRequestDto registerProductCategoryRequestDto);
 
-    List<ProductListResponseDto> getProductsByCategory(UUID topCategoryId, UUID middleCategoryId, UUID bottomCategoryId);
+    CursorPage<ProductCategoryListResponseDto> getProductsByCategory(UUID topCategoryId, UUID middleCategoryId,
+                                                                     UUID bottomCategoryId, UUID lastProductId,
+                                                                     int pageSize);
 
 }

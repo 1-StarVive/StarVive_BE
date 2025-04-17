@@ -5,22 +5,34 @@ import com.starbucks.starvive.featuredSection.domain.FeaturedSection;
 import com.starbucks.starvive.featuredSection.domain.FeaturedSectionProduct;
 import com.starbucks.starvive.featuredSection.dto.in.*;
 import com.starbucks.starvive.featuredSection.dto.out.FeaturedSectionProductGroupResponseDto;
+import com.starbucks.starvive.featuredSection.dto.out.FeaturedSectionProductResponseDto;
 import com.starbucks.starvive.featuredSection.infrastructure.FeaturedSectionProductRepository;
 import com.starbucks.starvive.featuredSection.infrastructure.FeaturedSectionRepository;
+import com.starbucks.starvive.image.domain.ProductImage;
+import com.starbucks.starvive.image.infrastructure.ProductImageRepository;
+import com.starbucks.starvive.product.domain.Product;
+import com.starbucks.starvive.product.domain.ProductOption;
+import com.starbucks.starvive.product.infrastructure.ProductOptionRepository;
+import com.starbucks.starvive.product.infrastructure.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import java.util.ArrayList;
+import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
-import static com.starbucks.starvive.common.domain.BaseResponseStatus.NO_EXIST_SECTION;
+import static com.starbucks.starvive.common.domain.BaseResponseStatus.*;
 
 @Service
 @RequiredArgsConstructor
 public class FeaturedSectionServiceImpl implements FeaturedSectionService {
 
     private final FeaturedSectionRepository sectionRepository;
-    private final FeaturedSectionProductRepository productRepository;
+    private final ProductRepository productRepository;
+    private final ProductOptionRepository productOptionRepository;
+    private final ProductImageRepository productImageRepository;
+    private final FeaturedSectionProductRepository featuredSectionProductRepository;
 
     @Override
     public FeaturedSection getSection(UUID sectionId) {
@@ -55,11 +67,34 @@ public class FeaturedSectionServiceImpl implements FeaturedSectionService {
         sectionRepository.deleteById(dto.getFeaturedSectionId());
     }
 
+    @Transactional(readOnly = true)
     @Override
     public List<FeaturedSectionProductGroupResponseDto> getProductsBySections(List<UUID> sectionIds) {
-        List<FeaturedSectionProduct> list = productRepository.findAllByFeaturedSectionIdIn(sectionIds);
-        // 임시: 실제 응답 DTO 가공 로직은 별도 정의 필요
-        return new ArrayList<>();
+
+        List<FeaturedSectionProduct> sectionProducts = featuredSectionProductRepository.findAllByFeaturedSectionIdIn(sectionIds);
+
+        Map<UUID, List<FeaturedSectionProductResponseDto>> groupedBySection = sectionProducts.stream()
+                .collect(Collectors.groupingBy(
+                        FeaturedSectionProduct::getFeaturedSectionId,
+                        Collectors.mapping(featuredSectionProduct -> {
+                            // 연관된 도메인 조회
+                            Product product = productRepository.findById(featuredSectionProduct.getProductId())
+                                    .orElseThrow(() -> new BaseException(NO_EXIST_PRODUCT));
+                            ProductOption option = productOptionRepository.findById(featuredSectionProduct.getProductOptionId())
+                                    .orElseThrow(() -> new BaseException(NO_EXIST_OPTION));
+                            ProductImage image = productImageRepository.findById(featuredSectionProduct.getProductImageId())
+                                    .orElseThrow(() -> new BaseException(NO_EXIST_IMAGE));
+
+                            return FeaturedSectionProductResponseDto.from(featuredSectionProduct, product, option, image);
+                        }, Collectors.toList())
+                ));
+
+        return groupedBySection.entrySet().stream()
+                .map(entry -> FeaturedSectionProductGroupResponseDto.builder()
+                        .featuredSectionsId(entry.getKey())
+                        .products(entry.getValue())
+                        .build())
+                .toList();
     }
 
     @Override
@@ -70,7 +105,7 @@ public class FeaturedSectionServiceImpl implements FeaturedSectionService {
                 .productOptionId(dto.getProductOptionId())
                 .productImageId(dto.getProductImageId())
                 .build();
-        productRepository.save(product);
+        featuredSectionProductRepository.save(product);
     }
 
     @Override
@@ -83,6 +118,6 @@ public class FeaturedSectionServiceImpl implements FeaturedSectionService {
                         .productImageId(null)
                         .build())
                 .toList();
-        productRepository.saveAll(products);
+        featuredSectionProductRepository.saveAll(products);
     }
 }

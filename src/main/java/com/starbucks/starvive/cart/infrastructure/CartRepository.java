@@ -8,6 +8,6 @@ import java.util.UUID;
 public interface CartRepository extends JpaRepository<Cart, UUID> {
 
     List<Cart> findAllByUserId(UUID userId);
-    void deleteAllByUserId(UUID userId);
+    void deleteByCartIdIn(List<UUID> cartIds);
 
 }

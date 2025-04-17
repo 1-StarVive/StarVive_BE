@@ -50,9 +50,10 @@ public class FeaturedSectionController {
     }
 
     @Operation(summary = "추천 섹션 상품 리스트 조회", description = "추천 섹션 ID 리스트로 섹션별 상품을 조회합니다.", tags = {"featured-section"})
-    @PostMapping("/products")
-    public List<FeaturedSectionProductGroupResponseDto> getProductsBySection(@RequestBody FeaturedSectionProductRequestVo featuredSectionProductRequestVo) {
-        return featuredSectionService.getProductsBySections(featuredSectionProductRequestVo.getFeaturedSectionsIds());
+    @GetMapping("/products")
+    public List<FeaturedSectionProductGroupResponseDto> getProductsBySection(
+            @RequestParam("featuredSectionIds") List<UUID> featuredSectionIds) {
+        return featuredSectionService.getProductsBySections(featuredSectionIds);
     }
 
     @Operation(summary = "추천 섹션에 상품 단건 등록", description = "추천 섹션에 하나의 상품을 등록합니다.", tags = {"featured-section"})

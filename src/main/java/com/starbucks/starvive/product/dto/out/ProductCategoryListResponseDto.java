@@ -1,53 +1,51 @@
-package com.starbucks.starvive.featuredSection.dto.out;
+package com.starbucks.starvive.product.dto.out;
 
-import com.starbucks.starvive.featuredSection.domain.FeaturedSectionProduct;
 import com.starbucks.starvive.image.domain.ProductImage;
 import com.starbucks.starvive.product.domain.Product;
 import com.starbucks.starvive.product.domain.ProductOption;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
 import java.util.UUID;
 
 @Getter
 @NoArgsConstructor
-public class FeaturedSectionProductResponseDto {
+public class ProductCategoryListResponseDto {
 
     private UUID productId;
     private String imageThumbUrl;
     private String imageThumbAlt;
+    private boolean isMain;
     private String name;
-    private int price;
     private int baseDiscountRate;
+    private int discountedPrice;
+    private int price;
 
     @Builder
-    public FeaturedSectionProductResponseDto(UUID productId,
-                                             String imageThumbUrl,
-                                             String imageThumbAlt,
-                                             String name,
-                                             int price,
-                                             int baseDiscountRate) {
+    public ProductCategoryListResponseDto(UUID productId, String imageThumbUrl, String imageThumbAlt, boolean isMain,
+                                  String name, int baseDiscountRate, int price) {
         this.productId = productId;
         this.imageThumbUrl = imageThumbUrl;
         this.imageThumbAlt = imageThumbAlt;
+        this.isMain = isMain;
         this.name = name;
-        this.price = price;
         this.baseDiscountRate = baseDiscountRate;
+        this.price = price;
+        this.discountedPrice = (baseDiscountRate > 0)
+                ? price - (price * baseDiscountRate / 100)
+                : price;
     }
 
-    public static FeaturedSectionProductResponseDto from(
-            FeaturedSectionProduct featuredSectionProduct,
-            Product product,
-            ProductOption option,
-            ProductImage image
-    ) {
-        return FeaturedSectionProductResponseDto.builder()
+    public static ProductCategoryListResponseDto from(Product product, ProductOption option, ProductImage image) {
+        return ProductCategoryListResponseDto.builder()
                 .productId(product.getProductId())
                 .name(product.getName())
-                .price(option.getPrice())
                 .baseDiscountRate(option.getBaseDiscountRate())
+                .price(option.getPrice())
                 .imageThumbUrl(image.getImageThumbUrl())
                 .imageThumbAlt(image.getImageThumbAlt())
+                .isMain(image.isMain())
                 .build();
     }
 }

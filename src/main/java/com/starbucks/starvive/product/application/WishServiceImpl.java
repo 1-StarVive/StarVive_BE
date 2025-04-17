@@ -26,6 +26,7 @@ import static com.starbucks.starvive.common.domain.BaseResponseStatus.*;
 @RequiredArgsConstructor
 public class WishServiceImpl implements WishService {
 
+
     private final StringRedisTemplate redisTemplate;
     private final ProductRepository productRepository;
     private final ProductImageRepository productImageRepository;

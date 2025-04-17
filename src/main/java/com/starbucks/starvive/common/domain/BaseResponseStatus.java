@@ -27,6 +27,7 @@ public enum BaseResponseStatus {
     ALREADY_EXIST_EMAIL(HttpStatus.CONFLICT, false, 408, "이미 사용 중인 이메일입니다."),
     ALREADY_EXIST_LOGIN_ID(HttpStatus.CONFLICT, false, 409, "이미 사용 중인 로그인 ID입니다."),
     INVALID_LOGIN_ID(HttpStatus.BAD_REQUEST, false, 411, "로그인 ID를 다시 확인해주세요."),
+    NO_PERMISSION_CART(HttpStatus.UNAUTHORIZED, false,412,"장바구니에 접근 권한이 없습니다."),
     /**
      * 900: 기타 에러
      */
