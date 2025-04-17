@@ -34,21 +34,23 @@ public class ShippingAddressController {
         shippingAddressService.addShippingAddress(dto, userDetails);
     }
 
-    @GetMapping("?{shippingAddressId}")
+    @GetMapping("/detail")
     public ShippingAddress getShippingAddressById(
-            @PathVariable UUID shippingAddressId,
-            @AuthenticationPrincipal UserDetails userDetails) {
-        return shippingAddressService.getShippingAddressById(shippingAddressId, userDetails);
+            @RequestParam("shippingAddressId") UUID shippingAddressId) {
+                
+        return shippingAddressService.getShippingAddressById(shippingAddressId);
     }
 
     @GetMapping
     public List<ShippingAddress> getShippingAddress(@AuthenticationPrincipal UserDetails userDetails) {
+
         List<ShippingAddress> shippingAddresses = shippingAddressService.getShippingAddress(userDetails);
         return shippingAddresses;
     }
     
     @DeleteMapping
     public void deleteShippingAddress(@RequestBody DeleteShippipngAddressVo deleteShippipngAddressVo) {
+
         shippingAddressService.deleteShippingAddress(DeleteShippingAddressRequestDto.from(deleteShippipngAddressVo));
     }
 
