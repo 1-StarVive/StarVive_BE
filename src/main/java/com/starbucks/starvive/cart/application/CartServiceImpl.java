@@ -34,52 +34,60 @@ public class CartServiceImpl implements CartService {
     @Transactional(readOnly = true)
     @Override
     public List<CartItemResponseVo> getCartList(UUID userId) {
-        List<Cart> carts = cartRepository.findAllByUserId(userId);
+        return cartRepository.findAllByUserId(userId).stream()
+                .map(cart -> {
+                    Product product = productRepository.findById(cart.getProductId())
+                            .orElseThrow(() -> new BaseException(NO_EXIST_PRODUCT));
 
-        return carts.stream().map(cart -> {
-            Product product = productRepository.findById(cart.getProductId())
-                    .orElseThrow(() -> new BaseException(NO_EXIST_PRODUCT));
+                    ProductOption option = productOptionRepository.findById(cart.getProductOptionId())
+                            .orElseThrow(() -> new BaseException(NO_EXIST_OPTION));
 
-            ProductOption option = productOptionRepository.findById(cart.getProductOptionId())
-                    .orElseThrow(() -> new BaseException(NO_EXIST_OPTION));
+                    ProductImage image = productImageRepository.findFirstByProductId(cart.getProductId())
+                            .orElseThrow(() -> new BaseException(NO_EXIST_IMAGE));
 
-            ProductImage image = productImageRepository.findFirstByProductId(cart.getProductId())
-                    .orElseThrow(() -> new BaseException(NO_EXIST_IMAGE));
-
-            return CartItemResponseVo.from(cart, product, option, image);
-        }).collect(Collectors.toList());
+                    return CartItemResponseVo.from(cart, product, option, image);
+                })
+                .collect(Collectors.toList());
     }
 
     @Override
-    public void addItem(AddCartItemRequestDto addCartItemRequestDto, UUID userId) {
+    public void addItem(AddCartItemRequestDto dto, UUID userId) {
         Cart cart = Cart.builder()
                 .userId(userId)
-                .productId(addCartItemRequestDto.getProductId())
-                .productOptionId(addCartItemRequestDto.getProductOptionId())
-                .quantity(addCartItemRequestDto.getQuantity())
-                .checked(addCartItemRequestDto.isChecked())
+                .productId(dto.getProductId())
+                .productOptionId(dto.getProductOptionId())
+                .quantity(dto.getQuantity())
+                .checked(dto.isChecked())
                 .build();
         cartRepository.save(cart);
     }
 
+    @Transactional
     @Override
-    public void updateItem(UpdateCartItemRequestDto updateCartItemRequestDto, UUID userId) {
-        Cart cart = cartRepository.findById(updateCartItemRequestDto.getCartId())
+    public void updateItem(UpdateCartItemRequestDto dto, UUID userId) {
+        Cart cart = cartRepository.findById(dto.getCartId())
                 .orElseThrow(() -> new BaseException(NO_EXIST_CART));
-        cart.update(updateCartItemRequestDto.getProductOptionId(), updateCartItemRequestDto.getQuantity(), updateCartItemRequestDto.isChecked());
+
+        if (!cart.getUserId().equals(userId)) {
+            throw new BaseException(NO_PERMISSION_CART);
+        }
+
+        cart.update(dto.getProductOptionId(), dto.getQuantity(), dto.isChecked());
     }
 
     @Override
-    public void deleteSelectedItems(DeleteSelectedCartItemsRequestDto deleteSelectedCartItemsRequestDto, UUID userId) {
-        List<UUID> cartItemIds = deleteSelectedCartItemsRequestDto.getCartItemIds();
+    public void deleteSelectedItems(DeleteSelectedCartItemsRequestDto dto, UUID userId) {
+        List<UUID> cartItemIds = dto.getCartItemIds();
 
-        // 장바구니 항목이 존재하는지 검증 (선택 사항)
-        cartItemIds.forEach(cartId -> {
-            if (!cartRepository.existsById(cartId)) {
-                throw new BaseException(NO_EXIST_CART);
-            }
-        });
+        List<Cart> carts = cartRepository.findAllById(cartItemIds);
 
-        cartRepository.deleteAllByIdInBatch(cartItemIds);
+        boolean hasInvalidCart = carts.stream()
+                .anyMatch(cart -> !cart.getUserId().equals(userId));
+
+        if (hasInvalidCart) {
+            throw new BaseException(NO_PERMISSION_CART);
+        }
+
+        cartRepository.deleteAllInBatch(carts);
     }
 }
