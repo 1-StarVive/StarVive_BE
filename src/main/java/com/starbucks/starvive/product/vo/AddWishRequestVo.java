@@ -9,8 +9,6 @@ import java.util.UUID;
 @NoArgsConstructor
 public class AddWishRequestVo {
 
-    private UUID userId;
     private UUID productId;
-    private UUID productOptionId;
 
 }

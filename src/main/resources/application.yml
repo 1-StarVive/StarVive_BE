@@ -72,6 +72,13 @@ spring:
             user-info-uri: https://kapi.kakao.com/v2/user/me
             user-name-attribute: id
 
+# Redis Configuration (Added for local Docker Redis)
+data:
+  redis:
+    host: localhost
+    port: 6379
+    # password: # Uncomment and set if your Redis requires a password
+
 # JWT Settings
 JWT:
   secret-key: ${JWT_SECRET_KEY}

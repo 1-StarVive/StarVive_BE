@@ -11,18 +11,18 @@ import java.util.UUID;
 @NoArgsConstructor
 public class ToggleWishRequestDto {
     private UUID userId;
-    private UUID productOptionId;
+    private UUID productId;
 
     @Builder
-    public ToggleWishRequestDto(UUID userId, UUID productOptionId) {
+    public ToggleWishRequestDto(UUID userId, UUID productId) {
         this.userId = userId;
-        this.productOptionId = productOptionId;
+        this.productId = productId;
     }
 
-    public static ToggleWishRequestDto from(ToggleWishRequestVo toggleWishRequestVo) {
+    public static ToggleWishRequestDto from(ToggleWishRequestVo toggleWishRequestVo, UUID userId) {
         return ToggleWishRequestDto.builder()
-                .userId(toggleWishRequestVo.getUserId())
-                .productOptionId(toggleWishRequestVo.getProductOptionId())
+                .userId(userId)
+                .productId(toggleWishRequestVo.getProductId())
                 .build();
     }
 }

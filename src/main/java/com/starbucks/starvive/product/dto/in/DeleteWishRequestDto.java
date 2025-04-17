@@ -9,16 +9,19 @@ import java.util.UUID;
 @Getter
 @NoArgsConstructor
 public class DeleteWishRequestDto {
-    private UUID wishId;
+    private UUID userId;
+    private UUID productId;
 
     @Builder
-    public DeleteWishRequestDto(UUID wishId) {
-        this.wishId = wishId;
+    public DeleteWishRequestDto(UUID userId, UUID productId) {
+        this.userId = userId;
+        this.productId = productId;
     }
 
-    public static DeleteWishRequestDto from(DeleteWishRequestVo deleteWishRequestVo) {
+    public static DeleteWishRequestDto from(DeleteWishRequestVo deleteWishRequestVo, UUID userId) {
         return DeleteWishRequestDto.builder()
-                .wishId(deleteWishRequestVo.getWishId())
+                .userId(userId)
+                .productId(deleteWishRequestVo.getProductId())
                 .build();
     }
 }
