@@ -50,7 +50,7 @@ public class FeaturedSectionController {
     }
 
     @Operation(summary = "추천 섹션 상품 리스트 조회", description = "추천 섹션 ID 리스트로 섹션별 상품을 조회합니다.", tags = {"featured-section"})
-    @PostMapping("/products")
+    @GetMapping("/products")
     public List<FeaturedSectionProductGroupResponseDto> getProductsBySection(@RequestBody FeaturedSectionProductRequestVo featuredSectionProductRequestVo) {
         return featuredSectionService.getProductsBySections(featuredSectionProductRequestVo.getFeaturedSectionsIds());
     }
