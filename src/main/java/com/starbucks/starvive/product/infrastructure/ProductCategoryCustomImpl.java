@@ -63,7 +63,7 @@ public class ProductCategoryCustomImpl implements ProductCategoryCustomRepositor
                 .join(option).on(option.productId.eq(product.productId))
                 .join(image).on(image.productId.eq(product.productId), image.isMain.isTrue())
                 .where(builder)
-                .orderBy(product.productId.desc())
+                .orderBy(product.productId.asc())
                 .limit(pageSize + 1)
                 .fetch();
 
