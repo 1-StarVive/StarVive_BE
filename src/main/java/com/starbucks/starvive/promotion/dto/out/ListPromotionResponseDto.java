@@ -6,10 +6,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
 @Getter
 @NoArgsConstructor
 public class ListPromotionResponseDto {
+
+    private UUID promotionId;
 
     private String title;
 
@@ -20,9 +23,10 @@ public class ListPromotionResponseDto {
     private String promotionDetailContent;
 
     @Builder
-    public ListPromotionResponseDto(String title,
+    public ListPromotionResponseDto(UUID promotionId, String title,
                                     LocalDate promotionStartAt, LocalDate promotionEndAt,
                                     String promotionDetailContent) {
+        this.promotionId = promotionId;
         this.title = title;
         this.promotionStartAt = promotionStartAt;
         this.promotionEndAt = promotionEndAt;
@@ -31,6 +35,7 @@ public class ListPromotionResponseDto {
 
     public static ListPromotionResponseDto from(Promotion promotion) {
         return ListPromotionResponseDto.builder()
+                .promotionId(promotion.getPromotionId())
                 .title(promotion.getTitle())
                 .promotionStartAt(promotion.getPromotionStartAt())
                 .promotionEndAt(promotion.getPromotionEndAt())
