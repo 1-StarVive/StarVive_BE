@@ -24,6 +24,7 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.transaction.PlatformTransactionManager;
 
 import javax.sql.DataSource;
+import com.starbucks.starvive.batch.listener.TruncateTempTableListener;
 
 @Slf4j
 @Configuration
@@ -36,6 +37,7 @@ public class BatchConfig {
     private final EntityManagerFactory entityManagerFactory;
     private final DataSource dataSource;
     private final WishRepository wishRepository;
+    private final TruncateTempTableListener truncateTempTableListener;
 
     @Value("${chunkSize:1000}")
     private int chunkSize;
@@ -44,6 +46,7 @@ public class BatchConfig {
     public Job bestProductJob() {
         log.info(">>>>> bestProductJob 생성");
         return new JobBuilder("bestProductJob", jobRepository)
+                .listener(truncateTempTableListener)
                 .start(calculateWishCountStep())
                 .next(updateBestProductStep())
                 .build();
@@ -75,9 +78,9 @@ public class BatchConfig {
     public ItemProcessor<Product, ProductWishCountDto> productWishCountProcessor() {
         log.info(">>>>> productWishCountProcessor 생성");
         return product -> {
-            long wishCount = wishRepository.countByProduct(product);
-            log.trace("Processing Product ID: {}, Wish Count: {}", product.getId(), wishCount);
-            return new ProductWishCountDto(product.getId(), wishCount);
+            long wishCount = wishRepository.countByProductId(product.getProductId());
+            log.trace("Processing Product ID: {}, Wish Count: {}", product.getProductId(), wishCount);
+            return new ProductWishCountDto(product.getProductId(), wishCount);
         };
     }
 

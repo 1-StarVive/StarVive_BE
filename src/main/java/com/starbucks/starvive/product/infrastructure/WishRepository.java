@@ -1,6 +1,7 @@
 package com.starbucks.starvive.product.infrastructure;
 
 import com.starbucks.starvive.product.domain.Wish;
+import com.starbucks.starvive.product.domain.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import java.util.List;
@@ -12,5 +13,7 @@ public interface WishRepository extends JpaRepository<Wish, UUID> {
 
     Optional<Wish> findByUserIdAndProductOptionId(UUID userId, UUID productOptionId);
     List<Wish> findAllByUserId(UUID userId);
+
+    long countByProductId(UUID productId);
 
 }
