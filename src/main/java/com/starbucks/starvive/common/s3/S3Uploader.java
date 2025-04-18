@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +24,7 @@ public class S3Uploader {
     private final AmazonS3 amazonS3;
 
     @Value("${spring.cloud.aws.s3.bucket}")
-    public String bucket;
+    private String bucket;
 
     public String upload(MultipartFile multipartFile, String folderName) {
         String originalFilename = multipartFile.getOriginalFilename();
@@ -35,13 +36,7 @@ public class S3Uploader {
         String ext = getExtension(originalFilename);
         String fileName = folderName + "/" + UUID.randomUUID() + ext;
 
-
-        try {
-            amazonS3.putObject(bucket, fileName, multipartFile.getInputStream(), null);
-        } catch (IOException e) {
-            throw new BaseException(S3_UPLOAD_FAILED);
-        }
-        return amazonS3.getUrl(bucket, fileName).toString();
+        return putObjectToS3(multipartFile, fileName);
     }
 
     public List<String> uploadMultiple(List<MultipartFile> multipartFiles, String folderName) {
@@ -55,12 +50,8 @@ public class S3Uploader {
     }
 
     private String updateFile(MultipartFile multipartFiles, String folderName) {
-        try {
-            amazonS3.putObject(bucket, folderName, multipartFiles.getInputStream(), null);
-        } catch (IOException e) {
-            throw new BaseException(S3_UPLOAD_FAILED);
-        }
-        return amazonS3.getUrl(bucket, folderName).toString();
+
+        return putObjectToS3(multipartFiles, folderName);
     }
 
     public void deleteFile(String fileName) {
@@ -72,10 +63,23 @@ public class S3Uploader {
     }
 
     private String getExtension(String fileName) {
+        int index = fileName.lastIndexOf(".");
+        if (index == -1 || index == fileName.length() - 1) {
+            throw new BaseException(S3_INVALID_FILE_FORMAT);
+        }
+        return fileName.substring(index);
+    }
+
+    private String putObjectToS3(MultipartFile multipartFile, String fileName) {
         try {
-            return fileName.substring(fileName.lastIndexOf("."));
-        } catch (StringIndexOutOfBoundsException e) {
-            throw new BaseException( S3_INVALID_FILE_FORMAT);
+            ObjectMetadata metadata = new ObjectMetadata();
+            metadata.setContentLength(multipartFile.getSize());
+            metadata.setContentType(multipartFile.getContentType());
+
+            amazonS3.putObject(bucket, fileName, multipartFile.getInputStream(), metadata);
+            return amazonS3.getUrl(bucket, fileName).toString();
+        } catch (IOException e) {
+            throw new BaseException(S3_UPLOAD_FAILED);
         }
     }
 }
