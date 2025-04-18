@@ -12,8 +12,6 @@ import java.util.UUID;
 @NoArgsConstructor
 public class RegisterTagRequestDto {
 
-    private UUID tagId;
-
     private String name;
 
     private String imageThumbUrl;
@@ -21,8 +19,7 @@ public class RegisterTagRequestDto {
     private String imageThumbAlt;
 
     @Builder
-    public RegisterTagRequestDto(UUID tagId, String name, String imageThumbUrl, String imageThumbAlt) {
-        this.tagId = tagId;
+    public RegisterTagRequestDto(String name, String imageThumbUrl, String imageThumbAlt) {
         this.name = name;
         this.imageThumbUrl = imageThumbUrl;
         this.imageThumbAlt = imageThumbAlt;
