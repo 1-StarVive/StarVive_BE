@@ -17,9 +17,9 @@ services:
       # DB 설정 (Compose 네트워크 내의 mysql 서비스 사용 가정, 또는 외부 DB 주소)
       # 만약 mysql 컨테이너도 이 Compose 파일에서 관리한다면 호스트를 'mysql'로 지정 가능
       - SPRING_DATASOURCE_URL=jdbc:mysql://${DB_HOST:-mysql}:${DB_PORT:-3306}/${DB_NAME:-starvive_dev}?useSSL=false&allowPublicKeyRetrieval=true
-      # Use Jenkins Credential variables directly (check names in Jenkins)
-      - SPRING_DATASOURCE_USERNAME=${db-credentials-dev_USR}
-      - SPRING_DATASOURCE_PASSWORD=${db-credentials-dev_PSW}
+      # Use Jenkins environment variables set by withCredentials
+      - SPRING_DATASOURCE_USERNAME=${DB_USER} 
+      - SPRING_DATASOURCE_PASSWORD=${DB_PASS}
       # Redis 설정 (같은 네트워크 내의 'redis' 서비스 사용)
       - SPRING_DATA_REDIS_HOST=${REDIS_HOST:-redis}
       - SPRING_DATA_REDIS_PORT=${REDIS_PORT:-6379}
