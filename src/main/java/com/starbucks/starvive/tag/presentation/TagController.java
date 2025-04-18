@@ -28,7 +28,7 @@ public class TagController {
         tagService.addTag(registerTagVo, file);
     }
 
-    @Operation(summary = "태그 등록", description = "태그를 등록합니다.",
+    @Operation(summary = "태그 전체 조회", description = "태그를 전체 조회합니다.",
             tags = {"tag-service"})
     @GetMapping("/all")
     public List<ListTagResponseDto> getTags() {
