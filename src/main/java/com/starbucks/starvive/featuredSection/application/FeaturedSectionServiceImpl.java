@@ -77,7 +77,7 @@ public class FeaturedSectionServiceImpl implements FeaturedSectionService {
                 .collect(Collectors.groupingBy(
                         FeaturedSectionProduct::getFeaturedSectionId,
                         Collectors.mapping(featuredSectionProduct -> {
-                            // 연관된 도메인 조회
+
                             Product product = productRepository.findById(featuredSectionProduct.getProductId())
                                     .orElseThrow(() -> new BaseException(NO_EXIST_PRODUCT));
                             ProductOption option = productOptionRepository.findById(featuredSectionProduct.getProductOptionId())
@@ -109,15 +109,27 @@ public class FeaturedSectionServiceImpl implements FeaturedSectionService {
     }
 
     @Override
-    public void registerProducts(AddFeaturedSectionProductRequestDto dto) {
-        List<FeaturedSectionProduct> products = dto.getProductIds().stream()
-                .map(pid -> FeaturedSectionProduct.builder()
-                        .featuredSectionId(dto.getFeaturedSectionId())
-                        .productId(pid)
-                        .productOptionId(null)
-                        .productImageId(null)
-                        .build())
+    public void registerProducts(AddFeaturedSectionProductRequestDto addFeaturedSectionProductRequestDto) {
+        List<FeaturedSectionProduct> products = addFeaturedSectionProductRequestDto.getProductIds().stream()
+                .map(productId -> {
+
+                    UUID optionId = productOptionRepository.findFirstByProductId(productId)
+                            .map(ProductOption::getProductOptionId)
+                            .orElseThrow(() -> new BaseException(NO_EXIST_OPTION));
+
+                    UUID imageId = productImageRepository.findFirstByProductId(productId)
+                            .map(ProductImage::getProductImageId)
+                            .orElseThrow(() -> new BaseException(NO_EXIST_IMAGE));
+
+                    return FeaturedSectionProduct.builder()
+                            .featuredSectionId(addFeaturedSectionProductRequestDto.getFeaturedSectionId())
+                            .productId(productId)
+                            .productOptionId(optionId)
+                            .productImageId(imageId)
+                            .build();
+                })
                 .toList();
+
         featuredSectionProductRepository.saveAll(products);
     }
 }
