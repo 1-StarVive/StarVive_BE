@@ -5,21 +5,28 @@ import com.starbucks.starvive.product.dto.in.AddProductRequestDto;
 import com.starbucks.starvive.product.dto.in.DeleteProductRequestDto;
 import com.starbucks.starvive.product.dto.in.UpdateProductRequestDto;
 import com.starbucks.starvive.product.vo.*;
-import com.starbucks.starvive.product.batch.BestProductBatchJob;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.batch.core.Job;
+import org.springframework.batch.core.JobParametersBuilder;
+import org.springframework.batch.core.launch.JobLauncher;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+@Slf4j
 @RequestMapping("/api/v1/product")
 @RestController
 @RequiredArgsConstructor
 public class ProductController {
 
     private final ProductService productService;
-    private final BestProductBatchJob bestProductBatchJob;
+    private final JobLauncher jobLauncher;
+    private final Job bestProductJob;
 
     @Operation(summary = "상품 등록", description = "상품을 등록합니다.", tags = {"product-service"})
     @PostMapping("/add")
@@ -73,10 +80,18 @@ public class ProductController {
     @Operation(summary = "수동 배치 실행 (테스트용)", description = "베스트 상품 배치 작업을 수동으로 즉시 실행합니다.", tags = {"batch-test", "product"})
     public String runBestProductBatchManually() {
         try {
-            bestProductBatchJob.createBestProducts();
-            return "Best product batch job executed successfully!";
+            log.info(">>>> Manual Trigger: bestProductJob 실행 시작...");
+            jobLauncher.run(
+                    bestProductJob,
+                    new JobParametersBuilder()
+                            .addLocalDateTime("manualRunDateTime", LocalDateTime.now())
+                            .toJobParameters()
+            );
+            log.info("<<<< Manual Trigger: bestProductJob 실행 완료.");
+            return "Best product batch job (Spring Batch) executed successfully!";
         } catch (Exception e) {
-            return "Error executing batch job: " + e.getMessage();
+            log.error("Manual Trigger: bestProductJob 실행 중 오류 발생", e);
+            return "Error executing batch job (Spring Batch): " + e.getMessage();
         }
     }
 }
