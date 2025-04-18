@@ -3,7 +3,6 @@ pipeline {
     
     environment {
         GRADLE_OPTS = '-Dorg.gradle.daemon=false -Dorg.gradle.jvmargs="-Xmx512m -XX:MaxMetaspaceSize=256m"'
-        DB_CREDS = credentials('db-credentials-dev')
         GOOGLE_CLIENT_ID_CRED = credentials('google-client-id')
         GOOGLE_CLIENT_SECRET_CRED = credentials('google-client-secret')
         KAKAO_CLIENT_ID_CRED = credentials('kakao-client-id')
@@ -17,6 +16,12 @@ pipeline {
         IMAGE_TAG = 'dev'
         AWS_REGION = 'ap-northeast-2'
         S3_BUCKET_NAME = 'starvive-assets'
+        IMAGE_NAME = "springboot-app:${IMAGE_TAG}"
+        DB_HOST = 'mysql'
+        DB_PORT = '3306'
+        REDIS_HOST = 'redis'
+        REDIS_PORT = '6379'
+        SPRING_PROFILES_ACTIVE = 'prod'
     }
     
     stages {
@@ -46,52 +51,40 @@ pipeline {
         
         stage('Deploy') {
             steps {
-                sh '''
-                    # 기존 컨테이너 중지 및 제거
-                    docker stop ${CONTAINER_NAME} || true
-                    docker rm ${CONTAINER_NAME} || true
-                    
-                    # 새로운 컨테이너 실행 - 환경 변수 주입 (AWS 포함)
-                    docker run -d --name ${CONTAINER_NAME} \
-                    -e SPRING_DATASOURCE_URL=jdbc:mysql://localhost:3306/${DB_NAME} \
-                    -e SPRING_DATASOURCE_USERNAME=${DB_CREDS_USR} \
-                    -e SPRING_DATASOURCE_PASSWORD=${DB_CREDS_PSW} \
-                    -e GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID_CRED} \
-                    -e GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET_CRED} \
-                    -e KAKAO_CLIENT_ID=${KAKAO_CLIENT_ID_CRED} \
-                    -e KAKAO_CLIENT_SECRET=${KAKAO_CLIENT_SECRET_CRED} \
-                    -e JWT_SECRET_KEY=${JWT_SECRET_KEY_CRED} \
-                    -e AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID_CRED} \
-                    -e AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY_CRED} \
-                    -e AWS_REGION=${AWS_REGION} \
-                    -e AWS_DEFAULT_REGION=${AWS_REGION} \
-                    -e S3_BUCKET_NAME=${S3_BUCKET_NAME} \
-                    -e SERVER_PORT=${SERVER_PORT} \
-                    --network=host \
-                    springboot-app:${IMAGE_TAG}
-                    
-                    # 컨테이너가 제대로 시작되었는지 확인
-                    sleep 30
-                    if ! docker ps | grep -q ${CONTAINER_NAME}; then
-                        echo "Container failed to start"
-                        docker logs ${CONTAINER_NAME}
-                        exit 1
-                    fi
-                    
-                    # 애플리케이션이 응답하는지 확인
-                    for i in {1..30}; do
-                        if curl -s http://localhost:${SERVER_PORT}/actuator/health > /dev/null; then
-                            echo "Application is up and running"
-                            exit 0
+                withCredentials([usernamePassword(credentialsId: 'db-credentials-dev', usernameVariable: 'DB_USER', passwordVariable: 'DB_PASS')]) {
+                    sh '''
+                        export DB_USER="${DB_USER}"
+                        export DB_PASS="${DB_PASS}"
+
+                        docker-compose -f docker-compose.yml down --remove-orphans || true 
+                        
+                        echo "Starting application using docker-compose..."
+                        docker-compose -f docker-compose.yml up -d --remove-orphans
+
+                        echo "Checking application status..."
+                        sleep 30 
+                        if ! docker ps | grep -q "${CONTAINER_NAME}"; then 
+                            echo "Container ${CONTAINER_NAME} failed to start"
+                            docker-compose -f docker-compose.yml logs app 
+                            exit 1
                         fi
-                        echo "Waiting for application to start... (attempt $i/30)"
-                        sleep 2
-                    done
-                    
-                    echo "Application failed to start"
-                    docker logs ${CONTAINER_NAME}
-                    exit 1
-                '''
+                        
+                        for i in {1..30}; do
+                            if curl -s http://localhost:${SERVER_PORT}/actuator/health > /dev/null; then
+                                echo "Application is up and running on port ${SERVER_PORT}"
+                                break
+                            fi
+                            echo "Waiting for application to start... (attempt $i/30)"
+                            sleep 2
+                        done
+                        
+                        if ! curl -s http://localhost:${SERVER_PORT}/actuator/health > /dev/null; then
+                             echo "Application failed to start after waiting"
+                             docker-compose -f docker-compose.yml logs app
+                             exit 1
+                        fi
+                    '''
+                }
             }
         }
     }
@@ -100,24 +93,16 @@ pipeline {
     always {
         node('') {
             sh '''
-                # Gradle 캐시 정리
                 rm -rf ~/.gradle/caches/ || true
                 
-                # 미사용 Docker 리소스 정리
-                docker system prune -f || true
+                docker system prune -a -f || true 
                 
-                # 빌드 임시 파일 정리
                 find . -name "*@tmp" -type d -exec rm -rf {} \\; 2>/dev/null || true
                 
-                # 오래된 Docker 이미지 정리 (7일 이상 된 것)
-                docker images -q --filter "dangling=true" | xargs docker rmi -f || true
-                
-                # 워크스페이스 크기 확인 (로그 목적)
                 echo "Current workspace size:"
                 du -sh . || true
             '''
             
-            // 워크스페이스 정리 (성공, 실패 모두 정리)
             cleanWs()
         }
     }

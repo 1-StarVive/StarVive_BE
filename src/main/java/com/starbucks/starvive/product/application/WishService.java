@@ -12,7 +12,10 @@ import java.util.UUID;
 public interface WishService {
 
     void addWish(AddWishRequestDto addWishRequestDto);
+
     void toggleWish(ToggleWishRequestDto toggleWishRequestDto);
+
     void deleteWish(DeleteWishRequestDto deleteWishRequestDto);
+    
     List<WishListResponseDto> getWishList(UUID userId);
 }

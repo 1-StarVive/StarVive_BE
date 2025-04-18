@@ -12,20 +12,17 @@ public class AddWishRequestDto {
 
     private UUID userId;
     private UUID productId;
-    private UUID productOptionId;
 
     @Builder
-    public AddWishRequestDto(UUID userId, UUID productId, UUID productOptionId) {
+    public AddWishRequestDto(UUID userId, UUID productId) {
         this.userId = userId;
         this.productId = productId;
-        this.productOptionId = productOptionId;
     }
 
-    public static AddWishRequestDto from(AddWishRequestVo addWishRequestVo) {
+    public static AddWishRequestDto from(AddWishRequestVo addWishRequestVo, UUID userId) {
         return AddWishRequestDto.builder()
-                .userId(addWishRequestVo.getUserId())
+                .userId(userId)
                 .productId(addWishRequestVo.getProductId())
-                .productOptionId(addWishRequestVo.getProductOptionId())
                 .build();
     }
 }

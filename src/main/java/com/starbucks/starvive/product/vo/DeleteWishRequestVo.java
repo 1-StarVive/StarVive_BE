@@ -9,5 +9,5 @@ import java.util.UUID;
 @NoArgsConstructor
 public class DeleteWishRequestVo {
 
-    private UUID wishId;
+    private UUID productId;
 }

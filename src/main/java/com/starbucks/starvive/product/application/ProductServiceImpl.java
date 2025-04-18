@@ -4,9 +4,11 @@ import com.amazonaws.services.kms.model.NotFoundException;
 import com.starbucks.starvive.common.exception.BaseException;
 import com.starbucks.starvive.image.domain.ProductImage;
 import com.starbucks.starvive.image.infrastructure.ProductImageRepository;
+import com.starbucks.starvive.product.domain.BestProduct;
 import com.starbucks.starvive.product.domain.Product;
 import com.starbucks.starvive.product.domain.ProductDetailImage;
 import com.starbucks.starvive.product.domain.ProductOption;
+import com.starbucks.starvive.product.dto.BestProductResponseDto;
 import com.starbucks.starvive.product.dto.in.AddProductRequestDto;
 import com.starbucks.starvive.product.dto.in.DeleteProductRequestDto;
 import com.starbucks.starvive.product.dto.in.UpdateProductRequestDto;
@@ -14,6 +16,7 @@ import com.starbucks.starvive.product.dto.out.ProductDetailResponseDto;
 import com.starbucks.starvive.product.dto.out.ProductListResponseDto;
 import com.starbucks.starvive.product.dto.out.ProductRequiredInfoResponseDto;
 import com.starbucks.starvive.product.dto.out.ProductResponseDto;
+import com.starbucks.starvive.product.infrastructure.BestProductRepository;
 import com.starbucks.starvive.product.infrastructure.ProductOptionRepository;
 import com.starbucks.starvive.product.infrastructure.ProductRepository;
 import com.starbucks.starvive.product.infrastructure.ProductRequiredInfoRepository;
@@ -21,6 +24,7 @@ import com.starbucks.starvive.product.infrastructure.productDetailImageRepositor
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
@@ -35,8 +39,12 @@ public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
     private final ProductOptionRepository productOptionRepository;
     private final ProductImageRepository productImageRepository;
+
     private final productDetailImageRepository productDetailImageRepository;
     private final ProductRequiredInfoRepository productRequiredInfoRepository;
+
+    private final BestProductRepository bestProductRepository;
+
 
     @Override
     public void addProduct(AddProductRequestDto addProductRequestDto) {
@@ -104,6 +112,36 @@ public class ProductServiceImpl implements ProductService {
                 .productDetailContent(detailImage != null ? detailImage.getProductDetailContent() : null)
                 .requiredInfos(requiredInfos)
                 .build();
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public List<BestProductResponseDto> getBestProducts() {
+        List<BestProduct> bestProducts = bestProductRepository.findAll(Sort.by(Sort.Direction.ASC, "bestRank"));
+
+        return bestProducts.stream()
+                .map(bestProduct -> {
+                    Product product = productRepository.findByProductId(bestProduct.getProductId())
+                            .orElseThrow(() -> new BaseException(NO_EXIST_PRODUCT));
+
+                    String thumbnailUrl = productImageRepository.findFirstByProductId(product.getProductId())
+                                                               .map(ProductImage::getImageThumbUrl)
+                                                               .orElse(null);
+
+                    Integer price = productOptionRepository.findFirstByProductId(product.getProductId())
+                                                          .map(ProductOption::getPrice)
+                                                          .orElse(0);
+
+                    return BestProductResponseDto.builder()
+                            .productId(product.getProductId())
+                            .nameKr(product.getName())
+                            .nameEn("")
+                            .price(price)
+                            .thumbnailUrl(thumbnailUrl)
+                            .rank(bestProduct.getBestRank())
+                            .build();
+                })
+                .collect(Collectors.toList());
     }
 }
 

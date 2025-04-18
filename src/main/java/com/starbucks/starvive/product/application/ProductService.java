@@ -6,6 +6,7 @@ import com.starbucks.starvive.product.dto.in.UpdateProductRequestDto;
 import com.starbucks.starvive.product.dto.out.ProductDetailResponseDto;
 import com.starbucks.starvive.product.dto.out.ProductListResponseDto;
 import com.starbucks.starvive.product.dto.out.ProductResponseDto;
+import com.starbucks.starvive.product.dto.BestProductResponseDto;
 import java.util.List;
 import java.util.UUID;
 
@@ -17,5 +18,6 @@ public interface ProductService {
     ProductResponseDto getProduct(UUID productId);
     List<ProductListResponseDto> getProductsByCursor(UUID lastProductId, int size);
     ProductDetailResponseDto getProductDetail(UUID productId);
+    List<BestProductResponseDto> getBestProducts();
 
 }
