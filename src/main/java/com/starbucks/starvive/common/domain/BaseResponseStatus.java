@@ -92,6 +92,10 @@ public enum BaseResponseStatus {
     // productDetail
     NO_EXIST_PRODUCT_DETAIL(HttpStatus.NOT_FOUND, false, 3014,"상품 상세 정보를 찾을 수 없습니다."),
 
+    // tag
+    DUPLICATED_TAG(HttpStatus.CONFLICT, false, 3016, "이미 등록된 태그입니다."),
+
+
     /**
      * 4000: comment service error
      */
