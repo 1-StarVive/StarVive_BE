@@ -27,7 +27,7 @@ public enum BaseResponseStatus {
     ALREADY_EXIST_EMAIL(HttpStatus.CONFLICT, false, 408, "이미 사용 중인 이메일입니다."),
     ALREADY_EXIST_LOGIN_ID(HttpStatus.CONFLICT, false, 409, "이미 사용 중인 로그인 ID입니다."),
     INVALID_LOGIN_ID(HttpStatus.BAD_REQUEST, false, 411, "로그인 ID를 다시 확인해주세요."),
-    NO_PERMISSION_CART(HttpStatus.UNAUTHORIZED, false,412,"장바구니에 접근 권한이 없습니다."),
+    NO_PERMISSION_CART(HttpStatus.UNAUTHORIZED, false, 412, "장바구니에 접근 권한이 없습니다."),
     /**
      * 900: 기타 에러
      */
@@ -62,7 +62,7 @@ public enum BaseResponseStatus {
     NO_EXIST_PRODUCT(HttpStatus.NOT_FOUND, false, 3001, "존재하지 않는 상품입니다"),
     NO_EXIST_OPTION(HttpStatus.NOT_FOUND, false, 3002, "존재하지 않는 옵션입니다"),
     NO_EXIST_CATEGORY(HttpStatus.NOT_FOUND, false, 3003, "존재하지 않는 카테고리입니다"),
-    NO_EXIST_IMAGE(HttpStatus.NOT_FOUND, false,3004, "존재하지 않는 이미지 입니다."),
+    NO_EXIST_IMAGE(HttpStatus.NOT_FOUND, false, 3004, "존재하지 않는 이미지 입니다."),
     NO_EXIST_SECTION(HttpStatus.NOT_FOUND, false, 3005, "존재하지 않는 섹션 입니다."),
     NO_EXIST_CART(HttpStatus.NOT_FOUND, false, 3006, "장바구니에 상품이 존재하지 않습니다."),
 
@@ -71,7 +71,7 @@ public enum BaseResponseStatus {
     DUPLICATED_CATEGORY(HttpStatus.CONFLICT, false, 3009, "이미 등록된 카테고리입니다"),
 
     // wish
-    DUPLICATED_WISH(HttpStatus.CONFLICT, false,3010, "이미 찜된 상품입니다."),
+    DUPLICATED_WISH(HttpStatus.CONFLICT, false, 3010, "이미 찜된 상품입니다."),
 
     NO_EXIST_OPTIONS_IN_PRODUCT(HttpStatus.NOT_FOUND, false, 3011, "해당 상품에 옵션이 존재하지 않습니다"),
 
@@ -87,14 +87,14 @@ public enum BaseResponseStatus {
 
 
     // FeaturedSection
-    NO_EXIST_FEATURED_SECTION(HttpStatus.NOT_FOUND,false, 3013,"존재하지 않는 추천 섹셥입니다."),
+    NO_EXIST_FEATURED_SECTION(HttpStatus.NOT_FOUND, false, 3013, "존재하지 않는 추천 섹셥입니다."),
 
     // productDetail
-    NO_EXIST_PRODUCT_DETAIL(HttpStatus.NOT_FOUND, false, 3014,"상품 상세 정보를 찾을 수 없습니다."),
+    NO_EXIST_PRODUCT_DETAIL(HttpStatus.NOT_FOUND, false, 3014, "상품 상세 정보를 찾을 수 없습니다."),
 
     // tag
     DUPLICATED_TAG(HttpStatus.CONFLICT, false, 3016, "이미 등록된 태그입니다."),
-
+    NO_EXIST_TAG(HttpStatus.NOT_FOUND, false, 3017, "존재하지 않는 태크입니다"),
 
     /**
      * 4000: comment service error
