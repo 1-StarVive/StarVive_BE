@@ -2,11 +2,13 @@ package com.starbucks.starvive;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
-@EnableScheduling
+@EnableBatchProcessing
 @EnableJpaAuditing
+@EnableScheduling
 @SpringBootApplication
 public class StarviveApplication {
 
