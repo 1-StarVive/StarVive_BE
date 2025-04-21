@@ -97,6 +97,12 @@ public class ProductServiceImpl implements ProductService {
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new BaseException(NO_EXIST_PRODUCT));
 
+        ProductOption option = productOptionRepository.findFirstByProductId(productId)
+                .orElseThrow(() -> new BaseException(NO_EXIST_OPTION));
+
+        ProductImage image = productImageRepository.findFirstByProductId(productId)
+                .orElseThrow(() -> new BaseException(NO_EXIST_IMAGE));
+
         ProductDetailImage detailImage = productDetailImageRepository.findByProductId(productId)
                 .orElse(null);
 
@@ -107,7 +113,9 @@ public class ProductServiceImpl implements ProductService {
 
         return ProductDetailResponseDto.builder()
                 .productId(product.getProductId())
+                .imageThumbUrl(image.getImageThumbUrl())
                 .name(product.getName())
+                .price(option.getPrice())
                 .productStatus(product.getProductStatus())
                 .productDetailContent(detailImage != null ? detailImage.getProductDetailContent() : null)
                 .requiredInfos(requiredInfos)
