@@ -4,7 +4,6 @@ import com.starbucks.starvive.common.utils.CursorPage;
 import com.starbucks.starvive.product.application.ProductCategoryService;
 import com.starbucks.starvive.product.dto.in.RegisterProductCategoryRequestDto;
 import com.starbucks.starvive.product.dto.out.ProductCategoryListResponseDto;
-import com.starbucks.starvive.product.dto.out.ProductListResponseDto;
 import com.starbucks.starvive.product.vo.RegisterProductCategoryVo;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;

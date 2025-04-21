@@ -78,6 +78,7 @@ public enum BaseResponseStatus {
     ALREADY_DELETED_CATEGORY(HttpStatus.BAD_REQUEST, false, 3012, "이미 삭제된 카테고리입니다."),
 
     DUPLICATED_PRODUCT_CATEGORY(HttpStatus.CONFLICT, false, 3015, "이미 등록된 상품-카테고리입니다."),
+    DUPLICATED_PRODUCT_TAG(HttpStatus.CONFLICT, false, 3018, "이미 등록된 상품-태그입니다"),
 
     // Promotion
     DUPLICATED_PROMOTION(HttpStatus.CONFLICT, false, 3101, "이미 등록된 기획전입니다."),
