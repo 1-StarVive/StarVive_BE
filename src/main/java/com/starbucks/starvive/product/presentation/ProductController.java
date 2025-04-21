@@ -1,9 +1,14 @@
 package com.starbucks.starvive.product.presentation;
 
+import com.starbucks.starvive.image.domain.ProductImage;
+import com.starbucks.starvive.image.infrastructure.ProductImageRepository;
 import com.starbucks.starvive.product.application.ProductService;
+import com.starbucks.starvive.product.domain.ProductOption;
 import com.starbucks.starvive.product.dto.in.AddProductRequestDto;
 import com.starbucks.starvive.product.dto.in.DeleteProductRequestDto;
 import com.starbucks.starvive.product.dto.in.UpdateProductRequestDto;
+import com.starbucks.starvive.product.dto.out.ProductDetailResponseDto;
+import com.starbucks.starvive.product.infrastructure.ProductOptionRepository;
 import com.starbucks.starvive.product.vo.*;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +32,8 @@ public class ProductController {
     private final ProductService productService;
     private final JobLauncher jobLauncher;
     private final Job bestProductJob;
+    private final ProductOptionRepository productOptionRepository;
+    private final ProductImageRepository productImageRepository;
 
     @Operation(summary = "상품 등록", description = "상품을 등록합니다.", tags = {"product-service"})
     @PostMapping("/add")
@@ -65,7 +72,12 @@ public class ProductController {
     @Operation(summary = "상품 상세 조회", description = "상품 상세 정보를 조회합니다.", tags = {"product-service"})
     @GetMapping("/detail")
     public ProductDetailResponseVo getProductDetail(@RequestParam("productId") UUID productId) {
-        return ProductDetailResponseVo.from(productService.getProductDetail(productId));
+
+        ProductDetailResponseDto dto = productService.getProductDetail(productId);
+        ProductOption option = productOptionRepository.findFirstByProductId(productId).orElse(null);
+        ProductImage image = productImageRepository.findFirstByProductId(productId)
+                .orElse(null);
+        return ProductDetailResponseVo.from(dto, image, option);
     }
 
     @Operation(summary = "베스트 상품 목록 조회", description = "인기 상품(베스트 상품) 목록을 순위 순으로 조회합니다.", tags = {"product-service"})
