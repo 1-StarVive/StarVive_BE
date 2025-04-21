@@ -7,7 +7,6 @@ import com.starbucks.starvive.product.dto.out.ProductRequiredInfoResponseDto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
 import java.util.List;
 import java.util.UUID;
 
@@ -19,31 +18,44 @@ public class ProductDetailResponseVo {
     private String imageThumbUrl;
     private String name;
     private int price;
+    private int baseDiscountRate;
+    private int discountedPrice;
     private String productStatus;
     private String productDetailContent;
     private List<ProductRequiredInfoResponseDto> requiredInfos;
 
     @Builder
-    public ProductDetailResponseVo(UUID productId, String imageThumbUrl, String name, int price, String productStatus,
-                                   String productDetailContent, List<ProductRequiredInfoResponseDto> requiredInfos) {
+    public ProductDetailResponseVo(UUID productId,
+                                   String imageThumbUrl,
+                                   String name,
+                                   int price,
+                                   int baseDiscountRate,
+                                   int discountedPrice,
+                                   String productStatus,
+                                   String productDetailContent,
+                                   List<ProductRequiredInfoResponseDto> requiredInfos) {
         this.productId = productId;
         this.imageThumbUrl = imageThumbUrl;
         this.name = name;
         this.price = price;
+        this.baseDiscountRate = baseDiscountRate;
+        this.discountedPrice = discountedPrice;
         this.productStatus = productStatus;
         this.productDetailContent = productDetailContent;
         this.requiredInfos = requiredInfos;
     }
 
-    public static ProductDetailResponseVo from(ProductDetailResponseDto productDetailResponseDto, ProductImage image, ProductOption option) {
+    public static ProductDetailResponseVo from(ProductDetailResponseDto dto, ProductImage image, ProductOption option) {
         return ProductDetailResponseVo.builder()
-                .productId(productDetailResponseDto.getProductId())
+                .productId(dto.getProductId())
                 .imageThumbUrl(image.getImageThumbUrl())
-                .name(productDetailResponseDto.getName())
+                .name(dto.getName())
                 .price(option.getPrice())
-                .productStatus(productDetailResponseDto.getProductStatus().name())
-                .productDetailContent(productDetailResponseDto.getProductDetailContent())
-                .requiredInfos(productDetailResponseDto.getRequiredInfos())
+                .baseDiscountRate(option.getBaseDiscountRate())
+                .discountedPrice(option.getDiscountedPrice())
+                .productStatus(dto.getProductStatus().name())
+                .productDetailContent(dto.getProductDetailContent())
+                .requiredInfos(dto.getRequiredInfos())
                 .build();
     }
 }

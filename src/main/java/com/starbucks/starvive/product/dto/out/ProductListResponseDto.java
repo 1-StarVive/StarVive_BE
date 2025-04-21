@@ -26,7 +26,7 @@ public class ProductListResponseDto {
      */
     @Builder
     public ProductListResponseDto(UUID productId, String imageThumbUrl, String imageThumbAlt,
-                                  String name, int baseDiscountRate, int price) {
+                                  String name, int baseDiscountRate, int discountedPrice, int price) {
         this.productId = productId;
         this.imageThumbUrl = imageThumbUrl;
         this.imageThumbAlt = imageThumbAlt;
@@ -44,6 +44,7 @@ public class ProductListResponseDto {
                 .name(product.getName())
                 .baseDiscountRate(option.getBaseDiscountRate())
                 .price(option.getPrice())
+                .discountedPrice(option.getDiscountedPrice())
                 .imageThumbUrl(image.getImageThumbUrl())
                 .imageThumbAlt(image.getImageThumbAlt())
                 .build();
