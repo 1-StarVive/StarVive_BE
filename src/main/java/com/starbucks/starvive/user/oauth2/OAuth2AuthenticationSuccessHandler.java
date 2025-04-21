@@ -19,6 +19,9 @@ import org.springframework.security.web.authentication.SimpleUrlAuthenticationSu
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import com.starbucks.starvive.common.utils.NicknameGenerator;
+import jakarta.servlet.http.Cookie;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 
 import java.io.IOException;
 import java.time.Instant;
@@ -76,18 +79,45 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
         String accessToken = jwtTokenProvider.generateAccessToken(user.getUserId());
         String refreshToken = jwtTokenProvider.generateRefreshToken(user.getUserId());
-        long expiresIn = jwtTokenProvider.getAccessTokenExpirationTime();
+        // long expiresIn = jwtTokenProvider.getAccessTokenExpirationTime(); // 쿠키 MaxAge 설정에 사용되므로 주석 제거
 
         saveRefreshToken(user, refreshToken);
 
-        SignInResponseDto responseDto = SignInResponseDto.from(user, accessToken, refreshToken, expiresIn);
+        // --- 기존 JSON 응답 로직 제거 ---
+        // SignInResponseDto responseDto = SignInResponseDto.from(user, accessToken, refreshToken, expiresIn);
+        // response.setStatus(HttpServletResponse.SC_OK);
+        // response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+        // response.setCharacterEncoding("UTF-8");
+        // objectMapper.writeValue(response.getWriter(), responseDto);
 
-        response.setStatus(HttpServletResponse.SC_OK);
-        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-        response.setCharacterEncoding("UTF-8");
-        objectMapper.writeValue(response.getWriter(), responseDto);
+        // --- 쿠키 생성 및 리디렉션 로직 추가 ---
+        // 1. Access Token 쿠키 생성
+        Cookie accessTokenCookie = new Cookie("accessToken", accessToken);
+        accessTokenCookie.setPath("/"); // 쿠키가 전송될 경로 (사이트 전체)
+        accessTokenCookie.setHttpOnly(true); // JavaScript에서 접근 불가 (보안 강화)
+        // accessTokenCookie.setSecure(true); // HTTPS 환경에서만 쿠키 전송 (운영 환경에서는 true 권장)
+        accessTokenCookie.setMaxAge((int) jwtTokenProvider.getAccessTokenExpirationTime()); // 초 단위 만료 시간 설정 ( 나누기 1000 제거 )
+        // accessTokenCookie.setSameSite("Lax"); // CSRF 방지를 위한 설정 (필요시 None, Strict 등으로 변경)
+        response.addCookie(accessTokenCookie);
 
-        log.info("Successfully processed OAuth2 로그인 처리 완료: {} / {}", socialLoginType, user.getUserId());
+        // 2. Refresh Token 쿠키 생성 (Access Token과 유사하게 설정)
+        Cookie refreshTokenCookie = new Cookie("refreshToken", refreshToken);
+        refreshTokenCookie.setPath("/");
+        refreshTokenCookie.setHttpOnly(true);
+        // refreshTokenCookie.setSecure(true); // HTTPS 환경에서만 쿠키 전송 (운영 환경에서는 true 권장)
+        refreshTokenCookie.setMaxAge((int) jwtTokenProvider.getRefreshTokenExpirationTime()); // 초 단위 만료 시간 설정 ( 나누기 1000 제거 )
+        // refreshTokenCookie.setSameSite("Lax"); // CSRF 방지를 위한 설정 (필요시 None, Strict 등으로 변경)
+        response.addCookie(refreshTokenCookie);
+
+        // Access Token 만료 시간 (초 단위) 가져오기
+        long expiresInSeconds = jwtTokenProvider.getAccessTokenExpirationTime();
+
+        // 3. 지정된 프론트엔드 URL로 리디렉션 (expiresIn 파라미터 추가)
+        String targetUrl = "http://localhost:3000/auth/google/callback?expiresIn=" + expiresInSeconds; // expiresIn 파라미터 추가
+        getRedirectStrategy().sendRedirect(request, response, targetUrl);
+
+
+        log.info("OAuth2 로그인 성공 및 쿠키 설정 후 리디렉션 완료: {} / {} -> {}", socialLoginType, user.getUserId(), targetUrl);
     }
 
     private User findOrCreateUser(SocialLoginType socialLoginType, String socialId, String email, String name) {
