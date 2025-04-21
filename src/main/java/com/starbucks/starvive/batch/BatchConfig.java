@@ -3,7 +3,6 @@ package com.starbucks.starvive.batch;
 import com.starbucks.starvive.batch.dto.ProductWishCountDto;
 import com.starbucks.starvive.product.batch.UpdateBestProductTasklet;
 import com.starbucks.starvive.product.domain.Product;
-import com.starbucks.starvive.product.infrastructure.WishRepository;
 import jakarta.persistence.EntityManagerFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,10 +19,12 @@ import org.springframework.batch.item.database.builder.JpaPagingItemReaderBuilde
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.transaction.PlatformTransactionManager;
 
 import javax.sql.DataSource;
+import java.util.Objects;
 import com.starbucks.starvive.batch.listener.TruncateTempTableListener;
 
 @Slf4j
@@ -36,8 +37,11 @@ public class BatchConfig {
     private final PlatformTransactionManager transactionManager;
     private final EntityManagerFactory entityManagerFactory;
     private final DataSource dataSource;
-    private final WishRepository wishRepository;
+    private final StringRedisTemplate redisTemplate;
     private final TruncateTempTableListener truncateTempTableListener;
+
+    private static final String PRODUCT_LIKED_BY_KEY_PREFIX = "product:";
+    private static final String PRODUCT_LIKED_BY_KEY_SUFFIX = ":liked_by";
 
     @Value("${chunkSize:1000}")
     private int chunkSize;
@@ -76,10 +80,13 @@ public class BatchConfig {
 
     @Bean
     public ItemProcessor<Product, ProductWishCountDto> productWishCountProcessor() {
-        log.info(">>>>> productWishCountProcessor 생성");
+        log.info(">>>>> productWishCountProcessor 생성 (Redis 조회 방식)");
         return product -> {
-            long wishCount = wishRepository.countByProductId(product.getProductId());
-            log.trace("Processing Product ID: {}, Wish Count: {}", product.getProductId(), wishCount);
+            String productLikedByKey = PRODUCT_LIKED_BY_KEY_PREFIX + product.getProductId() + PRODUCT_LIKED_BY_KEY_SUFFIX;
+            Long wishCountLong = redisTemplate.opsForSet().size(productLikedByKey);
+            long wishCount = Objects.requireNonNullElse(wishCountLong, 0L);
+
+            log.trace("Processing Product ID: {}, Wish Count from Redis: {}", product.getProductId(), wishCount);
             return new ProductWishCountDto(product.getProductId(), wishCount);
         };
     }
