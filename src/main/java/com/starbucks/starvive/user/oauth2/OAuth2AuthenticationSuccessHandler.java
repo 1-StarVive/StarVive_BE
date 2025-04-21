@@ -94,7 +94,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         // 1. Access Token 쿠키 생성
         Cookie accessTokenCookie = new Cookie("accessToken", accessToken);
         accessTokenCookie.setPath("/"); // 쿠키가 전송될 경로 (사이트 전체)
-        accessTokenCookie.setHttpOnly(true); // JavaScript에서 접근 불가 (보안 강화)
+        accessTokenCookie.setHttpOnly(false); // JavaScript에서 접근 불가 (보안 강화)
         // accessTokenCookie.setSecure(true); // HTTPS 환경에서만 쿠키 전송 (운영 환경에서는 true 권장)
         accessTokenCookie.setMaxAge((int) jwtTokenProvider.getAccessTokenExpirationTime()); // 초 단위 만료 시간 설정 ( 나누기 1000 제거 )
         // accessTokenCookie.setSameSite("Lax"); // CSRF 방지를 위한 설정 (필요시 None, Strict 등으로 변경)
@@ -103,17 +103,23 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         // 2. Refresh Token 쿠키 생성 (Access Token과 유사하게 설정)
         Cookie refreshTokenCookie = new Cookie("refreshToken", refreshToken);
         refreshTokenCookie.setPath("/");
-        refreshTokenCookie.setHttpOnly(true);
+        refreshTokenCookie.setHttpOnly(false);
         // refreshTokenCookie.setSecure(true); // HTTPS 환경에서만 쿠키 전송 (운영 환경에서는 true 권장)
         refreshTokenCookie.setMaxAge((int) jwtTokenProvider.getRefreshTokenExpirationTime()); // 초 단위 만료 시간 설정 ( 나누기 1000 제거 )
         // refreshTokenCookie.setSameSite("Lax"); // CSRF 방지를 위한 설정 (필요시 None, Strict 등으로 변경)
         response.addCookie(refreshTokenCookie);
 
         // Access Token 만료 시간 (초 단위) 가져오기
-        long expiresInSeconds = jwtTokenProvider.getAccessTokenExpirationTime();
+        Cookie expiresInCookie = new Cookie("expiresIn", String.valueOf(jwtTokenProvider.getAccessTokenExpirationTime()));
+        expiresInCookie.setPath("/");
+        expiresInCookie.setHttpOnly(false);
+        // refreshTokenCookie.setSecure(true); // HTTPS 환경에서만 쿠키 전송 (운영 환경에서는 true 권장)
+        refreshTokenCookie.setMaxAge((int) jwtTokenProvider.getRefreshTokenExpirationTime()); // 초 단위 만료 시간 설정 ( 나누기 1000 제거 )
+        // refreshTokenCookie.setSameSite("Lax"); // CSRF 방지를 위한 설정 (필요시 None, Strict 등으로 변경)
+        response.addCookie(expiresInCookie);
 
         // 3. 지정된 프론트엔드 URL로 리디렉션 (expiresIn 파라미터 추가)
-        String targetUrl = "http://localhost:3000/auth/google/callback?expiresIn=" + expiresInSeconds; // expiresIn 파라미터 추가
+        String targetUrl = "http://localhost:3000/auth/google/callback?expiresIn="; // expiresIn 파라미터 추가
         getRedirectStrategy().sendRedirect(request, response, targetUrl);
 
 
