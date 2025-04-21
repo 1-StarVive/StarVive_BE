@@ -74,7 +74,9 @@ public class SecurityConfig {
                                 "/api/v1/vendor/**" ,
                                 "/api/v1/topCategories/**",
                                 "/api/v1/middleCategories/**",
-                                "/api/v1/bottomCategories/**"
+                                "/api/v1/bottomCategories/**",
+                                "/auth/google/callback/**",
+                                "/auth/kakao/callback/**"
                         ).permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/**").permitAll()
                         .requestMatchers("/api/users/signout").authenticated()
