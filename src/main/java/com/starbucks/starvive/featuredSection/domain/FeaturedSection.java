@@ -10,7 +10,6 @@ import java.util.UUID;
 @Getter
 @Entity
 @NoArgsConstructor
-@Builder
 public class FeaturedSection {
 
     @Id
@@ -24,6 +23,7 @@ public class FeaturedSection {
     @Column(nullable = false)
     private boolean activated;
 
+    @Builder
     public FeaturedSection(UUID featuredSectionId, String name, boolean activated) {
         this.featuredSectionId = featuredSectionId;
         this.name = name;

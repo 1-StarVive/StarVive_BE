@@ -1,7 +1,5 @@
 package com.starbucks.starvive.product.infrastructure;
 
-import com.starbucks.starvive.product.domain.Wish;
-import com.starbucks.starvive.product.domain.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import java.util.List;

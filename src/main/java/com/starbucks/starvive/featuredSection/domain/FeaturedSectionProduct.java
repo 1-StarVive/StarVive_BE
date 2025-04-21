@@ -11,7 +11,6 @@ import org.hibernate.annotations.UuidGenerator;
 @Getter
 @Entity
 @NoArgsConstructor
-@Builder
 public class FeaturedSectionProduct {
 
     @Id
@@ -31,7 +30,9 @@ public class FeaturedSectionProduct {
     @Column(columnDefinition = "BINARY(16)", nullable = false)
     private UUID productImageId;
 
-    public FeaturedSectionProduct(UUID featuredSectionProductId, UUID productId, UUID featuredSectionId, UUID productOptionId, UUID productImageId) {
+    @Builder
+    public FeaturedSectionProduct(UUID featuredSectionProductId, UUID productId,
+                                  UUID featuredSectionId, UUID productOptionId, UUID productImageId) {
         this.featuredSectionProductId = featuredSectionProductId;
         this.productId = productId;
         this.featuredSectionId = featuredSectionId;
