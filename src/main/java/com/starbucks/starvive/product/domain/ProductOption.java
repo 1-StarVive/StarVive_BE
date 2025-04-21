@@ -34,6 +34,9 @@ public class ProductOption extends BaseEntity {
     private int baseDiscountRate;
 
     @Column(nullable = false)
+    private int discountedPrice;
+
+    @Column(nullable = false)
     private String name; // 길이 ? 사이즈 ?
 
     @Column(nullable = false, columnDefinition = "BINARY(16)")
@@ -42,13 +45,20 @@ public class ProductOption extends BaseEntity {
     @Builder
     public ProductOption(UUID productOptionId, Integer stock,
                          int price, Boolean carvedAvailable,
-                         int baseDiscountRate, String name, UUID productId) {
+                         int baseDiscountRate, int discountedPrice, String name, UUID productId) {
         this.productOptionId = productOptionId;
         this.stock = stock;
         this.price = price;
         this.carvedAvailable = carvedAvailable;
         this.baseDiscountRate = baseDiscountRate;
+        this.discountedPrice = discountedPrice;
         this.name = name;
         this.productId = productId;
+    }
+
+    public int getDiscountedPrice() {
+        return (baseDiscountRate > 0)
+                ? price - (price * baseDiscountRate / 100)
+                : price;
     }
 }
