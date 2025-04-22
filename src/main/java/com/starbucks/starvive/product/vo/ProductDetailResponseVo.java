@@ -15,8 +15,10 @@ import java.util.UUID;
 public class ProductDetailResponseVo {
 
     private UUID productId;
+    private UUID productOptionId;
     private String imageThumbUrl;
     private String name;
+    private String optionName;
     private int price;
     private int baseDiscountRate;
     private int discountedPrice;
@@ -26,8 +28,10 @@ public class ProductDetailResponseVo {
 
     @Builder
     public ProductDetailResponseVo(UUID productId,
+                                   UUID productOptionId,
                                    String imageThumbUrl,
                                    String name,
+                                   String optionName,
                                    int price,
                                    int baseDiscountRate,
                                    int discountedPrice,
@@ -35,8 +39,10 @@ public class ProductDetailResponseVo {
                                    String productDetailContent,
                                    List<ProductRequiredInfoResponseDto> requiredInfos) {
         this.productId = productId;
+        this.productOptionId = productOptionId;
         this.imageThumbUrl = imageThumbUrl;
         this.name = name;
+        this.optionName = optionName;
         this.price = price;
         this.baseDiscountRate = baseDiscountRate;
         this.discountedPrice = discountedPrice;
@@ -48,8 +54,10 @@ public class ProductDetailResponseVo {
     public static ProductDetailResponseVo from(ProductDetailResponseDto dto, ProductImage image, ProductOption option) {
         return ProductDetailResponseVo.builder()
                 .productId(dto.getProductId())
+                .productOptionId(dto.getProductOptionId())
                 .imageThumbUrl(image.getImageThumbUrl())
                 .name(dto.getName())
+                .optionName(option.getName())
                 .price(option.getPrice())
                 .baseDiscountRate(option.getBaseDiscountRate())
                 .discountedPrice(option.getDiscountedPrice())

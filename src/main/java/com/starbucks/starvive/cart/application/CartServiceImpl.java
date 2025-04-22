@@ -51,33 +51,33 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public void addItem(AddCartItemRequestDto dto, UUID userId) {
+    public void addItem(AddCartItemRequestDto addCartItemRequestDto, UUID userId) {
         Cart cart = Cart.builder()
                 .userId(userId)
-                .productId(dto.getProductId())
-                .productOptionId(dto.getProductOptionId())
-                .quantity(dto.getQuantity())
-                .checked(dto.isChecked())
+                .productId(addCartItemRequestDto.getProductId())
+                .productOptionId(addCartItemRequestDto.getProductOptionId())
+                .quantity(addCartItemRequestDto.getQuantity())
+                .checked(addCartItemRequestDto.isChecked())
                 .build();
         cartRepository.save(cart);
     }
 
     @Transactional
     @Override
-    public void updateItem(UpdateCartItemRequestDto dto, UUID userId) {
-        Cart cart = cartRepository.findById(dto.getCartId())
+    public void updateItem(UpdateCartItemRequestDto updateCartItemRequestDto, UUID userId) {
+        Cart cart = cartRepository.findById(updateCartItemRequestDto.getCartId())
                 .orElseThrow(() -> new BaseException(NO_EXIST_CART));
 
         if (!cart.getUserId().equals(userId)) {
             throw new BaseException(NO_PERMISSION_CART);
         }
 
-        cart.update(dto.getProductOptionId(), dto.getQuantity(), dto.isChecked());
+        cart.update(updateCartItemRequestDto.getProductOptionId(), updateCartItemRequestDto.getQuantity(), updateCartItemRequestDto.isChecked());
     }
 
     @Override
-    public void deleteSelectedItems(DeleteSelectedCartItemsRequestDto dto, UUID userId) {
-        List<UUID> cartItemIds = dto.getCartItemIds();
+    public void deleteSelectedItems(DeleteSelectedCartItemsRequestDto deleteSelectedCartItemsRequestDto, UUID userId) {
+        List<UUID> cartItemIds = deleteSelectedCartItemsRequestDto.getCartItemIds();
 
         List<Cart> carts = cartRepository.findAllById(cartItemIds);
 
