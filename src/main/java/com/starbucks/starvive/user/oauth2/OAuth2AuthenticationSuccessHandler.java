@@ -119,7 +119,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         response.addCookie(expiresInCookie);
 
         // 3. 지정된 프론트엔드 URL로 리디렉션 (expiresIn 파라미터 추가)
-        String targetUrl = "http://localhost:3000/auth/google/callback"; // expiresIn 파라미터 추가
+        String targetUrl = "http://starvive.store/auth/google/callback"; // expiresIn 파라미터 추가
         getRedirectStrategy().sendRedirect(request, response, targetUrl);
 
 
