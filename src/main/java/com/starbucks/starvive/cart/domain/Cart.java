@@ -47,4 +47,8 @@ public class Cart extends BaseEntity {
         this.quantity = quantity;
         this.checked = checked;
     }
+
+    public void updateChecked(boolean checked) {
+        this.checked = checked;
+    }
 }

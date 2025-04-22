@@ -4,6 +4,7 @@ import com.starbucks.starvive.cart.domain.Cart;
 import com.starbucks.starvive.cart.dto.in.AddCartItemRequestDto;
 import com.starbucks.starvive.cart.dto.in.DeleteSelectedCartItemsRequestDto;
 import com.starbucks.starvive.cart.dto.in.UpdateCartItemRequestDto;
+import com.starbucks.starvive.cart.dto.in.UpdateCheckedCartItemsRequestDto;
 import com.starbucks.starvive.cart.infrastructure.CartRepository;
 import com.starbucks.starvive.cart.vo.CartItemResponseVo;
 import com.starbucks.starvive.common.exception.BaseException;
@@ -73,6 +74,17 @@ public class CartServiceImpl implements CartService {
         }
 
         cart.update(updateCartItemRequestDto.getProductOptionId(), updateCartItemRequestDto.getQuantity(), updateCartItemRequestDto.isChecked());
+    }
+
+    @Transactional
+    @Override
+    public void updateCheckedItems(List<UpdateCheckedCartItemsRequestDto> dtoList, UUID userId) {
+        for (UpdateCheckedCartItemsRequestDto dto : dtoList) {
+            Cart cart = cartRepository.findByCartIdAndUserId(dto.getCartId(), userId)
+                    .orElseThrow(() -> new BaseException(NO_EXIST_CART));
+
+            cart.updateChecked(dto.isChecked());
+        }
     }
 
     @Override

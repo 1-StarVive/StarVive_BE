@@ -4,10 +4,8 @@ import com.starbucks.starvive.cart.application.CartService;
 import com.starbucks.starvive.cart.dto.in.AddCartItemRequestDto;
 import com.starbucks.starvive.cart.dto.in.DeleteSelectedCartItemsRequestDto;
 import com.starbucks.starvive.cart.dto.in.UpdateCartItemRequestDto;
-import com.starbucks.starvive.cart.vo.AddCartItemRequestVo;
-import com.starbucks.starvive.cart.vo.CartItemResponseVo;
-import com.starbucks.starvive.cart.vo.DeleteSelectedCartItemsRequestVo;
-import com.starbucks.starvive.cart.vo.UpdateCartItemRequestVo;
+import com.starbucks.starvive.cart.dto.in.UpdateCheckedCartItemsRequestDto;
+import com.starbucks.starvive.cart.vo.*;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -15,6 +13,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
+
 import com.starbucks.starvive.user.domain.User;
 
 @RestController
@@ -47,6 +47,18 @@ public class CartController {
     public void updateItem(@RequestBody UpdateCartItemRequestVo updateCartItemRequestVo, @AuthenticationPrincipal UserDetails userDetails) {
         cartService.updateItem(UpdateCartItemRequestDto.from(updateCartItemRequestVo), getUserId(userDetails));
     }
+
+    @Operation(summary = "장바구니 체크 상태 일괄 수정", description = "여러 장바구니 항목의 체크 상태를 동시에 수정합니다.", tags = {"cart"})
+    @PutMapping("/update-items")
+    public void updateCheckedItems(@RequestBody List<UpdateCheckedCartItemsRequestVo> voList,
+                                   @AuthenticationPrincipal UserDetails userDetails) {
+        List<UpdateCheckedCartItemsRequestDto> dtoList = voList.stream()
+                .map(UpdateCheckedCartItemsRequestDto::from)
+                .collect(Collectors.toList());
+
+        cartService.updateCheckedItems(dtoList, getUserId(userDetails));
+    }
+
 
     @Operation(summary = "장바구니 선택 항목 삭제", description = "장바구니에서 여러 개의 항목을 선택하여 삭제합니다.", tags = {"cart"})
     @DeleteMapping("/items")
