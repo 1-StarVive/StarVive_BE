@@ -36,14 +36,4 @@ public class PromotionProductController {
     ) {
         return promotionProductService.getPromotionProducts(promotionId);
     }
-
-//    @Operation(summary = "기획전 ID 상품 수정",
-//            description = "기획전 ID를 통해 상품을 수정힙니다",
-//            tags = {"promotion-product-service"})
-//    @PutMapping
-//    public void updatePromotionProduct(
-//            @RequestParam("promotionId") RegisterPromotionProductRequestDto promotionWithProductRequest
-//    ) {
-//        promotionProductService.updatePromotion(promotionWithProductRequest);
-//    }
 }
