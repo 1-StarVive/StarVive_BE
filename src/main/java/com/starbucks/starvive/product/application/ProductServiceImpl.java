@@ -113,8 +113,10 @@ public class ProductServiceImpl implements ProductService {
 
         return ProductDetailResponseDto.builder()
                 .productId(product.getProductId())
+                .productOptionId(option.getProductOptionId())
                 .imageThumbUrl(image.getImageThumbUrl())
                 .name(product.getName())
+                .optionName(option.getName())
                 .price(option.getPrice())
                 .productStatus(product.getProductStatus())
                 .productDetailContent(detailImage != null ? detailImage.getProductDetailContent() : null)
