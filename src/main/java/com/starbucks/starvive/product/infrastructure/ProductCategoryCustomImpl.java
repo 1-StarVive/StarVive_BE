@@ -46,7 +46,7 @@ public class ProductCategoryCustomImpl implements ProductCategoryCustomRepositor
                 .ifPresent(id -> builder.and(productCategory.bottomCategoryId.eq(id)));
 
         Optional.ofNullable(lastProductId)
-                .ifPresent(cursor -> builder.and(product.productId.gt(cursor)));
+                .ifPresent(cursor -> builder.and(product.productId.lt(cursor)));
 
         List<ProductCategoryListResponseDto> results = jpaQueryFactory.select(Projections.constructor(
                         ProductCategoryListResponseDto.class,
@@ -63,7 +63,7 @@ public class ProductCategoryCustomImpl implements ProductCategoryCustomRepositor
                 .join(option).on(option.productId.eq(product.productId))
                 .join(image).on(image.productId.eq(product.productId), image.isMain.isTrue())
                 .where(builder)
-                .orderBy(product.productId.asc())
+                .orderBy(product.productId.desc())
                 .limit(pageSize + 1)
                 .fetch();
 
