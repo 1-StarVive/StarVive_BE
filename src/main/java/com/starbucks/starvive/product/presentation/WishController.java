@@ -5,6 +5,7 @@ import com.starbucks.starvive.product.dto.in.AddWishRequestDto;
 import com.starbucks.starvive.product.dto.in.DeleteWishRequestDto;
 import com.starbucks.starvive.product.dto.in.ToggleWishRequestDto;
 import com.starbucks.starvive.product.dto.out.WishListResponseDto;
+import com.starbucks.starvive.product.dto.out.WishStatusResponseDto;
 import com.starbucks.starvive.product.vo.AddWishRequestVo;
 import com.starbucks.starvive.product.vo.DeleteWishRequestVo;
 import com.starbucks.starvive.product.vo.ToggleWishRequestVo;
@@ -14,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
+import java.util.UUID;
 
 @RequestMapping("/api/v1/wish")
 @RestController
@@ -48,4 +50,10 @@ public class WishController {
     //     ToggleWishRequestDto requestDto = ToggleWishRequestDto.from(toggleWishRequestVo, user.getUserId());
     //     wishService.toggleWish(requestDto);
     // }
+
+    @GetMapping("/status")
+    public WishStatusResponseDto getWishStatus(@AuthenticationPrincipal User user, @RequestParam UUID productId) {
+        
+        return new WishStatusResponseDto(productId, wishService.isWished(user.getUserId(), productId));
+    }
 }

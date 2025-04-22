@@ -120,5 +120,13 @@ public class WishServiceImpl implements WishService {
         }
     }
 
-    
+    @Override
+    public boolean isWished(UUID userId, UUID productId) {
+
+        return Boolean.TRUE.equals(
+            redisTemplate
+            .opsForSet()
+            .isMember(USER_LIKES_KEY_PREFIX + userId + USER_LIKES_KEY_SUFFIX, productId.toString()));
+    }
+
 }

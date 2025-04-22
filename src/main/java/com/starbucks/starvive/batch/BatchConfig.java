@@ -48,6 +48,7 @@ public class BatchConfig {
 
     @Bean
     public Job bestProductJob() {
+
         log.info(">>>>> bestProductJob 생성");
         return new JobBuilder("bestProductJob", jobRepository)
                 .listener(truncateTempTableListener)
@@ -58,6 +59,7 @@ public class BatchConfig {
 
     @Bean
     public Step calculateWishCountStep() {
+
         log.info(">>>>> calculateWishCountStep 생성 (Chunk Size: {})", chunkSize);
         return new StepBuilder("calculateWishCountStep", jobRepository)
                 .<Product, ProductWishCountDto>chunk(chunkSize, transactionManager)
@@ -69,6 +71,7 @@ public class BatchConfig {
 
     @Bean
     public ItemReader<Product> productItemReader() {
+
         log.info(">>>>> productItemReader 생성");
         return new JpaPagingItemReaderBuilder<Product>()
                 .name("productItemReader")
@@ -80,6 +83,7 @@ public class BatchConfig {
 
     @Bean
     public ItemProcessor<Product, ProductWishCountDto> productWishCountProcessor() {
+
         log.info(">>>>> productWishCountProcessor 생성 (Redis 조회 방식)");
         return product -> {
             String productLikedByKey = PRODUCT_LIKED_BY_KEY_PREFIX + product.getProductId() + PRODUCT_LIKED_BY_KEY_SUFFIX;
@@ -93,6 +97,7 @@ public class BatchConfig {
 
     @Bean
     public ItemWriter<ProductWishCountDto> tempProductWishCountWriter() {
+
         log.info(">>>>> tempProductWishCountWriter 생성");
         String sql = "INSERT INTO temp_product_wish_count (product_id, wish_count) " +
                      "VALUES (UNHEX(REPLACE(:productId, '-', '')), :wishCount) " +
@@ -112,6 +117,7 @@ public class BatchConfig {
 
     @Bean
     public Step updateBestProductStep() {
+        
         log.info(">>>>> updateBestProductStep 생성");
         return new StepBuilder("updateBestProductStep", jobRepository)
                 .tasklet(updateBestProductTasklet, transactionManager)
