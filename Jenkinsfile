@@ -1,6 +1,6 @@
 pipeline {
     agent any
-    
+
     environment {
         GRADLE_OPTS = '-Dorg.gradle.daemon=false -Dorg.gradle.jvmargs="-Xmx512m -XX:MaxMetaspaceSize=256m"'
         GOOGLE_CLIENT_ID_CRED = credentials('google-client-id')
@@ -23,32 +23,32 @@ pipeline {
         REDIS_PORT = '6379'
         SPRING_PROFILES_ACTIVE = 'prod'
     }
-    
+
     stages {
         stage('Checkout') {
             steps {
                 checkout scm
             }
         }
-        
+
         stage('Clean Workspace') {
             steps {
                 sh 'rm -rf ~/.gradle/caches/ || true'
             }
         }
-        
+
         stage('Build') {
             steps {
                 sh './gradlew clean build -x test --no-daemon'
             }
         }
-        
+
         stage('Docker Build') {
             steps {
                 sh "docker build -t springboot-app:${IMAGE_TAG} ."
             }
         }
-        
+
         stage('Deploy') {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'db-credentials-dev', usernameVariable: 'DB_USER', passwordVariable: 'DB_PASS')]) {
@@ -79,47 +79,46 @@ pipeline {
                         done
                         
                         if ! curl -s http://localhost:${SERVER_PORT}/actuator/health > /dev/null; then
-                             echo "Application failed to start after waiting"
-                             docker-compose -f docker-compose.yml logs app
-                             exit 1
+                            echo "Application failed to start after waiting"
+                            docker-compose -f docker-compose.yml logs app
+                            exit 1
                         fi
                     '''
                 }
             }
         }
     }
-    
+
     post {
-        success {success {
-        slackSend (
-            channel: '#이거보이면-자세교정',  
-            color: 'good',
-            message: "✅ [${env.JOB_NAME} #${env.BUILD_NUMBER}] 성공적으로 배포되었습니다! (<${env.BUILD_URL}|상세보기>)",
-            tokenCredentialId: 'slack-token'  
-        )
-    }
+        success {
+            slackSend (
+                channel: '#이거보이면-자세교정',
+                color: 'good',
+                message: "✅ [${env.JOB_NAME} #${env.BUILD_NUMBER}] 성공적으로 배포되었습니다! (<${env.BUILD_URL}|상세보기>)",
+                tokenCredentialId: 'slack-token'
+            )
+        }
 
-    failure {
-        slackSend (
-            channel: '#이거보이면-자세교정',
-            color: 'danger',
-            message: "❌ [${env.JOB_NAME} #${env.BUILD_NUMBER}] 배포 실패! 로그 확인 요망. (<${env.BUILD_URL}|상세보기>)",
-            tokenCredentialId: 'slack-token'
-        )
-    }
+        failure {
+            slackSend (
+                channel: '#이거보이면-자세교정',
+                color: 'danger',
+                message: "❌ [${env.JOB_NAME} #${env.BUILD_NUMBER}] 배포 실패! 로그 확인 요망. (<${env.BUILD_URL}|상세보기>)",
+                tokenCredentialId: 'slack-token'
+            )
+        }
 
-
-    always {
-        node('') {
-            sh '''
-                rm -rf ~/.gradle/caches/ || true
-                docker system prune -a -f || true 
-                find . -name "*@tmp" -type d -exec rm -rf {} \\; 2>/dev/null || true
-                echo "Current workspace size:"
-                du -sh . || true
-            '''
-            
-            cleanWs()
+        always {
+            node('') {
+                sh '''
+                    rm -rf ~/.gradle/caches/ || true
+                    docker system prune -a -f || true 
+                    find . -name "*@tmp" -type d -exec rm -rf {} \\; 2>/dev/null || true
+                    echo "Current workspace size:"
+                    du -sh . || true
+                '''
+                cleanWs()
+            }
         }
     }
 }
