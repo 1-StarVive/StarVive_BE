@@ -25,6 +25,7 @@ public class CartItemResponseDto {
     private int baseDiscountRate;
     private int discountedPrice;
     private int quantity;
+    private boolean checked;
 
     @Builder
     public CartItemResponseDto(UUID userId,
@@ -38,7 +39,8 @@ public class CartItemResponseDto {
                                int price,
                                int baseDiscountRate,
                                int discountedPrice,
-                               int quantity) {
+                               int quantity,
+                               boolean checked) {
         this.userId = userId;
         this.cartId = cartId;
         this.productId = productId;
@@ -51,6 +53,7 @@ public class CartItemResponseDto {
         this.baseDiscountRate = baseDiscountRate;
         this.discountedPrice = discountedPrice;
         this.quantity = quantity;
+        this.checked = checked;
     }
 
     /**
@@ -73,6 +76,7 @@ public class CartItemResponseDto {
                 .baseDiscountRate(baseDiscountRate)
                 .discountedPrice(discountedPrice)
                 .quantity(cartItemResponseVo.getQuantity())
+                .checked(cartItemResponseVo.isChecked())
                 .build();
     }
 }
