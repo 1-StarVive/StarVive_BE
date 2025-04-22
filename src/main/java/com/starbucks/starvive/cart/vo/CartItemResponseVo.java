@@ -25,11 +25,12 @@ public class CartItemResponseVo {
     private int baseDiscountRate;
     private int discountedPrice;
     private int quantity;
+    private boolean checked;
 
     @Builder
     public CartItemResponseVo(UUID cartId, UUID productId,UUID productOptionId,
                               String name, String optionName, String imageThumbUrl, String imageThumbAlt,
-                              int price, int baseDiscountRate, int discountedPrice, int quantity) {
+                              int price, int baseDiscountRate, int discountedPrice, int quantity, boolean checked) {
         this.cartId = cartId;
         this.productId = productId;
         this.productOptionId = productOptionId;
@@ -41,6 +42,7 @@ public class CartItemResponseVo {
         this.baseDiscountRate = baseDiscountRate;
         this.discountedPrice = discountedPrice;
         this.quantity = quantity;
+        this.checked = checked;
     }
 
     public static CartItemResponseVo from(Cart cart, Product product, ProductOption option, ProductImage image) {
@@ -60,6 +62,7 @@ public class CartItemResponseVo {
                 .baseDiscountRate(baseDiscountRate)
                 .discountedPrice(discountedPrice)
                 .quantity(cart.getQuantity())
+                .checked(cart.getChecked())
                 .build();
     }
 }
