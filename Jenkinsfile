@@ -17,7 +17,7 @@ pipeline {
         AWS_REGION = 'ap-northeast-2'
         S3_BUCKET_NAME = 'starvive-assets'
         IMAGE_NAME = "springboot-app:${IMAGE_TAG}"
-        DB_HOST = 'mysql'
+        DB_HOST = 'localhost'
         DB_PORT = '3306'
         REDIS_HOST = 'redis'
         REDIS_PORT = '6379'
