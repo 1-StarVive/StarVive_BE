@@ -53,6 +53,7 @@ public class ProductDetailResponseVo {
 
     public static ProductDetailResponseVo from(ProductDetailResponseDto productDetailResponseDto, ProductImage image, ProductOption option) {
         return ProductDetailResponseVo.builder()
+          
                 .productId(productDetailResponseDto.getProductId())
                 .productOptionId(productDetailResponseDto.getProductOptionId())
                 .imageThumbUrl(image.getImageThumbUrl())
