@@ -18,4 +18,5 @@ public interface WishService {
     void deleteWish(DeleteWishRequestDto deleteWishRequestDto);
     
     List<WishListResponseDto> getWishList(UUID userId);
+    boolean isWished(UUID userId, UUID productId);
 }
