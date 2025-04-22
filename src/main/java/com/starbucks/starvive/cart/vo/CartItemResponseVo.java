@@ -13,35 +13,46 @@ import java.util.UUID;
 @NoArgsConstructor
 public class CartItemResponseVo {
 
+
     private UUID cartId;
     private UUID productId;
     private String name;
     private String imageThumbUrl;
     private String imageThumbAlt;
     private int price;
+    private int baseDiscountRate;
+    private int discountedPrice;
     private int quantity;
 
     @Builder
     public CartItemResponseVo(UUID cartId, UUID productId,
                               String name, String imageThumbUrl, String imageThumbAlt,
-                              int price, int quantity) {
+                              int price, int baseDiscountRate, int discountedPrice, int quantity) {
         this.cartId = cartId;
         this.productId = productId;
         this.name = name;
         this.imageThumbUrl = imageThumbUrl;
         this.imageThumbAlt = imageThumbAlt;
         this.price = price;
+        this.baseDiscountRate = baseDiscountRate;
+        this.discountedPrice = discountedPrice;
         this.quantity = quantity;
     }
 
     public static CartItemResponseVo from(Cart cart, Product product, ProductOption option, ProductImage image) {
+        int price = option.getPrice();
+        int baseDiscountRate = option.getBaseDiscountRate();
+        int discountedPrice = (baseDiscountRate > 0) ? price - (price * baseDiscountRate / 100) : price;
+
         return CartItemResponseVo.builder()
                 .cartId(cart.getCartId())
                 .productId(cart.getProductId())
                 .name(product.getName())
                 .imageThumbUrl(image.getImageThumbUrl())
                 .imageThumbAlt(image.getImageThumbAlt())
-                .price(option.getPrice())
+                .price(price)
+                .baseDiscountRate(baseDiscountRate)
+                .discountedPrice(discountedPrice)
                 .quantity(cart.getQuantity())
                 .build();
     }

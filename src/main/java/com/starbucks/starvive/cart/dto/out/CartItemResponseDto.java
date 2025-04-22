@@ -1,11 +1,16 @@
 package com.starbucks.starvive.cart.dto.out;
 
+import com.starbucks.starvive.cart.vo.CartItemResponseVo;
+import com.starbucks.starvive.product.dto.out.ProductListResponseDto;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+
 import java.util.UUID;
 
 @Getter
-@AllArgsConstructor
+@NoArgsConstructor
 public class CartItemResponseDto {
 
     private UUID userId;
@@ -15,6 +20,52 @@ public class CartItemResponseDto {
     private String imageThumbUrl;
     private String imageThumbAlt;
     private int price;
+    private int baseDiscountRate;
+    private int discountedPrice;
     private int quantity;
 
+    @Builder
+    public CartItemResponseDto(UUID userId,
+                               UUID cartId,
+                               UUID productId,
+                               String productName,
+                               String imageThumbUrl,
+                               String imageThumbAlt,
+                               int price,
+                               int baseDiscountRate,
+                               int discountedPrice,
+                               int quantity) {
+        this.userId = userId;
+        this.cartId = cartId;
+        this.productId = productId;
+        this.productName = productName;
+        this.imageThumbUrl = imageThumbUrl;
+        this.imageThumbAlt = imageThumbAlt;
+        this.price = price;
+        this.baseDiscountRate = baseDiscountRate;
+        this.discountedPrice = discountedPrice;
+        this.quantity = quantity;
+    }
+
+    /**
+     * Factory 메서드 – VO 기반 + 할인율 추가 정보로 변환
+     */
+    public static CartItemResponseDto from(CartItemResponseVo cartItemResponseVo, UUID userId, int baseDiscountRate) {
+        int discountedPrice = (baseDiscountRate > 0)
+                ? cartItemResponseVo.getPrice() - (cartItemResponseVo.getPrice() * baseDiscountRate / 100)
+                : cartItemResponseVo.getPrice();
+
+        return CartItemResponseDto.builder()
+                .userId(userId)
+                .cartId(cartItemResponseVo.getCartId())
+                .productId(cartItemResponseVo.getProductId())
+                .productName(cartItemResponseVo.getName())
+                .imageThumbUrl(cartItemResponseVo.getImageThumbUrl())
+                .imageThumbAlt(cartItemResponseVo.getImageThumbAlt())
+                .price(cartItemResponseVo.getPrice())
+                .baseDiscountRate(baseDiscountRate)
+                .discountedPrice(discountedPrice)
+                .quantity(cartItemResponseVo.getQuantity())
+                .build();
+    }
 }
