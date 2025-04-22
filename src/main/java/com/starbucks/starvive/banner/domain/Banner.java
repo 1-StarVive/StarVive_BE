@@ -35,13 +35,18 @@ public class Banner extends BaseEntity {
     @Column(nullable = false)
     private Boolean activated;  // 배너 상태
 
+    @Column(columnDefinition = "BINARY(16)")
+    private UUID promotionId;
 
     @Builder
-    public Banner(String imageBannerUrl, String imageBannerAlt, LocalDate postedAt, boolean activated) {
+    public Banner(UUID bannerId, String imageBannerUrl, String imageBannerAlt,
+                  LocalDate postedAt, Boolean activated, UUID promotionId) {
+        this.bannerId = bannerId;
         this.imageBannerUrl = imageBannerUrl;
         this.imageBannerAlt = imageBannerAlt;
         this.postedAt = postedAt;
         this.activated = activated;
+        this.promotionId = promotionId;
     }
 
     public void updateImage(String newImageUrl) {

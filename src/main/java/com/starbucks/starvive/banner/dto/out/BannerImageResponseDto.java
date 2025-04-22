@@ -16,15 +16,18 @@ public class BannerImageResponseDto {
     private  String imageBannerAlt;
     private  LocalDate postedAt;
     private  boolean activated;
+    private UUID promotionId;
 
     @Builder
-    public BannerImageResponseDto(UUID bannerId, String imageBannerUrl, String imageBannerAlt,
-                                  LocalDate postedAt, boolean activated) {
+    public BannerImageResponseDto(UUID bannerId, String imageBannerUrl,
+                                  String imageBannerAlt, LocalDate postedAt,
+                                  boolean activated, UUID promotionId) {
         this.bannerId = bannerId;
         this.imageBannerUrl = imageBannerUrl;
         this.imageBannerAlt = imageBannerAlt;
         this.postedAt = postedAt;
         this.activated = activated;
+        this.promotionId = promotionId;
     }
 
     public static BannerImageResponseDto from(Banner banner) {
@@ -34,6 +37,7 @@ public class BannerImageResponseDto {
                 .imageBannerAlt(banner.getImageBannerAlt())
                 .postedAt(banner.getPostedAt())
                 .activated(banner.getActivated())
+                .promotionId(banner.getPromotionId())
                 .build();
     }
 }
