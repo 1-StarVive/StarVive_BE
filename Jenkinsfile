@@ -90,15 +90,31 @@ pipeline {
     }
     
     post {
+        success {success {
+        slackSend (
+            channel: '#이거보이면-자세교정',  
+            color: 'good',
+            message: "✅ [${env.JOB_NAME} #${env.BUILD_NUMBER}] 성공적으로 배포되었습니다! (<${env.BUILD_URL}|상세보기>)",
+            tokenCredentialId: 'slack-token'  
+        )
+    }
+
+    failure {
+        slackSend (
+            channel: '#이거보이면-자세교정',
+            color: 'danger',
+            message: "❌ [${env.JOB_NAME} #${env.BUILD_NUMBER}] 배포 실패! 로그 확인 요망. (<${env.BUILD_URL}|상세보기>)",
+            tokenCredentialId: 'slack-token'
+        )
+    }
+
+
     always {
         node('') {
             sh '''
                 rm -rf ~/.gradle/caches/ || true
-                
                 docker system prune -a -f || true 
-                
                 find . -name "*@tmp" -type d -exec rm -rf {} \\; 2>/dev/null || true
-                
                 echo "Current workspace size:"
                 du -sh . || true
             '''
