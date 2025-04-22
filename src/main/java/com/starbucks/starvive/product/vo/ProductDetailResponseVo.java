@@ -51,19 +51,20 @@ public class ProductDetailResponseVo {
         this.requiredInfos = requiredInfos;
     }
 
-    public static ProductDetailResponseVo from(ProductDetailResponseDto dto, ProductImage image, ProductOption option) {
+    public static ProductDetailResponseVo from(ProductDetailResponseDto productDetailResponseDto, ProductImage image, ProductOption option) {
         return ProductDetailResponseVo.builder()
-                .productId(dto.getProductId())
-                .productOptionId(dto.getProductOptionId())
+          
+                .productId(productDetailResponseDto.getProductId())
+                .productOptionId(productDetailResponseDto.getProductOptionId())
                 .imageThumbUrl(image.getImageThumbUrl())
-                .name(dto.getName())
+                .name(productDetailResponseDto.getName())
                 .optionName(option.getName())
                 .price(option.getPrice())
                 .baseDiscountRate(option.getBaseDiscountRate())
                 .discountedPrice(option.getDiscountedPrice())
-                .productStatus(dto.getProductStatus().name())
-                .productDetailContent(dto.getProductDetailContent())
-                .requiredInfos(dto.getRequiredInfos())
+                .productStatus(productDetailResponseDto.getProductStatus().name())
+                .productDetailContent(productDetailResponseDto.getProductDetailContent())
+                .requiredInfos(productDetailResponseDto.getRequiredInfos())
                 .build();
     }
 }
