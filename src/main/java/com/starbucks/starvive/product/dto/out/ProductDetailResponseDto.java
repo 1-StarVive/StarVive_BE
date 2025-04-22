@@ -16,8 +16,10 @@ import java.util.UUID;
 public class ProductDetailResponseDto {
 
     private UUID productId;
+    private UUID productOptionId;
     private String imageThumbUrl;
     private String name;
+    private String optionName;
     private int price;
     private int baseDiscountRate;
     private int discountedPrice;
@@ -27,8 +29,10 @@ public class ProductDetailResponseDto {
 
     @Builder
     public ProductDetailResponseDto(UUID productId,
+                                    UUID productOptionId,
                                     String imageThumbUrl,
                                     String name,
+                                    String optionName,
                                     int price,
                                     int baseDiscountRate,
                                     int discountedPrice,
@@ -36,8 +40,10 @@ public class ProductDetailResponseDto {
                                     String productDetailContent,
                                     List<ProductRequiredInfoResponseDto> requiredInfos) {
         this.productId = productId;
+        this.productOptionId = productOptionId;
         this.imageThumbUrl = imageThumbUrl;
         this.name = name;
+        this.optionName = optionName;
         this.price = price;
         this.baseDiscountRate = baseDiscountRate;
         this.discountedPrice = discountedPrice;
@@ -49,8 +55,10 @@ public class ProductDetailResponseDto {
     public static ProductDetailResponseDto from(Product product, ProductImage image, ProductOption option, ProductDetailImage detailImage, List<ProductRequiredInfoResponseDto> requiredInfos) {
         return ProductDetailResponseDto.builder()
                 .productId(product.getProductId())
+                .productOptionId(option.getProductOptionId())
                 .imageThumbUrl(image.getImageThumbUrl())
                 .name(product.getName())
+                .optionName(option.getName())
                 .price(option.getPrice())
                 .baseDiscountRate(option.getBaseDiscountRate())
                 .discountedPrice(option.getDiscountedPrice())

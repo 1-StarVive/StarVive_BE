@@ -16,7 +16,9 @@ public class CartItemResponseDto {
     private UUID userId;
     private UUID cartId;
     private UUID productId;
-    private String productName;
+    private UUID productOptionId;
+    private String name;
+    private String optionName;
     private String imageThumbUrl;
     private String imageThumbAlt;
     private int price;
@@ -28,7 +30,9 @@ public class CartItemResponseDto {
     public CartItemResponseDto(UUID userId,
                                UUID cartId,
                                UUID productId,
-                               String productName,
+                               UUID productOptionId,
+                               String name,
+                               String optionName,
                                String imageThumbUrl,
                                String imageThumbAlt,
                                int price,
@@ -38,7 +42,9 @@ public class CartItemResponseDto {
         this.userId = userId;
         this.cartId = cartId;
         this.productId = productId;
-        this.productName = productName;
+        this.productOptionId = productOptionId;
+        this.name = name;
+        this.optionName = optionName;
         this.imageThumbUrl = imageThumbUrl;
         this.imageThumbAlt = imageThumbAlt;
         this.price = price;
@@ -59,7 +65,8 @@ public class CartItemResponseDto {
                 .userId(userId)
                 .cartId(cartItemResponseVo.getCartId())
                 .productId(cartItemResponseVo.getProductId())
-                .productName(cartItemResponseVo.getName())
+                .productOptionId(cartItemResponseVo.getProductOptionId())
+                .name(cartItemResponseVo.getName())
                 .imageThumbUrl(cartItemResponseVo.getImageThumbUrl())
                 .imageThumbAlt(cartItemResponseVo.getImageThumbAlt())
                 .price(cartItemResponseVo.getPrice())

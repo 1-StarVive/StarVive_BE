@@ -1,5 +1,7 @@
 package com.starbucks.starvive.product.presentation;
 
+import com.starbucks.starvive.common.domain.BaseResponseStatus;
+import com.starbucks.starvive.common.exception.BaseException;
 import com.starbucks.starvive.image.domain.ProductImage;
 import com.starbucks.starvive.image.infrastructure.ProductImageRepository;
 import com.starbucks.starvive.product.application.ProductService;
@@ -74,9 +76,11 @@ public class ProductController {
     public ProductDetailResponseVo getProductDetail(@RequestParam("productId") UUID productId) {
 
         ProductDetailResponseDto dto = productService.getProductDetail(productId);
-        ProductOption option = productOptionRepository.findFirstByProductId(productId).orElse(null);
+        ProductOption option = productOptionRepository.findFirstByProductId(productId)
+                .orElseThrow(() -> new BaseException(BaseResponseStatus.NO_EXIST_OPTIONS_IN_PRODUCT));
+
         ProductImage image = productImageRepository.findFirstByProductId(productId)
-                .orElse(null);
+                .orElseThrow(() -> new BaseException(BaseResponseStatus.NO_EXIST_IMAGE));
         return ProductDetailResponseVo.from(dto, image, option);
     }
 
