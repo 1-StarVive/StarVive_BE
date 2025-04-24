@@ -42,6 +42,10 @@ public class Cart extends BaseEntity {
         this.checked = checked;
     }
 
+    public void increaseQuantity(int quantityToAdd) {
+        this.quantity += quantityToAdd;
+    }
+
     public void update(UUID productOptionId, int quantity, boolean checked) {
         this.productOptionId = productOptionId;
         this.quantity = quantity;
