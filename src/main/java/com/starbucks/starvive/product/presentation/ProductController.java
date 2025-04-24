@@ -74,14 +74,8 @@ public class ProductController {
     @Operation(summary = "상품 상세 조회", description = "상품 상세 정보를 조회합니다.", tags = {"product-service"})
     @GetMapping("/detail")
     public ProductDetailResponseVo getProductDetail(@RequestParam("productId") UUID productId) {
-
         ProductDetailResponseDto dto = productService.getProductDetail(productId);
-        ProductOption option = productOptionRepository.findFirstByProductId(productId)
-                .orElseThrow(() -> new BaseException(BaseResponseStatus.NO_EXIST_OPTIONS_IN_PRODUCT));
-
-        ProductImage image = productImageRepository.findFirstByProductId(productId)
-                .orElseThrow(() -> new BaseException(BaseResponseStatus.NO_EXIST_IMAGE));
-        return ProductDetailResponseVo.from(dto, image, option);
+        return ProductDetailResponseVo.from(dto);
     }
 
     @Operation(summary = "베스트 상품 목록 조회", description = "인기 상품(베스트 상품) 목록을 순위 순으로 조회합니다.", tags = {"product-service"})

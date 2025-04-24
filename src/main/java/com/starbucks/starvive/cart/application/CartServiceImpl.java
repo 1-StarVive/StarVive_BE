@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import static com.starbucks.starvive.common.domain.BaseResponseStatus.*;
@@ -51,16 +52,31 @@ public class CartServiceImpl implements CartService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional
     @Override
     public void addItem(AddCartItemRequestDto addCartItemRequestDto, UUID userId) {
-        Cart cart = Cart.builder()
-                .userId(userId)
-                .productId(addCartItemRequestDto.getProductId())
-                .productOptionId(addCartItemRequestDto.getProductOptionId())
-                .quantity(addCartItemRequestDto.getQuantity())
-                .checked(addCartItemRequestDto.isChecked())
-                .build();
-        cartRepository.save(cart);
+        UUID productOptionId = addCartItemRequestDto.getProductOptionId();
+
+        List<Cart> existingCarts = cartRepository.findAllByUserIdAndProductOptionId(userId, productOptionId);
+
+        if (!existingCarts.isEmpty()) {
+            Cart mainCart = existingCarts.get(0);
+            mainCart.increaseQuantity(addCartItemRequestDto.getQuantity());
+
+            if (existingCarts.size() > 1) {
+                List<Cart> redundant = existingCarts.subList(1, existingCarts.size());
+                cartRepository.deleteAll(redundant);
+            }
+        } else {
+            Cart newCart = Cart.builder()
+                    .userId(userId)
+                    .productId(addCartItemRequestDto.getProductId())
+                    .productOptionId(productOptionId)
+                    .quantity(addCartItemRequestDto.getQuantity())
+                    .checked(addCartItemRequestDto.isChecked())
+                    .build();
+            cartRepository.save(newCart);
+        }
     }
 
     @Transactional

@@ -1,13 +1,12 @@
 package com.starbucks.starvive.product.application;
 
 import com.amazonaws.services.kms.model.NotFoundException;
+import com.querydsl.core.QueryFactory;
+import com.querydsl.core.types.Projections;
 import com.starbucks.starvive.common.exception.BaseException;
 import com.starbucks.starvive.image.domain.ProductImage;
 import com.starbucks.starvive.image.infrastructure.ProductImageRepository;
-import com.starbucks.starvive.product.domain.BestProduct;
-import com.starbucks.starvive.product.domain.Product;
-import com.starbucks.starvive.product.domain.ProductDetailImage;
-import com.starbucks.starvive.product.domain.ProductOption;
+import com.starbucks.starvive.product.domain.*;
 import com.starbucks.starvive.product.dto.BestProductResponseDto;
 import com.starbucks.starvive.product.dto.in.AddProductRequestDto;
 import com.starbucks.starvive.product.dto.in.DeleteProductRequestDto;
@@ -16,11 +15,7 @@ import com.starbucks.starvive.product.dto.out.ProductDetailResponseDto;
 import com.starbucks.starvive.product.dto.out.ProductListResponseDto;
 import com.starbucks.starvive.product.dto.out.ProductRequiredInfoResponseDto;
 import com.starbucks.starvive.product.dto.out.ProductResponseDto;
-import com.starbucks.starvive.product.infrastructure.BestProductRepository;
-import com.starbucks.starvive.product.infrastructure.ProductOptionRepository;
-import com.starbucks.starvive.product.infrastructure.ProductRepository;
-import com.starbucks.starvive.product.infrastructure.ProductRequiredInfoRepository;
-import com.starbucks.starvive.product.infrastructure.productDetailImageRepository;
+import com.starbucks.starvive.product.infrastructure.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -39,11 +34,11 @@ public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
     private final ProductOptionRepository productOptionRepository;
     private final ProductImageRepository productImageRepository;
-
-    private final productDetailImageRepository productDetailImageRepository;
-    private final ProductRequiredInfoRepository productRequiredInfoRepository;
-
+    private final ProductCustomRepository productCustomRepository;
     private final BestProductRepository bestProductRepository;
+    private final ProductRequiredInfoRepository productRequiredInfoRepository;
+    private final QueryFactory queryFactory;
+    private final ProductInfoCustom productInfoCustom;
 
 
     @Override
@@ -94,34 +89,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductDetailResponseDto getProductDetail(UUID productId) {
-        Product product = productRepository.findById(productId)
-                .orElseThrow(() -> new BaseException(NO_EXIST_PRODUCT));
-
-        ProductOption option = productOptionRepository.findFirstByProductId(productId)
-                .orElseThrow(() -> new BaseException(NO_EXIST_OPTION));
-
-        ProductImage image = productImageRepository.findFirstByProductId(productId)
-                .orElseThrow(() -> new BaseException(NO_EXIST_IMAGE));
-
-        ProductDetailImage detailImage = productDetailImageRepository.findByProductId(productId)
-                .orElse(null);
-
-        List<ProductRequiredInfoResponseDto> requiredInfos = productRequiredInfoRepository.findByProductId(productId)
-                .stream()
-                .map(ProductRequiredInfoResponseDto::from)
-                .collect(Collectors.toList());
-
-        return ProductDetailResponseDto.builder()
-                .productId(product.getProductId())
-                .productOptionId(option.getProductOptionId())
-                .imageThumbUrl(image.getImageThumbUrl())
-                .name(product.getName())
-                .optionName(option.getName())
-                .price(option.getPrice())
-                .productStatus(product.getProductStatus())
-                .productDetailContent(detailImage != null ? detailImage.getProductDetailContent() : null)
-                .requiredInfos(requiredInfos)
-                .build();
+        return productCustomRepository.findProductDetailById(productId); // 모든 데이터 포함해서 반환
     }
 
     @Transactional(readOnly = true)

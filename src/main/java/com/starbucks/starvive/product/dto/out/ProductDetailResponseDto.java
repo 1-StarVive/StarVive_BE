@@ -27,18 +27,10 @@ public class ProductDetailResponseDto {
     private String productDetailContent;
     private List<ProductRequiredInfoResponseDto> requiredInfos;
 
-    @Builder
-    public ProductDetailResponseDto(UUID productId,
-                                    UUID productOptionId,
-                                    String imageThumbUrl,
-                                    String name,
-                                    String optionName,
-                                    int price,
-                                    int baseDiscountRate,
-                                    int discountedPrice,
-                                    ProductStatus productStatus,
-                                    String productDetailContent,
-                                    List<ProductRequiredInfoResponseDto> requiredInfos) {
+
+    public ProductDetailResponseDto(UUID productId, UUID productOptionId, String imageThumbUrl, String name,
+                                    String optionName, int price, int baseDiscountRate, int discountedPrice,
+                                    ProductStatus productStatus, String productDetailContent) {
         this.productId = productId;
         this.productOptionId = productOptionId;
         this.imageThumbUrl = imageThumbUrl;
@@ -49,22 +41,11 @@ public class ProductDetailResponseDto {
         this.discountedPrice = discountedPrice;
         this.productStatus = productStatus;
         this.productDetailContent = productDetailContent;
-        this.requiredInfos = requiredInfos;
     }
 
-    public static ProductDetailResponseDto from(Product product, ProductImage image, ProductOption option, ProductDetailImage detailImage, List<ProductRequiredInfoResponseDto> requiredInfos) {
-        return ProductDetailResponseDto.builder()
-                .productId(product.getProductId())
-                .productOptionId(option.getProductOptionId())
-                .imageThumbUrl(image.getImageThumbUrl())
-                .name(product.getName())
-                .optionName(option.getName())
-                .price(option.getPrice())
-                .baseDiscountRate(option.getBaseDiscountRate())
-                .discountedPrice(option.getDiscountedPrice())
-                .productStatus(product.getProductStatus())
-                .productDetailContent(detailImage.getProductDetailContent())
-                .requiredInfos(requiredInfos)
-                .build();
+
+    public ProductDetailResponseDto withRequiredInfos(List<ProductRequiredInfoResponseDto> infos) {
+        this.requiredInfos = infos;
+        return this;
     }
 }

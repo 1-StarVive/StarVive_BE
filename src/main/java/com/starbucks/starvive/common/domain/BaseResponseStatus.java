@@ -93,6 +93,8 @@ public enum BaseResponseStatus {
     // productDetail
     NO_EXIST_PRODUCT_DETAIL(HttpStatus.NOT_FOUND, false, 3014, "상품 상세 정보를 찾을 수 없습니다."),
 
+    NO_EXIST_DETAIL_IMAGE(HttpStatus.NOT_FOUND, false,3015,"상품 상세 이미지를 찾을 수 없습니다."),
+
     // tag
     DUPLICATED_TAG(HttpStatus.CONFLICT, false, 3016, "이미 등록된 태그입니다."),
     NO_EXIST_TAG(HttpStatus.NOT_FOUND, false, 3017, "존재하지 않는 태크입니다"),
