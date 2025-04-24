@@ -101,22 +101,11 @@ logging:
 
 ---
 
-##  5. 서버 실행
-```bash
-./gradlew bootRun
-```
-
-또는
-
-```bash
-java -jar build/libs/starvive-0.0.1-SNAPSHOT.jar
-```
-
 - Swagger UI: [http://localhost:8080/swagger-ui/index.html](http://localhost:8080/swagger-ui/index.html)
 
 ---
 
-##  6. 기본 테스트 계정
+##  5. 기본 테스트 계정
 - 회원가입: `/api/v1/auth/join`
 - 로그인: `/api/v1/auth/login`
 
