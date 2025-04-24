@@ -117,7 +117,7 @@ Authorization: Bearer <ACCESS_TOKEN>
 
 ## 🧪 Postman 테스트 가능 API
 - 회원가입 / 로그인
-- 상품, 장바구니, 주문, 찜하기, 배너, 추천 섹션
+- 상품조회, 카테고리별 조회, 찜하기
 
 > Postman 가이드: [Notion 링크](https://www.notion.so/Postman-1ca2ca1a3b5d80889e22f2d31021f2dd?pvs=21)
 
