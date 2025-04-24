@@ -5,6 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.UuidGenerator;
@@ -29,5 +30,13 @@ public class ProductRequiredInfo {
 
     @Column(columnDefinition = "BINARY(16)", nullable = false)
     private UUID productId;
+
+    @Builder
+    public ProductRequiredInfo(UUID productRequiredInfoId, String type, String value, UUID productId) {
+        this.productRequiredInfoId = productRequiredInfoId;
+        this.type = type;
+        this.value = value;
+        this.productId = productId;
+    }
 }
 
