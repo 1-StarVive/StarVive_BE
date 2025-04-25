@@ -83,7 +83,7 @@ public class ProductServiceImpl implements ProductService {
                 })
                 .toList();
     }
-    @Transactional(readOnly = true)
+
     @Override
     public ProductDetailResponseDto getProductDetail(UUID productId) {
         return productCustomRepository.findProductDetailById(productId);
