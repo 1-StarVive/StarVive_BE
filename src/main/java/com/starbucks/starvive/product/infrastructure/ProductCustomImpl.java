@@ -31,7 +31,7 @@ public class ProductCustomImpl implements ProductCustomRepository {
         QProductImage image = QProductImage.productImage;
         QProductDetailImage detailImage = QProductDetailImage.productDetailImage;
 
-        // 1. 기본 상품 상세 정보 조회
+        // 상품 상세 정보 조회 (단일 결과 반환)
         ProductDetailResponseDto dto = queryFactory
                 .select(Projections.constructor(ProductDetailResponseDto.class,
                         product.productId,
@@ -46,20 +46,22 @@ public class ProductCustomImpl implements ProductCustomRepository {
                         detailImage.productDetailContent
                 ))
                 .from(product)
-                .join(option).on(option.productId.eq(product.productId))
-                .join(image).on(image.productId.eq(product.productId))
-                .join(detailImage).on(detailImage.productId.eq(product.productId))
+                .leftJoin(option).on(option.productId.eq(product.productId))
+                .leftJoin(image).on(image.productId.eq(product.productId))
+                .leftJoin(detailImage).on(detailImage.productId.eq(product.productId))
                 .where(product.productId.eq(productId))
-                .fetchOne();
+                .limit(1)  // 중복된 결과를 하나만 반환
+                .fetchFirst();
 
+        // 상품 상세 정보가 없으면 예외 처리
         if (dto == null) {
             throw new BaseException(BaseResponseStatus.NO_EXIST_PRODUCT);
         }
 
-        List<ProductRequiredInfoResponseDto> requiredInfos =
-                productInfoCustom.findRequiredInfosByProductId(productId);
+        // 필수 정보 조회
+        List<ProductRequiredInfoResponseDto> requiredInfos = productInfoCustom.findRequiredInfosByProductId(productId);
 
+        // DTO에 필수 정보 추가 후 반환
         return dto.withRequiredInfos(requiredInfos);
     }
-
 }
