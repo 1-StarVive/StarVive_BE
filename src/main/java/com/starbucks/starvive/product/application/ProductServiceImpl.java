@@ -3,6 +3,7 @@ package com.starbucks.starvive.product.application;
 import com.amazonaws.services.kms.model.NotFoundException;
 import com.querydsl.core.QueryFactory;
 import com.querydsl.core.types.Projections;
+import com.starbucks.starvive.common.domain.BaseResponseStatus;
 import com.starbucks.starvive.common.exception.BaseException;
 import com.starbucks.starvive.image.domain.ProductImage;
 import com.starbucks.starvive.image.infrastructure.ProductImageRepository;
@@ -36,10 +37,6 @@ public class ProductServiceImpl implements ProductService {
     private final ProductImageRepository productImageRepository;
     private final ProductCustomRepository productCustomRepository;
     private final BestProductRepository bestProductRepository;
-    private final ProductRequiredInfoRepository productRequiredInfoRepository;
-    private final QueryFactory queryFactory;
-    private final ProductInfoCustom productInfoCustom;
-
 
     @Override
     public void addProduct(AddProductRequestDto addProductRequestDto) {
@@ -86,10 +83,10 @@ public class ProductServiceImpl implements ProductService {
                 })
                 .toList();
     }
-
+    @Transactional(readOnly = true)
     @Override
     public ProductDetailResponseDto getProductDetail(UUID productId) {
-        return productCustomRepository.findProductDetailById(productId); // 모든 데이터 포함해서 반환
+        return productCustomRepository.findProductDetailById(productId);
     }
 
     @Transactional(readOnly = true)
