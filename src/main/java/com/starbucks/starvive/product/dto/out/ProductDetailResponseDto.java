@@ -38,9 +38,31 @@ public class ProductDetailResponseDto {
         this.optionName = optionName;
         this.price = price;
         this.baseDiscountRate = baseDiscountRate;
-        this.discountedPrice = discountedPrice;
+        this.discountedPrice = (baseDiscountRate > 0)
+                ? price - (price * baseDiscountRate / 100)
+                : price;
         this.productStatus = productStatus;
         this.productDetailContent = productDetailContent;
+    }
+
+    @Builder
+    public ProductDetailResponseDto(UUID productId, UUID productOptionId, String imageThumbUrl, String name,
+                                    String optionName, int price, int baseDiscountRate,
+                                    ProductStatus productStatus, String productDetailContent,
+                                    List<ProductRequiredInfoResponseDto> requiredInfos) {
+        this.productId = productId;
+        this.productOptionId = productOptionId;
+        this.imageThumbUrl = imageThumbUrl;
+        this.name = name;
+        this.optionName = optionName;
+        this.price = price;
+        this.baseDiscountRate = baseDiscountRate;
+        this.discountedPrice = (baseDiscountRate > 0)
+                ? price - (price * baseDiscountRate / 100)
+                : price;
+        this.productStatus = productStatus;
+        this.productDetailContent = productDetailContent;
+        this.requiredInfos = requiredInfos;
     }
 
 

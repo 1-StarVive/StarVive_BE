@@ -3,6 +3,8 @@ package com.starbucks.starvive.product.infrastructure;
 
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.starbucks.starvive.common.domain.BaseResponseStatus;
+import com.starbucks.starvive.common.exception.BaseException;
 import com.starbucks.starvive.image.domain.QProductImage;
 import com.starbucks.starvive.product.domain.QProduct;
 import com.starbucks.starvive.product.domain.QProductDetailImage;
@@ -49,11 +51,15 @@ public class ProductCustomImpl implements ProductCustomRepository {
                 .join(detailImage).on(detailImage.productId.eq(product.productId))
                 .where(product.productId.eq(productId))
                 .fetchOne();
-// 2. 필수 정보 추가 조회 (QueryDSL 방식)
+
+        if (dto == null) {
+            throw new BaseException(BaseResponseStatus.NO_EXIST_PRODUCT);
+        }
+
         List<ProductRequiredInfoResponseDto> requiredInfos =
                 productInfoCustom.findRequiredInfosByProductId(productId);
 
-        // 3. withRequiredInfos 메서드를 통해 값 설정
         return dto.withRequiredInfos(requiredInfos);
     }
+
 }
